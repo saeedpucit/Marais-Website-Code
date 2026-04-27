@@ -1,0 +1,10 @@
+{
+  "sections": {
+    "main": {
+      "type": "marais-product",
+      "settings": {}
+    }
+  },
+  "order": ["main"]
+}
+

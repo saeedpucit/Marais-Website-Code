@@ -1,0 +1,61 @@
+{%- paginate customer.orders by 20 -%}
+
+<div class="account-page">
+  {%- render 'account-nav' -%}
+
+  <div class="account-content">
+
+    <div class="account-header">
+      <h1 class="account-header__greeting">Order History</h1>
+      <p class="account-header__sub">{{ customer.orders.size }} order{{ customer.orders.size | plural: '', 's' }} placed</p>
+    </div>
+
+    {%- if customer.orders.size > 0 -%}
+      <table class="order-table">
+        <thead>
+          <tr>
+            <th>Order</th>
+            <th>Date</th>
+            <th>Items</th>
+            <th>Status</th>
+            <th>Total</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {%- for order in customer.orders -%}
+            {%- render 'account-order-row', order: order -%}
+          {%- endfor -%}
+        </tbody>
+      </table>
+
+      {%- if paginate.pages > 1 -%}
+        <div style="display:flex;justify-content:space-between;align-items:center;padding-top:32px;border-top:1px solid var(--mh-light);margin-top:32px">
+          {%- if paginate.previous -%}
+            <a href="{{ paginate.previous.url }}" class="mh-btn mh-btn--outline">&larr; Previous</a>
+          {%- else -%}
+            <span></span>
+          {%- endif -%}
+          <span style="font-size:12px;color:var(--mh-gray);font-family:var(--mh-sans)">
+            Page {{ paginate.current_page }} of {{ paginate.pages }}
+          </span>
+          {%- if paginate.next -%}
+            <a href="{{ paginate.next.url }}" class="mh-btn">Next &rarr;</a>
+          {%- else -%}
+            <span></span>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+    {%- else -%}
+      <div style="padding:80px 0;text-align:center">
+        <h2 style="font-family:var(--mh-serif);font-size:36px;font-weight:300;margin-bottom:12px">No orders yet</h2>
+        <p style="font-size:13px;color:var(--mh-gray);font-family:var(--mh-sans);margin-bottom:32px">Discover our curated selection of luxury fashion.</p>
+        <a href="/collections/all" class="mh-btn">Shop Now</a>
+      </div>
+    {%- endif -%}
+
+  </div>
+</div>
+
+{%- endpaginate -%}

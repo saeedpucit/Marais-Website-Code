@@ -1,0 +1,76 @@
+<div class="mh-designers-hero">
+  {%- if section.settings.eyebrow != blank -%}
+    <p class="mh-designers-hero__eyebrow">{{ section.settings.eyebrow }}</p>
+  {%- endif -%}
+  <h1 class="mh-designers-hero__heading">{{ section.settings.heading | default: 'Our Designers' }}</h1>
+  <div class="mh-designers-hero__search">
+    <input
+      class="mh-designers-hero__input"
+      type="text"
+      placeholder="{{ section.settings.placeholder | default: 'Search designers' }}"
+      id="BrandSearchInput"
+      autocomplete="off"
+      aria-label="Search designers"
+    >
+    <span class="mh-designers-hero__search-icon">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+      </svg>
+    </span>
+  </div>
+</div>
+
+<script>
+  (function () {
+    var input = document.getElementById('BrandSearchInput');
+    if (!input) return;
+    input.addEventListener('input', function () {
+      var q = this.value.toLowerCase().trim();
+      document.querySelectorAll('.mh-brands-full__row').forEach(function (row) {
+        var name = (row.dataset.name || '').toLowerCase();
+        row.hidden = q.length > 0 && !name.includes(q);
+      });
+      /* Hide letter groups where all rows are hidden */
+      document.querySelectorAll('.mh-brands-full__group').forEach(function (group) {
+        var visible = group.querySelectorAll('.mh-brands-full__row:not([hidden])').length;
+        group.style.display = visible === 0 && q.length > 0 ? 'none' : '';
+      });
+    });
+  }());
+</script>
+
+{% schema %}
+{
+  "name": "Designers Hero",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Curated Luxury"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Our Designers"
+    },
+    {
+      "type": "text",
+      "id": "placeholder",
+      "label": "Search placeholder",
+      "default": "Search designers..."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Designers Hero",
+      "settings": {
+        "eyebrow": "Curated Luxury",
+        "heading": "Our Designers"
+      }
+    }
+  ]
+}
+{% endschema %}

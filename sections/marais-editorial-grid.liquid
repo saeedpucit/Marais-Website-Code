@@ -1,0 +1,81 @@
+<div class="mh-ed-sec">
+  <div style="max-width:1440px;margin:0 auto;">
+    <div class="mh-sec__hdr mh-fu" style="margin-bottom:36px;">
+      <div>
+        <p class="mh-sec__eyebrow">{{ section.settings.eyebrow }}</p>
+        <h2 class="mh-sec__title">{{ section.settings.title }}</h2>
+      </div>
+      {%- if section.settings.see_all_label != blank and section.settings.see_all_link != blank -%}
+        <a href="{{ section.settings.see_all_link }}" class="mh-see-all">{{ section.settings.see_all_label }}</a>
+      {%- endif -%}
+    </div>
+    <div class="mh-ed__grid mh-fu">
+      {%- for block in section.blocks -%}
+        <a href="{{ block.settings.link }}" class="mh-ed__card" {{ block.shopify_attributes }}>
+          <div class="mh-ed__bg-inner" style="background-color: {{ block.settings.bg_color }};">
+            {%- if block.settings.image != blank -%}
+              <img
+                src="{{ block.settings.image | image_url: width: 1200 }}"
+                alt="{{ block.settings.title | escape }}"
+                loading="lazy"
+                style="width:100%;height:100%;object-fit:cover;display:block;"
+              >
+            {%- endif -%}
+          </div>
+          <div class="mh-ed__meta">
+            {%- if block.settings.category != blank -%}
+              <p class="mh-ed__cat">{{ block.settings.category }}</p>
+            {%- endif -%}
+            <h3 class="mh-ed__title">{{ block.settings.title }}</h3>
+          </div>
+        </a>
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) { if (e.isIntersecting) e.target.classList.add('mh-vis'); });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.mh-ed-sec .mh-fu').forEach(function (el) { io.observe(el); });
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Editorial Grid",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "MARAIS Journal" },
+    { "type": "text", "id": "title", "label": "Title", "default": "Editorial" },
+    { "type": "text", "id": "see_all_label", "label": "See all label", "default": "All Stories" },
+    { "type": "url", "id": "see_all_link", "label": "See all link" }
+  ],
+  "blocks": [
+    {
+      "type": "article",
+      "name": "Article",
+      "limit": 3,
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "color", "id": "bg_color", "label": "Fallback background colour", "default": "#0a0a1e" },
+        { "type": "text", "id": "category", "label": "Category label", "default": "Campaign" },
+        { "type": "text", "id": "title", "label": "Article title", "default": "Article Title" },
+        { "type": "url", "id": "link", "label": "Link" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Editorial Grid",
+      "blocks": [
+        { "type": "article", "settings": { "category": "Campaign — F/W 25", "title": "The MARAIS Edit: A New Collaborative Vision", "bg_color": "#0a0a1e" } },
+        { "type": "article", "settings": { "category": "Craftsmanship", "title": "The Making of an Icon", "bg_color": "#1e180a" } },
+        { "type": "article", "settings": { "category": "Sustainability", "title": "Designed to Last", "bg_color": "#0a1e1a" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

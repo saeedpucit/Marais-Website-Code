@@ -1,0 +1,163 @@
+{%- assign img1       = product.featured_image -%}
+{%- assign img2       = product.images[1] -%}
+{%- assign is_sale = false -%}
+{%- if product.compare_at_price > product.price and product.available -%}{%- assign is_sale = true -%}{%- endif -%}
+{%- assign is_new = false -%}
+{%- if product.tags contains 'new' or product.tags contains 'new-arrival' -%}{%- assign is_new = true -%}{%- endif -%}
+{%- assign is_limited = false -%}
+{%- if product.tags contains 'limited-edition' or product.tags contains 'ltd' -%}{%- assign is_limited = true -%}{%- endif -%}
+{%- assign delay      = index | minus: 1 | times: 40 | at_most: 400 -%}
+
+{%- assign colour_idx = nil -%}
+{%- assign size_idx = nil -%}
+{%- for opt in product.options -%}
+  {%- assign opt_l = opt | downcase -%}
+  {%- if opt_l == 'colour' or opt_l == 'color' -%}
+    {%- assign colour_idx = forloop.index0 -%}
+  {%- endif -%}
+  {%- if opt_l == 'size' -%}
+    {%- assign size_idx = forloop.index0 -%}
+  {%- endif -%}
+{%- endfor -%}
+
+<article class="product-card" style="animation-delay:{{ delay }}ms">
+
+  <a href="{{ product.url }}" class="product-card__img-link" tabindex="-1" aria-hidden="true">
+    <div class="product-card__img-wrap">
+
+      {%- if is_sale -%}
+        <span class="product-card__badge product-card__badge--sale">Sale</span>
+      {%- elsif is_limited -%}
+        <span class="product-card__badge product-card__badge--ltd">Ltd</span>
+      {%- elsif is_new -%}
+        <span class="product-card__badge product-card__badge--new">New</span>
+      {%- endif -%}
+
+      {%- if img1 -%}
+        <img
+          class="product-card__img product-card__img--primary"
+          src="{{ img1 | img_url: '600x800', crop: 'center' }}"
+          alt="{{ img1.alt | escape | default: product.title }}"
+          loading="lazy"
+          width="600"
+          height="800"
+        >
+        {%- if img2 -%}
+          <img
+            class="product-card__img product-card__img--hover"
+            src="{{ img2 | img_url: '600x800', crop: 'center' }}"
+            alt="{{ img2.alt | escape | default: product.title }}"
+            loading="lazy"
+            width="600"
+            height="800"
+          >
+        {%- endif -%}
+      {%- else -%}
+        <div class="product-card__img-placeholder">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        </div>
+      {%- endif -%}
+
+      <button
+        class="product-card__qv"
+        data-handle="{{ product.handle }}"
+        aria-label="Quick view {{ product.title | escape }}"
+      >Quick View</button>
+
+      <button
+        class="product-card__wish"
+        aria-label="Save {{ product.title | escape }} to wishlist"
+        aria-pressed="false"
+        data-product-id="{{ product.id }}"
+        data-product-handle="{{ product.handle }}"
+        data-product-title="{{ product.title | escape }}"
+        data-product-vendor="{{ product.vendor | escape }}"
+        data-product-price="{{ product.price }}"
+        data-product-compare-price="{{ product.compare_at_price }}"
+        data-product-url="{{ product.url }}"
+        data-product-image="{{ img1 | img_url: '600x800', crop: 'center' }}"
+      >
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+        </svg>
+      </button>
+
+      {%- if size_idx != nil -%}
+        <div class="product-card__sizes" aria-label="Available sizes">
+          {%- assign seen_sizes = '' -%}
+          {%- for variant in product.variants -%}
+            {%- assign sv = variant.options[size_idx] -%}
+            {%- assign sv_key = '|' | append: sv | append: '|' -%}
+            {%- unless seen_sizes contains sv_key -%}
+              {%- assign size_avail = false -%}
+              {%- assign size_vid = '' -%}
+              {%- for v2 in product.variants -%}
+                {%- if v2.options[size_idx] == sv -%}
+                  {%- if v2.available and size_avail == false -%}
+                    {%- assign size_avail = true -%}
+                    {%- assign size_vid = v2.id -%}
+                  {%- endif -%}
+                {%- endif -%}
+              {%- endfor -%}
+              <button
+                class="product-card__size-pill{% unless size_avail %} is-sold-out{% endunless %}"
+                {% if size_avail %}data-variant-id="{{ size_vid }}"{% else %}disabled{% endif %}
+                aria-label="{{ sv }}{% unless size_avail %} — sold out{% endunless %}"
+              >{{ sv }}</button>
+              {%- assign seen_sizes = seen_sizes | append: sv_key -%}
+            {%- endunless -%}
+          {%- endfor -%}
+        </div>
+      {%- elsif product.variants.size == 1 -%}
+        {%- assign fv = product.selected_or_first_available_variant -%}
+        <button
+          class="product-card__quick-add"
+          data-variant-id="{{ fv.id }}"
+          aria-label="Quick add {{ product.title | escape }}"
+        >Quick Add</button>
+      {%- else -%}
+        <a href="{{ product.url }}" class="product-card__quick-add">Select Options</a>
+      {%- endif -%}
+
+    </div>
+  </a>
+
+  <div class="product-card__info">
+    <p class="product-card__vendor">{{ product.vendor }}</p>
+    <h3 class="product-card__title">
+      <a href="{{ product.url }}" class="product-card__title-link">{{ product.title }}</a>
+    </h3>
+    <div class="product-card__footer">
+      <div class="product-card__price">
+        {%- if is_sale -%}
+          <span class="product-card__price-was">{{ product.compare_at_price | money }}</span>
+          <span class="product-card__price-sale">{{ product.price | money }}</span>
+        {%- else -%}
+          {{ product.price | money }}
+        {%- endif -%}
+      </div>
+
+      {%- if colour_idx != nil -%}
+        {%- assign seen_colours = '' -%}
+        {%- assign swatch_count = 0 -%}
+        <div class="product-card__swatches" aria-hidden="true">
+          {%- for variant in product.variants -%}
+            {%- assign cv = variant.options[colour_idx] -%}
+            {%- assign cv_key = '|' | append: cv | append: '|' -%}
+            {%- unless seen_colours contains cv_key -%}
+              {%- if swatch_count < 5 -%}
+                <span class="product-card__swatch" data-c="{{ cv | downcase }}" title="{{ cv }}"></span>
+              {%- endif -%}
+              {%- assign seen_colours = seen_colours | append: cv_key -%}
+              {%- assign swatch_count = swatch_count | plus: 1 -%}
+            {%- endunless -%}
+          {%- endfor -%}
+          {%- if swatch_count > 5 -%}
+            <span class="product-card__swatch-more">+{{ swatch_count | minus: 5 }}</span>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+
+</article>

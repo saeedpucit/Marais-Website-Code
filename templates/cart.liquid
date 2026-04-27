@@ -1,0 +1,173 @@
+{%- assign item_count = cart.item_count -%}
+
+<div class="cart-page">
+
+  <div class="cart-page__header">
+    <h1 class="cart-page__heading">Your Bag</h1>
+    <span class="cart-page__count" data-cart-count>
+      {{- item_count == 1 ? '1 item' : item_count | append: ' items' -}}
+    </span>
+  </div>
+
+  {%- if item_count > 0 -%}
+
+    <div class="cart-page__layout">
+
+      <!-- ── Line items ── -->
+      <div class="cart-items" data-cart-items-area>
+        {%- for item in cart.items -%}
+          <div class="cart-item" data-key="{{ item.key }}">
+
+            <a href="{{ item.url }}" class="cart-item__img-link" tabindex="-1">
+              {%- if item.image -%}
+                <img
+                  class="cart-item__img"
+                  src="{{ item.image | image_url: width: 300 }}"
+                  alt="{{ item.image.alt | escape | default: item.title | escape }}"
+                  loading="lazy"
+                  width="96"
+                  height="128"
+                >
+              {%- else -%}
+                <div class="cart-item__img"></div>
+              {%- endif -%}
+            </a>
+
+            <div class="cart-item__body">
+              <div class="cart-item__top">
+                <div class="cart-item__info">
+                  <p class="cart-item__vendor">{{ item.vendor }}</p>
+                  <a href="{{ item.url }}" class="cart-item__title">{{ item.product.title }}</a>
+                  {%- unless item.variant.title == 'Default Title' -%}
+                    <p class="cart-item__variant">{{ item.variant.title }}</p>
+                  {%- endunless -%}
+                </div>
+                <div class="cart-item__price">
+                  {%- if item.original_price > item.final_price -%}
+                    <span class="cart-item__price-was">{{ item.original_price | money }}</span>
+                    <span class="cart-item__price-sale">{{ item.final_price | money }}</span>
+                  {%- else -%}
+                    {{ item.final_price | money }}
+                  {%- endif -%}
+                </div>
+              </div>
+
+              <div class="cart-item__bottom">
+                <div class="cart-item__qty">
+                  <button class="cart-item__qty-btn" data-dir="down" aria-label="Decrease quantity">−</button>
+                  <input
+                    class="cart-item__qty-val"
+                    type="number"
+                    value="{{ item.quantity }}"
+                    min="0"
+                    aria-label="Quantity for {{ item.title | escape }}"
+                  >
+                  <button class="cart-item__qty-btn" data-dir="up" aria-label="Increase quantity">+</button>
+                </div>
+                <button class="cart-item__remove" aria-label="Remove {{ item.title | escape }}">Remove</button>
+              </div>
+            </div>
+
+          </div>
+        {%- endfor -%}
+      </div>
+
+      <!-- ── Order summary ── -->
+      <aside class="cart-summary" data-cart-summary-area>
+        <h2 class="cart-summary__heading">Order Summary</h2>
+
+        <div class="cart-summary__row">
+          <span class="cart-summary__label">Subtotal</span>
+          <span class="cart-summary__val" data-cart-subtotal>{{ cart.items_subtotal_price | money }}</span>
+        </div>
+        <div class="cart-summary__row">
+          <span class="cart-summary__label">Shipping</span>
+          <span class="cart-summary__val">Calculated at checkout</span>
+        </div>
+
+        <hr class="cart-summary__divider">
+
+        <div class="cart-summary__total-row">
+          <span class="cart-summary__total-lbl">Estimated Total</span>
+          <span class="cart-summary__total-val" data-cart-total>{{ cart.total_price | money }}</span>
+        </div>
+
+        <p class="cart-summary__note">Taxes and shipping calculated at checkout. Free standard shipping on all Australian orders.</p>
+
+        <!-- Promo code -->
+        <div class="cart-promo">
+          <label class="cart-promo__label" for="CartPromoCode">Promotional Code</label>
+          <form class="cart-promo__form" action="/checkout" method="post">
+            <div class="cart-promo__row">
+              <input
+                id="CartPromoCode"
+                class="cart-promo__input"
+                type="text"
+                name="discount"
+                placeholder="Enter code"
+                autocomplete="off"
+              >
+              <button type="submit" class="cart-promo__apply">Apply</button>
+            </div>
+          </form>
+        </div>
+
+        <a href="/checkout" class="cart-checkout">Proceed to Checkout</a>
+        <a href="/collections/all" class="cart-continue">Continue Shopping</a>
+
+        <!-- Trust bar -->
+        <div class="cart-trust">
+          <div class="cart-trust__item">
+            <span class="cart-trust__icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </span>
+            <span class="cart-trust__text">Free AU Delivery</span>
+          </div>
+          <div class="cart-trust__item">
+            <span class="cart-trust__icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            </span>
+            <span class="cart-trust__text">Easy Returns</span>
+          </div>
+          <div class="cart-trust__item">
+            <span class="cart-trust__icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </span>
+            <span class="cart-trust__text">100% Authentic</span>
+          </div>
+          <div class="cart-trust__item">
+            <span class="cart-trust__icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+            </span>
+            <span class="cart-trust__text">Secure Checkout</span>
+          </div>
+        </div>
+
+      </aside>
+
+    </div>
+
+  {%- else -%}
+
+    <div class="cart-empty" data-cart-empty-area>
+      <h2 class="cart-empty__heading">Your bag is empty</h2>
+      <p class="cart-empty__sub">Discover our curated selection of luxury fashion</p>
+      <div class="cart-empty__cta">
+        <a href="/collections/women" class="mh-btn">Shop Women</a>
+        <a href="/collections/men" class="mh-btn mh-btn--outline">Shop Men</a>
+      </div>
+
+      <div class="cart-empty__recs">
+        <h3 class="cart-empty__recs-title">You May Also Like</h3>
+        <div class="cart-recs-grid">
+          {%- for product in collections.all.products limit: 4 -%}
+            {%- assign index = forloop.index -%}
+            {%- render 'product-card', product: product, index: index -%}
+          {%- endfor -%}
+        </div>
+      </div>
+    </div>
+
+  {%- endif -%}
+
+</div>

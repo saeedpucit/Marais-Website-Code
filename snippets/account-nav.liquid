@@ -1,0 +1,32 @@
+{%- assign path = request.path -%}
+
+<nav class="account-nav" aria-label="Account navigation">
+  <span class="account-nav__greeting">My Account</span>
+  <ul class="account-nav__links">
+    <li>
+      <a href="{{ routes.account_url }}"
+         class="account-nav__link{% if path == '/account' %} account-nav__link--active{% endif %}">
+        Overview
+      </a>
+    </li>
+    <li>
+      <a href="{{ routes.account_url }}/orders"
+         class="account-nav__link{% if path contains '/orders' %} account-nav__link--active{% endif %}">
+        Orders
+      </a>
+    </li>
+    <li>
+      <a href="{{ routes.account_url }}/addresses"
+         class="account-nav__link{% if path contains '/addresses' %} account-nav__link--active{% endif %}">
+        Addresses
+      </a>
+    </li>
+    <li>
+      <a href="{{ routes.account_url }}/wishlist"
+         class="account-nav__link{% if path contains '/wishlist' %} account-nav__link--active{% endif %}">
+        Wishlist
+      </a>
+    </li>
+  </ul>
+  <a href="{{ routes.account_logout_url }}" class="account-nav__logout">Sign Out</a>
+</nav>

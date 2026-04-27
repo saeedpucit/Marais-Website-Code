@@ -1,0 +1,26 @@
+{%- assign fulfillment = order.fulfillment_status -%}
+{%- assign financial   = order.financial_status -%}
+
+{%- assign status_class = 'order-status--unfulfilled' -%}
+{%- assign status_label = 'Pending' -%}
+{%- if fulfillment == 'fulfilled' -%}
+  {%- assign status_class = 'order-status--fulfilled' -%}
+  {%- assign status_label = 'Fulfilled' -%}
+{%- elsif fulfillment == 'partial' -%}
+  {%- assign status_class = 'order-status--unfulfilled' -%}
+  {%- assign status_label = 'Partial' -%}
+{%- elsif financial == 'refunded' or financial == 'voided' -%}
+  {%- assign status_class = 'order-status--cancelled' -%}
+  {%- assign status_label = 'Cancelled' -%}
+{%- endif -%}
+
+<tr>
+  <td>{{ order.name }}</td>
+  <td>{{ order.created_at | date: '%d %b %Y' }}</td>
+  <td>{{ order.line_items.size }} item{{ order.line_items.size | plural: '', 's' }}</td>
+  <td><span class="order-status {{ status_class }}">{{ status_label }}</span></td>
+  <td>{{ order.total_price | money }}</td>
+  <td>
+    <a href="{{ order.customer_url }}" class="order-link">View</a>
+  </td>
+</tr>

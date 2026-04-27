@@ -1,0 +1,75 @@
+{
+  "sections": {
+    "about_hero": {
+      "type": "luxury-editorial",
+      "settings": {
+        "eyebrow": "Est. 2004 — Melbourne",
+        "heading": "Born in Melbourne,\nDressed by the World",
+        "overlay_opacity": 30,
+        "text_position": "bottom",
+        "link1_label": "Shop Now",
+        "link1_url": "/collections/all"
+      }
+    },
+    "about_feature": {
+      "type": "marais-editorial-feature",
+      "settings": {
+        "image_side": "left",
+        "eyebrow": "Our Story",
+        "heading": "Two Decades of Curation",
+        "body": "<p>Founded in Melbourne in 2004, MARAIS began as a singular vision: to bring the world's most considered designers to Australian wardrobes. What started as a single boutique in South Yarra has grown into five locations and a global online presence.</p><p>We believe fashion is more than clothing — it is a form of self-expression, craft, and culture. Every brand we carry is chosen with intention. Every piece tells a story.</p>",
+        "cta_label": "Shop the Collection",
+        "cta_link": "/collections/all"
+      }
+    },
+    "about_stats": {
+      "type": "marais-stats-bar",
+      "blocks": {
+        "s1": { "type": "stat", "settings": { "number": "2004", "label": "Year Founded" } },
+        "s2": { "type": "stat", "settings": { "number": "5",    "label": "Melbourne Boutiques" } },
+        "s3": { "type": "stat", "settings": { "number": "50+",  "label": "Global Designers" } },
+        "s4": { "type": "stat", "settings": { "number": "20+",  "label": "Years of Curation" } }
+      },
+      "block_order": ["s1","s2","s3","s4"],
+      "settings": {}
+    },
+    "about_team": {
+      "type": "marais-team-grid",
+      "blocks": {
+        "m1": { "type": "member", "settings": { "name": "Karla M.", "role": "Founder & Creative Director" } },
+        "m2": { "type": "member", "settings": { "name": "James T.", "role": "Head of Buying" } },
+        "m3": { "type": "member", "settings": { "name": "Sophie L.", "role": "Brand Director" } }
+      },
+      "block_order": ["m1","m2","m3"],
+      "settings": {
+        "eyebrow": "The People",
+        "title": "Meet the Team"
+      }
+    },
+    "about_locations": {
+      "type": "marais-locations",
+      "blocks": {
+        "l1": { "type": "location", "settings": { "name": "South Yarra", "address": "1 Chapel Street, South Yarra VIC 3141", "phone": "+61 3 9827 0000", "hours": "Mon–Sat 10am–6pm, Sun 11am–5pm" } },
+        "l2": { "type": "location", "settings": { "name": "Melbourne CBD", "address": "300 Collins Street, Melbourne VIC 3000", "phone": "+61 3 9650 0000", "hours": "Mon–Sat 10am–7pm, Sun 11am–6pm" } },
+        "l3": { "type": "location", "settings": { "name": "Armadale", "address": "High Street, Armadale VIC 3143", "phone": "+61 3 9824 0000", "hours": "Mon–Sat 10am–6pm, Sun 12pm–5pm" } }
+      },
+      "block_order": ["l1","l2","l3"],
+      "settings": {
+        "eyebrow": "Find Us",
+        "title": "Our Boutiques"
+      }
+    },
+    "about_newsletter": {
+      "type": "marais-newsletter",
+      "settings": {}
+    }
+  },
+  "order": [
+    "about_hero",
+    "about_feature",
+    "about_stats",
+    "about_team",
+    "about_locations",
+    "about_newsletter"
+  ]
+}

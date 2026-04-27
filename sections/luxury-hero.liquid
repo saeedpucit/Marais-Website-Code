@@ -1,0 +1,208 @@
+{{ 'luxury-hero.css' | asset_url | stylesheet_tag }}
+
+<div
+  class="luxury-hero"
+  data-autoplay="{{ section.settings.autoplay }}"
+  data-interval="{{ section.settings.autoplay_speed | times: 1000 }}"
+>
+  {%- for block in section.blocks -%}
+    <div
+      class="luxury-hero__slide{% if forloop.first %} is-active{% endif %}"
+      {{ block.shopify_attributes }}
+    >
+      {%- if block.settings.video_url != blank -%}
+        <video
+          class="luxury-hero__video"
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="auto"
+        >
+          <source src="{{ block.settings.video_url }}" type="video/mp4">
+        </video>
+      {%- elsif block.settings.image != blank -%}
+        {%- if block.settings.mobile_image != blank -%}
+          <img
+            src="{{ block.settings.mobile_image | image_url: width: 750 }}"
+            alt="{{ block.settings.heading | escape }}"
+            class="luxury-hero__media large-up-hide"
+            loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
+            width="750"
+            height="1000"
+          >
+        {%- endif -%}
+        <img
+          src="{{ block.settings.image | image_url: width: 2000 }}"
+          srcset="
+            {{ block.settings.image | image_url: width: 750 }} 750w,
+            {{ block.settings.image | image_url: width: 1100 }} 1100w,
+            {{ block.settings.image | image_url: width: 1500 }} 1500w,
+            {{ block.settings.image | image_url: width: 2000 }} 2000w
+          "
+          sizes="100vw"
+          alt="{{ block.settings.heading | escape }}"
+          class="luxury-hero__media{% if block.settings.mobile_image != blank %} small-hide medium-hide{% endif %}"
+          loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
+          width="2000"
+          height="1125"
+        >
+      {%- else -%}
+        <div style="width:100%;height:100%;background:#111;"></div>
+      {%- endif -%}
+
+      <div class="luxury-hero__overlay"></div>
+
+      <div class="luxury-hero__content">
+        {%- if block.settings.eyebrow != blank -%}
+          <span class="luxury-hero__eyebrow">{{ block.settings.eyebrow }}</span>
+        {%- endif -%}
+        {%- if block.settings.heading != blank -%}
+          <span class="luxury-hero__heading">{{ block.settings.heading }}</span>
+        {%- endif -%}
+        {%- if block.settings.cta_label != blank and block.settings.cta_link != blank -%}
+          <a href="{{ block.settings.cta_link }}" class="luxury-hero__cta">
+            {{ block.settings.cta_label }}
+          </a>
+        {%- endif -%}
+      </div>
+    </div>
+  {%- endfor -%}
+
+  {%- if section.blocks.size > 1 -%}
+    <div class="luxury-hero__dots" role="tablist">
+      {%- for block in section.blocks -%}
+        <button
+          class="luxury-hero__dot{% if forloop.first %} is-active{% endif %}"
+          data-index="{{ forloop.index0 }}"
+          role="tab"
+          aria-label="Slide {{ forloop.index }}"
+        ></button>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+</div>
+
+<script>
+(function () {
+  var hero = document.querySelector('.luxury-hero');
+  if (!hero) return;
+
+  var slides = hero.querySelectorAll('.luxury-hero__slide');
+  var dots = hero.querySelectorAll('.luxury-hero__dot');
+  if (slides.length <= 1) return;
+
+  var current = 0;
+  var autoplay = hero.dataset.autoplay === 'true';
+  var interval = parseInt(hero.dataset.interval, 10) || 5000;
+  var timer;
+
+  function goTo(index) {
+    slides[current].classList.remove('is-active');
+    if (dots[current]) dots[current].classList.remove('is-active');
+    current = (index + slides.length) % slides.length;
+    slides[current].classList.add('is-active');
+    if (dots[current]) dots[current].classList.add('is-active');
+  }
+
+  dots.forEach(function (dot) {
+    dot.addEventListener('click', function () {
+      clearInterval(timer);
+      goTo(parseInt(this.dataset.index, 10));
+      if (autoplay) startTimer();
+    });
+  });
+
+  function startTimer() {
+    timer = setInterval(function () { goTo(current + 1); }, interval);
+  }
+
+  if (autoplay) startTimer();
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Hero Slideshow",
+  "tag": "section",
+  "class": "luxury-hero-section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Auto-advance slides",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "autoplay_speed",
+      "min": 3,
+      "max": 12,
+      "step": 1,
+      "unit": "s",
+      "label": "Change slides every",
+      "default": 6
+    }
+  ],
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "Slide",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Desktop image"
+        },
+        {
+          "type": "image_picker",
+          "id": "mobile_image",
+          "label": "Mobile image",
+          "info": "Portrait crop for phones. Falls back to desktop image if not set."
+        },
+        {
+          "type": "text",
+          "id": "video_url",
+          "label": "Video URL (MP4)",
+          "info": "Hosted video URL. Overrides image when set."
+        },
+        {
+          "type": "text",
+          "id": "eyebrow",
+          "label": "Eyebrow text",
+          "info": "Small label above the heading, e.g. SS25"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading"
+        },
+        {
+          "type": "text",
+          "id": "cta_label",
+          "label": "CTA label",
+          "default": "DISCOVER"
+        },
+        {
+          "type": "url",
+          "id": "cta_link",
+          "label": "CTA link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero Slideshow",
+      "blocks": [
+        {
+          "type": "slide",
+          "settings": {
+            "cta_label": "DISCOVER"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

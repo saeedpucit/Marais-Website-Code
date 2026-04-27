@@ -1,0 +1,41 @@
+{
+  "sections": {
+    "designers_hero": {
+      "type": "marais-designers-hero",
+      "settings": {
+        "eyebrow": "Curated Luxury",
+        "heading": "Our Designers",
+        "placeholder": "Search designers..."
+      }
+    },
+    "designers_list": {
+      "type": "marais-brands-full",
+      "blocks": {
+        "b1":  { "type": "brand", "settings": { "letter": "A", "name": "Alexander McQueen", "tagline": "Dark romanticism, British precision", "gender": "W / M", "link": "/collections/all" } },
+        "b2":  { "type": "brand", "settings": { "letter": "A", "name": "Ami Paris", "tagline": "Parisian simplicity, elevated", "gender": "W / M", "link": "/collections/all" } },
+        "b3":  { "type": "brand", "settings": { "letter": "A", "name": "Amiri", "tagline": "Rock 'n' roll luxury", "gender": "W / M", "link": "/collections/all" } },
+        "b4":  { "type": "brand", "settings": { "letter": "B", "name": "Balenciaga", "tagline": "Fashion's radical provocateur", "gender": "W / M", "link": "/collections/all" } },
+        "b5":  { "type": "brand", "settings": { "letter": "C", "name": "Celine", "tagline": "Quiet confidence, refined ease", "gender": "W / M", "link": "/collections/all" } },
+        "b6":  { "type": "brand", "settings": { "letter": "D", "name": "Diesel", "tagline": "Denim reimagined", "gender": "W / M", "link": "/collections/women-diesel" } },
+        "b7":  { "type": "brand", "settings": { "letter": "E", "name": "Entire Studios", "tagline": "Unisex essentials, globally minded", "gender": "W / M", "link": "/collections/men-entire-studios" } },
+        "b8":  { "type": "brand", "settings": { "letter": "F", "name": "Fear of God", "tagline": "American luxury, understated", "gender": "M", "link": "/collections/all" } },
+        "b9":  { "type": "brand", "settings": { "letter": "G", "name": "Givenchy", "tagline": "Parisian couture, modern edge", "gender": "W / M", "link": "/collections/all" } },
+        "b10": { "type": "brand", "settings": { "letter": "J", "name": "Jacquemus", "tagline": "Provençal sun, Parisian edge", "gender": "W / M", "link": "/collections/all" } },
+        "b11": { "type": "brand", "settings": { "letter": "L", "name": "Loewe", "tagline": "Spanish craft, contemporary vision", "gender": "W / M", "link": "/collections/women-loewe" } },
+        "b12": { "type": "brand", "settings": { "letter": "M", "name": "Maison Margiela", "tagline": "Deconstruction as philosophy", "gender": "W / M", "link": "/collections/men-maison-margiela" } },
+        "b13": { "type": "brand", "settings": { "letter": "M", "name": "Maison Mihara Yasuhiro", "tagline": "Tokyo's avant-garde footwear", "gender": "W / M", "link": "/collections/men-maison-mihara-yasuhiro" } },
+        "b14": { "type": "brand", "settings": { "letter": "O", "name": "Off-White", "tagline": "Street culture meets luxury", "gender": "W / M", "link": "/collections/all" } },
+        "b15": { "type": "brand", "settings": { "letter": "P", "name": "Post Archive Faction", "tagline": "Seoul's technical avant-garde", "gender": "W / M", "link": "/collections/all" } },
+        "b16": { "type": "brand", "settings": { "letter": "R", "name": "Represent", "tagline": "Manchester grit, global ambition", "gender": "W / M", "link": "/collections/all" } },
+        "b17": { "type": "brand", "settings": { "letter": "R", "name": "Rick Owens", "tagline": "Darkness, movement, architecture", "gender": "W / M", "link": "/collections/all" } },
+        "b18": { "type": "brand", "settings": { "letter": "S", "name": "Sacai", "tagline": "Hybrid construction, Tokyo precision", "gender": "W / M", "link": "/collections/men-sacai" } },
+        "b19": { "type": "brand", "settings": { "letter": "S", "name": "Stone Island", "tagline": "Technical outerwear, Italian heritage", "gender": "M", "link": "/collections/all" } },
+        "b20": { "type": "brand", "settings": { "letter": "W", "name": "Wooyoungmi", "tagline": "Seoul's quiet luxury menswear", "gender": "M", "link": "/collections/all" } },
+        "b21": { "type": "brand", "settings": { "letter": "Y", "name": "Y-3", "tagline": "Yamamoto × adidas, sport refined", "gender": "W / M", "link": "/collections/men-y3" } }
+      },
+      "block_order": ["b1","b2","b3","b4","b5","b6","b7","b8","b9","b10","b11","b12","b13","b14","b15","b16","b17","b18","b19","b20","b21"],
+      "settings": {}
+    }
+  },
+  "order": ["designers_hero", "designers_list"]
+}

@@ -1,0 +1,42 @@
+{
+  "sections": {
+    "lookbook": {
+      "type": "marais-lookbook",
+      "blocks": {
+        "slide1": {
+          "type": "slide",
+          "settings": {
+            "eyebrow": "F/W 2025 — Campaign",
+            "heading": "The Autumn Edit",
+            "body": "Defining pieces from Maison Margiela, Rick Owens, Loewe and more — curated for the season ahead.",
+            "cta_label": "Shop Now",
+            "cta_link": "/collections/all"
+          }
+        },
+        "slide2": {
+          "type": "slide",
+          "settings": {
+            "eyebrow": "Women",
+            "heading": "Dressed\nwith Intention",
+            "body": "Considered dressing for the considered woman. Each piece selected for its craft, its culture, its longevity.",
+            "cta_label": "Shop Women",
+            "cta_link": "/collections/women"
+          }
+        },
+        "slide3": {
+          "type": "slide",
+          "settings": {
+            "eyebrow": "Men",
+            "heading": "The\nDark Archive",
+            "body": "For those who dress with purpose. Rick Owens, Stone Island, Maison Margiela — the full men's edit.",
+            "cta_label": "Shop Men",
+            "cta_link": "/collections/men"
+          }
+        }
+      },
+      "block_order": ["slide1", "slide2", "slide3"],
+      "settings": {}
+    }
+  },
+  "order": ["lookbook"]
+}

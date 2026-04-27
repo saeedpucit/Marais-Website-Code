@@ -1,0 +1,47 @@
+<div class="mh-statsbar">
+  {%- for block in section.blocks -%}
+    <div class="mh-statsbar__item" {{ block.shopify_attributes }}>
+      <span class="mh-statsbar__num">{{ block.settings.number }}</span>
+      <span class="mh-statsbar__lbl">{{ block.settings.label }}</span>
+    </div>
+  {%- endfor -%}
+</div>
+
+{% schema %}
+{
+  "name": "Stats Bar",
+  "tag": "section",
+  "max_blocks": 6,
+  "blocks": [
+    {
+      "type": "stat",
+      "name": "Stat",
+      "settings": [
+        {
+          "type": "text",
+          "id": "number",
+          "label": "Number / value",
+          "placeholder": "20+"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "placeholder": "Years of Curation"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Stats Bar",
+      "blocks": [
+        { "type": "stat", "settings": { "number": "20+", "label": "Years" } },
+        { "type": "stat", "settings": { "number": "5",   "label": "Boutiques" } },
+        { "type": "stat", "settings": { "number": "50+", "label": "Global Brands" } },
+        { "type": "stat", "settings": { "number": "2004","label": "Founded" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

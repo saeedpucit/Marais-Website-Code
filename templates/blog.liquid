@@ -1,0 +1,75 @@
+{%- paginate blog.articles by 18 -%}
+
+{%- assign featured_article = blog.articles.first -%}
+
+<div class="editorial-page">
+
+  <!-- ── Tag filter ── -->
+  {%- if blog.all_tags.size > 0 -%}
+    <div class="editorial-tag-filter">
+      <a href="{{ blog.url }}" class="editorial-tag-pill{% unless current_tags %} is-active{% endunless %}">All</a>
+      {%- for tag in blog.all_tags -%}
+        {%- if current_tags contains tag -%}
+          {{ tag | link_to_remove_tag: tag | replace: '<a ', '<a class="editorial-tag-pill is-active " ' }}
+        {%- else -%}
+          {{ tag | link_to_tag: tag | replace: '<a ', '<a class="editorial-tag-pill " ' }}
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+
+  <!-- ── Featured hero (first article) ── -->
+  {%- if featured_article -%}
+    <a href="{{ featured_article.url }}" class="editorial-hero">
+      {%- if featured_article.image -%}
+        <img
+          class="editorial-hero__img"
+          src="{{ featured_article.image | image_url: width: 2000 }}"
+          srcset="
+            {{ featured_article.image | image_url: width: 1200 }} 1200w,
+            {{ featured_article.image | image_url: width: 1800 }} 1800w,
+            {{ featured_article.image | image_url: width: 2000 }} 2000w
+          "
+          sizes="100vw"
+          alt="{{ featured_article.image.alt | escape | default: featured_article.title | escape }}"
+          loading="eager"
+          width="2000"
+          height="1125"
+        >
+      {%- endif -%}
+      <div class="editorial-hero__overlay"></div>
+      <div class="editorial-hero__content">
+        {%- if featured_article.tags.first -%}
+          <span class="editorial-hero__tag">{{ featured_article.tags.first }}</span>
+        {%- endif -%}
+        <span class="editorial-hero__title">{{ featured_article.title }}</span>
+        <span class="editorial-hero__link">Read Story</span>
+      </div>
+    </a>
+  {%- endif -%}
+
+  <!-- ── Article grid (remaining) ── -->
+  {%- assign remaining = blog.articles | slice: 1, 100 -%}
+  {%- if remaining.size > 0 -%}
+    <div class="editorial-grid">
+      {%- for article in remaining -%}
+        {%- render 'editorial-card', article: article -%}
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+
+  <!-- ── Pagination ── -->
+  {%- if paginate.pages > 1 -%}
+    <div style="display:flex;justify-content:center;gap:8px;padding:48px;border-top:1px solid var(--mh-light)">
+      {%- if paginate.previous -%}
+        <a href="{{ paginate.previous.url }}" class="mh-btn mh-btn--outline">&larr; Previous</a>
+      {%- endif -%}
+      {%- if paginate.next -%}
+        <a href="{{ paginate.next.url }}" class="mh-btn">Next &rarr;</a>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+
+</div>
+
+{%- endpaginate -%}

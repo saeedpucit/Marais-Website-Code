@@ -1,0 +1,27 @@
+<div class="error-page">
+  <div class="error-page__watermark" aria-hidden="true">404</div>
+  <div class="error-page__content">
+    <p class="error-page__eyebrow">Page Not Found</p>
+    <h1 class="error-page__heading">
+      The page you're looking for<br>
+      <em>doesn't exist</em>
+    </h1>
+    <p class="error-page__sub">It may have moved, been removed, or the URL may be incorrect.</p>
+    <div class="error-page__actions">
+      <a href="/collections/women" class="mh-btn">Shop Women</a>
+      <a href="/collections/men" class="mh-btn mh-btn--outline">Shop Men</a>
+      <a href="/search" class="mh-btn mh-btn--outline">Search</a>
+    </div>
+  </div>
+
+  <div class="error-page__recs">
+    <p class="error-page__recs-eyebrow">While you're here</p>
+    <h2 class="error-page__recs-title">New Arrivals</h2>
+    <div class="error-page__recs-grid">
+      {%- for product in collections.all.products limit: 4 -%}
+        {%- assign index = forloop.index -%}
+        {%- render 'product-card', product: product, index: index -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</div>

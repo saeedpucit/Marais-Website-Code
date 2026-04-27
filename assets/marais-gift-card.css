@@ -1,0 +1,286 @@
+/* ============================================================
+   MARAIS — marais-gift-card.css
+   Standalone gift card page
+   ============================================================ */
+
+:root {
+  --mh-black: #0a0a0a;
+  --mh-white: #fafaf8;
+  --mh-cream: #f5f2ed;
+  --mh-gold: #c9a84c;
+  --mh-light: #e8e4de;
+  --mh-gray: #7a7a7a;
+  --mh-serif: 'Cormorant Garamond', Georgia, serif;
+  --mh-sans: 'Outfit', 'Helvetica Neue', Arial, sans-serif;
+}
+
+*,
+*::before,
+*::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--mh-black);
+  color: var(--mh-white);
+  font-family: var(--mh-sans);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 60px 24px 80px;
+}
+
+/* ── Header ── */
+.gc-header {
+  width: 100%;
+  max-width: 540px;
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.gc-logo {
+  display: inline-block;
+  color: var(--mh-white);
+  margin-bottom: 28px;
+  text-decoration: none;
+}
+
+.gc-greeting {
+  font-size: 10px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.35);
+  font-family: var(--mh-sans);
+  margin-bottom: 4px;
+}
+
+/* ── Card object ── */
+.gc-card {
+  width: 100%;
+  max-width: 540px;
+  background: var(--mh-cream);
+  aspect-ratio: 16/9;
+  padding: 36px 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 40px;
+  box-shadow: 0 40px 80px rgba(0,0,0,.5);
+}
+
+.gc-card::before {
+  content: '';
+  position: absolute;
+  top: -60px;
+  right: -60px;
+  width: 240px;
+  height: 240px;
+  background: radial-gradient(circle, rgba(201,168,76,.18) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.gc-card::after {
+  content: 'MARAIS';
+  position: absolute;
+  bottom: -10px;
+  right: 20px;
+  font-family: var(--mh-serif);
+  font-size: 80px;
+  font-weight: 300;
+  color: rgba(10,10,10,.04);
+  letter-spacing: -.02em;
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+}
+
+.gc-card__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.gc-card__mark { color: var(--mh-black); }
+
+.gc-card__meta {
+  text-align: right;
+}
+
+.gc-card__label {
+  font-size: 8px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--mh-gray);
+  font-family: var(--mh-sans);
+  display: block;
+}
+
+.gc-card__bottom { }
+
+.gc-card__value {
+  font-family: var(--mh-serif);
+  font-size: clamp(48px, 9vw, 76px);
+  font-weight: 300;
+  color: var(--mh-black);
+  line-height: 1;
+  letter-spacing: -.02em;
+  display: block;
+}
+
+.gc-card__expired-badge {
+  display: inline-block;
+  font-size: 9px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  background: var(--mh-black);
+  color: var(--mh-white);
+  font-family: var(--mh-sans);
+  margin-top: 8px;
+}
+
+.gc-card__balance {
+  font-size: 11px;
+  color: var(--mh-gray);
+  font-family: var(--mh-sans);
+  margin-top: 4px;
+}
+
+/* ── QR code ── */
+.gc-qr-wrap {
+  width: 100%;
+  max-width: 540px;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 28px;
+}
+
+.gc-qr {
+  padding: 14px;
+  background: var(--mh-white);
+  display: inline-block;
+}
+
+/* ── Gift code ── */
+.gc-code-section {
+  width: 100%;
+  max-width: 540px;
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.gc-code-label {
+  font-size: 9px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.35);
+  font-family: var(--mh-sans);
+  margin-bottom: 12px;
+}
+
+.gc-code {
+  display: block;
+  width: 100%;
+  background: transparent;
+  border: 1px solid var(--mh-gold);
+  color: var(--mh-gold);
+  font-family: 'Courier New', 'Lucida Console', monospace;
+  font-size: clamp(14px, 3vw, 20px);
+  letter-spacing: .18em;
+  text-align: center;
+  padding: 14px 20px;
+  outline: none;
+  cursor: text;
+  -webkit-user-select: all;
+  user-select: all;
+}
+
+.gc-copy-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 12px;
+  min-height: 24px;
+}
+
+.gc-copy-btn {
+  background: none;
+  border: none;
+  font-size: 10px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.4);
+  font-family: var(--mh-sans);
+  cursor: pointer;
+  transition: color .2s;
+  padding: 0;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.gc-copy-btn:hover { color: var(--mh-white); }
+
+.gc-copy-success {
+  font-size: 10px;
+  color: var(--mh-gold);
+  font-family: var(--mh-sans);
+  letter-spacing: .06em;
+}
+
+/* ── Apple Wallet ── */
+.gc-apple-wallet {
+  margin: 4px 0;
+  display: flex;
+  justify-content: center;
+}
+
+/* ── Action buttons ── */
+.gc-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.gc-btn {
+  display: inline-block;
+  padding: 12px 28px;
+  font-size: 11px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  font-family: var(--mh-sans);
+  text-decoration: none;
+  cursor: pointer;
+  transition: background .2s, color .2s, border-color .2s;
+  border: 1px solid rgba(255,255,255,.3);
+  color: rgba(255,255,255,.7);
+  background: transparent;
+}
+.gc-btn:hover {
+  border-color: var(--mh-white);
+  color: var(--mh-white);
+}
+.gc-btn--primary {
+  background: var(--mh-white);
+  color: var(--mh-black);
+  border-color: var(--mh-white);
+}
+.gc-btn--primary:hover {
+  background: rgba(250,250,248,.85);
+  color: var(--mh-black);
+}
+
+/* ── Print ── */
+@media print {
+  body { background: white; color: black; padding: 20px; }
+  .gc-card { box-shadow: none; border: 1px solid #ddd; }
+  .gc-code { color: black; border-color: #999; }
+  .gc-actions, .gc-copy-row, .gc-apple-wallet { display: none !important; }
+  .gc-greeting, .gc-code-label { color: #666; }
+}
+
+@media (max-width: 600px) {
+  body { padding: 40px 16px 60px; }
+  .gc-card { aspect-ratio: auto; min-height: 220px; padding: 28px 24px; }
+}

@@ -1,0 +1,28 @@
+<div class="account-page">
+  {%- render 'account-nav' -%}
+
+  <div class="account-content">
+
+    <div class="account-header">
+      <h1 class="account-header__greeting">Your Curated Edit</h1>
+      <p class="account-header__sub" id="WishlistCount">Loading&hellip;</p>
+    </div>
+
+    <!-- Grid rendered by marais-account.js -->
+    <div id="WishlistGrid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:2px;min-height:200px">
+    </div>
+
+    <!-- Empty state (hidden by default, shown by JS if wishlist is empty) -->
+    <div id="WishlistEmpty" style="display:none">
+      <div class="wishlist-empty">
+        <h2 class="wishlist-empty__heading">Nothing saved yet</h2>
+        <p class="wishlist-empty__sub">Save pieces you love by tapping the heart on any product</p>
+        <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+          <a href="/collections/women" class="mh-btn">Shop Women</a>
+          <a href="/collections/men" class="mh-btn mh-btn--outline">Shop Men</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

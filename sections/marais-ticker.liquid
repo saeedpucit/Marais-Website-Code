@@ -1,0 +1,43 @@
+<div class="mh-ticker">
+  <div class="mh-ticker__track">
+    {%- for block in section.blocks -%}
+      <span>{{ block.settings.text }}</span><b>&nbsp;·&nbsp;</b>
+    {%- endfor -%}
+    {%- for block in section.blocks -%}
+      <span>{{ block.settings.text }}</span><b>&nbsp;·&nbsp;</b>
+    {%- endfor -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Brand Ticker",
+  "tag": "section",
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Ticker item",
+      "settings": [
+        { "type": "text", "id": "text", "label": "Text", "default": "New Arrivals" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Brand Ticker",
+      "blocks": [
+        { "type": "item", "settings": { "text": "New Arrivals — F/W 25" } },
+        { "type": "item", "settings": { "text": "Maison Margiela" } },
+        { "type": "item", "settings": { "text": "Rick Owens DRKSHDW" } },
+        { "type": "item", "settings": { "text": "Stone Island" } },
+        { "type": "item", "settings": { "text": "Sacai" } },
+        { "type": "item", "settings": { "text": "Loewe" } },
+        { "type": "item", "settings": { "text": "Wooyoungmi F/W 25" } },
+        { "type": "item", "settings": { "text": "Fear of God" } },
+        { "type": "item", "settings": { "text": "Balenciaga" } },
+        { "type": "item", "settings": { "text": "Dr. Martens × Rick Owens" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

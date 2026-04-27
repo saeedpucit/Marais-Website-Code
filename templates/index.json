@@ -1,0 +1,181 @@
+{
+  "sections": {
+    "marais_hero": {
+      "type": "marais-hero",
+      "settings": {
+        "badge": "Fall / Winter 2025 — New Arrivals",
+        "heading_line1": "The",
+        "heading_line2": "Luxury",
+        "heading_italic": "Edit",
+        "subtext": "Melbourne's premier multi-brand luxury boutique. Maison Margiela, Rick Owens, Loewe, Balenciaga and more — curated with intention.",
+        "cta1_label": "Shop Women",
+        "cta1_link": "/collections/women",
+        "cta2_label": "Shop Men",
+        "cta2_link": "/collections/men"
+      }
+    },
+    "marais_ticker": {
+      "type": "marais-ticker",
+      "blocks": {
+        "t1": { "type": "item", "settings": { "text": "New Arrivals — F/W 25" } },
+        "t2": { "type": "item", "settings": { "text": "Maison Margiela" } },
+        "t3": { "type": "item", "settings": { "text": "Rick Owens DRKSHDW" } },
+        "t4": { "type": "item", "settings": { "text": "Stone Island" } },
+        "t5": { "type": "item", "settings": { "text": "Sacai" } },
+        "t6": { "type": "item", "settings": { "text": "Loewe" } },
+        "t7": { "type": "item", "settings": { "text": "Wooyoungmi F/W 25" } },
+        "t8": { "type": "item", "settings": { "text": "Fear of God" } },
+        "t9": { "type": "item", "settings": { "text": "Balenciaga" } },
+        "t10": { "type": "item", "settings": { "text": "Dr. Martens × Rick Owens" } }
+      },
+      "block_order": ["t1","t2","t3","t4","t5","t6","t7","t8","t9","t10"],
+      "settings": {}
+    },
+    "marais_category_grid": {
+      "type": "marais-category-grid",
+      "blocks": {
+        "cat1": { "type": "category", "settings": { "label": "New Season", "name": "Down Jackets & Outerwear", "bg_color": "#12122a", "link": "/collections/all" } },
+        "cat2": { "type": "category", "settings": { "label": "Footwear", "name": "Shoes & Sneakers", "bg_color": "#0d1a0c", "link": "/collections/all" } },
+        "cat3": { "type": "category", "settings": { "label": "Carry", "name": "Bags", "bg_color": "#1a0c0c", "link": "/collections/all" } },
+        "cat4": { "type": "category", "settings": { "label": "Finish", "name": "Accessories", "bg_color": "#0c0c1a", "link": "/collections/all" } },
+        "cat5": { "type": "category", "settings": { "label": "Lifestyle", "name": "Home & Objects", "bg_color": "#1a180a", "link": "/collections/all" } }
+      },
+      "block_order": ["cat1","cat2","cat3","cat4","cat5"],
+      "settings": {
+        "eyebrow": "Shop by Category",
+        "title": "The Edit",
+        "see_all_label": "Shop All",
+        "see_all_link": "/collections/all"
+      }
+    },
+    "marais_products": {
+      "type": "marais-products",
+      "blocks": {
+        "tab_women": { "type": "tab", "settings": { "label": "Women", "collection": "women-new-arrivals" } },
+        "tab_men": { "type": "tab", "settings": { "label": "Men", "collection": "men-new-arrivals" } }
+      },
+      "block_order": ["tab_women","tab_men"],
+      "settings": {
+        "eyebrow": "Just Arrived",
+        "title": "Just In",
+        "products_to_show": 8,
+        "show_vendor": true,
+        "see_all_label": "View All",
+        "see_all_link": "/collections/all"
+      }
+    },
+    "marais_banner_1": {
+      "type": "marais-collection-banner",
+      "settings": {
+        "layout": "image-left",
+        "eyebrow": "New Season",
+        "heading": "The",
+        "heading_italic": "Autumn Edit",
+        "body": "Defining pieces from Maison Margiela, Rick Owens, Loewe and more — curated for the season ahead.",
+        "cta_label": "Explore Now",
+        "cta_link": "/collections/all",
+        "bg_color": "#f5f2ed"
+      }
+    },
+    "marais_brands_az": {
+      "type": "marais-brands-az",
+      "blocks": {
+        "b1":  { "type": "brand", "settings": { "name": "Alexander McQueen", "gender": "W / M", "link": "/collections/all" } },
+        "b2":  { "type": "brand", "settings": { "name": "Ami Paris", "gender": "W / M", "link": "/collections/all" } },
+        "b3":  { "type": "brand", "settings": { "name": "Amiri", "gender": "W / M", "link": "/collections/all" } },
+        "b4":  { "type": "brand", "settings": { "name": "Balenciaga", "gender": "W / M", "link": "/collections/all" } },
+        "b5":  { "type": "brand", "settings": { "name": "Celine", "gender": "W / M", "link": "/collections/all" } },
+        "b6":  { "type": "brand", "settings": { "name": "Diesel", "gender": "W / M", "link": "/collections/women-diesel" } },
+        "b7":  { "type": "brand", "settings": { "name": "Fear of God", "gender": "M", "link": "/collections/all" } },
+        "b8":  { "type": "brand", "settings": { "name": "Givenchy", "gender": "W / M", "link": "/collections/all" } },
+        "b9":  { "type": "brand", "settings": { "name": "Jacquemus", "gender": "W / M", "link": "/collections/all" } },
+        "b10": { "type": "brand", "settings": { "name": "Loewe", "gender": "W / M", "link": "/collections/women-loewe" } },
+        "b11": { "type": "brand", "settings": { "name": "Maison Margiela", "gender": "W / M", "link": "/collections/men-maison-margiela" } },
+        "b12": { "type": "brand", "settings": { "name": "Off-White", "gender": "W / M", "link": "/collections/all" } },
+        "b13": { "type": "brand", "settings": { "name": "Rick Owens", "gender": "W / M", "link": "/collections/all" } },
+        "b14": { "type": "brand", "settings": { "name": "Sacai", "gender": "W / M", "link": "/collections/men-sacai" } },
+        "b15": { "type": "brand", "settings": { "name": "Stone Island", "gender": "M", "link": "/collections/all" } },
+        "b16": { "type": "brand", "settings": { "name": "Wooyoungmi", "gender": "M", "link": "/collections/all" } },
+        "b17": { "type": "brand", "settings": { "name": "Post Archive Faction", "gender": "W / M", "link": "/collections/all" } },
+        "b18": { "type": "brand", "settings": { "name": "Represent", "gender": "W / M", "link": "/collections/all" } },
+        "b19": { "type": "brand", "settings": { "name": "Entire Studios", "gender": "W / M", "link": "/collections/men-entire-studios" } },
+        "b20": { "type": "brand", "settings": { "name": "Y-3", "gender": "W / M", "link": "/collections/men-y3" } }
+      },
+      "block_order": ["b1","b2","b3","b4","b5","b6","b7","b8","b9","b10","b11","b12","b13","b14","b15","b16","b17","b18","b19","b20"],
+      "settings": {
+        "eyebrow": "Featured Designers",
+        "title": "Designers A–Z",
+        "see_all_label": "All Brands",
+        "see_all_link": "/collections/all"
+      }
+    },
+    "marais_banner_2": {
+      "type": "marais-collection-banner",
+      "settings": {
+        "layout": "image-right",
+        "eyebrow": "Editorial",
+        "heading": "Dressed",
+        "heading_italic": "with Intention",
+        "body": "Discover the stories behind our most considered collections — where craft meets culture.",
+        "cta_label": "Read the Journal",
+        "cta_link": "/blogs/news",
+        "bg_color": "#0a0a0a",
+        "text_color": "#fafaf8"
+      }
+    },
+    "marais_brand_story": {
+      "type": "marais-brand-story",
+      "settings": {
+        "year": "2004",
+        "eyebrow": "Our Story",
+        "heading": "Born in\nMelbourne",
+        "body": "Founded in Melbourne in 2004, MARAIS is a multi-brand luxury boutique curating the world's most influential designers. With five boutiques across the city and a global online presence, we bring Balenciaga, Maison Margiela, Rick Owens, Loewe and more under one roof.",
+        "cta_label": "Discover Our Story",
+        "cta_link": "/pages/about",
+        "stat1_number": "20+",
+        "stat1_label": "Years",
+        "stat2_number": "5",
+        "stat2_label": "Boutiques",
+        "stat3_number": "50+",
+        "stat3_label": "Global Brands"
+      }
+    },
+    "marais_editorial_grid": {
+      "type": "marais-editorial-grid",
+      "blocks": {
+        "ed1": { "type": "article", "settings": { "category": "Campaign — F/W 25", "title": "The MARAIS Edit: A New Collaborative Vision", "bg_color": "#0a0a1e", "link": "#" } },
+        "ed2": { "type": "article", "settings": { "category": "Craftsmanship", "title": "The Making of an Icon", "bg_color": "#1e180a", "link": "#" } },
+        "ed3": { "type": "article", "settings": { "category": "Sustainability", "title": "Designed to Last", "bg_color": "#0a1e1a", "link": "#" } }
+      },
+      "block_order": ["ed1","ed2","ed3"],
+      "settings": {
+        "eyebrow": "MARAIS Journal",
+        "title": "Editorial",
+        "see_all_label": "All Stories",
+        "see_all_link": "/blogs/news"
+      }
+    },
+    "marais_newsletter": {
+      "type": "marais-newsletter",
+      "settings": {
+        "heading": "Stay",
+        "heading_italic": "Connected",
+        "subtext": "Be the first to discover new arrivals, exclusive offers, editorial features, and events — directly to your inbox.",
+        "placeholder": "Your email address",
+        "button_label": "Subscribe"
+      }
+    }
+  },
+  "order": [
+    "marais_hero",
+    "marais_ticker",
+    "marais_category_grid",
+    "marais_banner_1",
+    "marais_products",
+    "marais_brands_az",
+    "marais_banner_2",
+    "marais_brand_story",
+    "marais_editorial_grid",
+    "marais_newsletter"
+  ]
+}

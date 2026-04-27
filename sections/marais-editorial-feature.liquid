@@ -1,0 +1,94 @@
+{%- assign side = section.settings.image_side | default: 'left' -%}
+
+<div class="mh-ef{% if side == 'right' %} mh-ef--image-right{% endif %}">
+
+  <div class="mh-ef__image">
+    {%- if section.settings.image != blank -%}
+      <img
+        src="{{ section.settings.image | image_url: width: 1400 }}"
+        alt="{{ section.settings.image.alt | escape | default: section.settings.heading | escape }}"
+        loading="lazy"
+        width="{{ section.settings.image.width }}"
+        height="{{ section.settings.image.height }}"
+      >
+    {%- else -%}
+      <div class="mh-ef__placeholder"></div>
+    {%- endif -%}
+  </div>
+
+  <div class="mh-ef__copy">
+    {%- if section.settings.eyebrow != blank -%}
+      <p class="mh-ef__eyebrow">{{ section.settings.eyebrow }}</p>
+    {%- endif -%}
+    {%- if section.settings.heading != blank -%}
+      <h2 class="mh-ef__heading">{{ section.settings.heading }}</h2>
+    {%- endif -%}
+    {%- if section.settings.body != blank -%}
+      <div class="mh-ef__body">{{ section.settings.body }}</div>
+    {%- endif -%}
+    {%- if section.settings.cta_label != blank and section.settings.cta_link != blank -%}
+      <a href="{{ section.settings.cta_link }}" class="mh-btn">{{ section.settings.cta_label }}</a>
+    {%- endif -%}
+  </div>
+
+</div>
+
+{% schema %}
+{
+  "name": "Editorial Feature",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "select",
+      "id": "image_side",
+      "label": "Image side",
+      "options": [
+        { "value": "left",  "label": "Left (image 60%)" },
+        { "value": "right", "label": "Right (image 60%)" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "placeholder": "Our Story"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "body",
+      "label": "Body text"
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "CTA label"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "CTA link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Editorial Feature",
+      "settings": {
+        "eyebrow": "Our Story",
+        "heading": "Born in Melbourne",
+        "image_side": "left"
+      }
+    }
+  ]
+}
+{% endschema %}

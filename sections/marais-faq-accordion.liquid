@@ -1,0 +1,95 @@
+<div class="mh-faq">
+  {%- if section.settings.eyebrow != blank or section.settings.title != blank -%}
+    <div class="mh-faq__header">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="mh-team__eyebrow">{{ section.settings.eyebrow }}</p>
+      {%- endif -%}
+      {%- if section.settings.title != blank -%}
+        <h2 class="mh-team__title">{{ section.settings.title }}</h2>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+
+  {%- for block in section.blocks -%}
+    <details class="mh-faq__item" {{ block.shopify_attributes }}>
+      <summary class="mh-faq__q">
+        {{ block.settings.question }}
+        <span class="mh-faq__icon" aria-hidden="true">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+        </span>
+      </summary>
+      <div class="mh-faq__a">{{ block.settings.answer }}</div>
+    </details>
+  {%- endfor -%}
+</div>
+
+{% schema %}
+{
+  "name": "FAQ",
+  "tag": "section",
+  "max_blocks": 20,
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Need Help?"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Frequently Asked Questions"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "faq",
+      "name": "FAQ",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question",
+          "placeholder": "What is your return policy?"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "Answer"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "FAQ",
+      "blocks": [
+        {
+          "type": "faq",
+          "settings": {
+            "question": "What is your return policy?",
+            "answer": "<p>We offer a 30-day return policy on all full-price items. Items must be unworn, unwashed, and in original condition with all tags attached.</p>"
+          }
+        },
+        {
+          "type": "faq",
+          "settings": {
+            "question": "Do you offer free shipping?",
+            "answer": "<p>Yes — complimentary standard shipping is included on all orders within Australia. Express and international shipping rates apply.</p>"
+          }
+        },
+        {
+          "type": "faq",
+          "settings": {
+            "question": "How do I track my order?",
+            "answer": "<p>Once your order is dispatched you will receive a tracking link via email. You can also view order status in your account dashboard.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

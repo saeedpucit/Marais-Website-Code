@@ -1,0 +1,112 @@
+{%- assign current_letter = '' -%}
+{%- assign sorted_blocks = section.blocks | sort: 'settings.letter' -%}
+
+<div class="mh-brands-full">
+  {%- for block in sorted_blocks -%}
+    {%- assign letter = block.settings.letter | upcase | strip -%}
+    {%- if letter == '' -%}{%- assign letter = block.settings.name | upcase | slice: 0, 1 -%}{%- endif -%}
+
+    {%- if letter != current_letter -%}
+      {%- unless forloop.first -%}
+          </div><!-- /.mh-brands-full__list -->
+        </div><!-- /.mh-brands-full__group -->
+      {%- endunless -%}
+      <div class="mh-brands-full__group">
+        <div class="mh-brands-full__letter" aria-hidden="true">{{ letter }}</div>
+        <div class="mh-brands-full__list">
+      {%- assign current_letter = letter -%}
+    {%- endif -%}
+
+    <a
+      href="{{ block.settings.link | default: '/collections/all' }}"
+      class="mh-brands-full__row"
+      data-name="{{ block.settings.name | downcase | escape }}"
+      {{ block.shopify_attributes }}
+    >
+      <span class="mh-brands-full__name">{{ block.settings.name }}</span>
+      {%- if block.settings.tagline != blank -%}
+        <span class="mh-brands-full__tagline">{{ block.settings.tagline }}</span>
+      {%- endif -%}
+      {%- if block.settings.gender != blank -%}
+        <span class="mh-brands-full__gender">{{ block.settings.gender }}</span>
+      {%- endif -%}
+      <span class="mh-brands-full__shop">Shop &rarr;</span>
+    </a>
+
+    {%- if forloop.last -%}
+        </div><!-- /.mh-brands-full__list -->
+      </div><!-- /.mh-brands-full__group -->
+    {%- endif -%}
+
+  {%- endfor -%}
+</div>
+
+{% schema %}
+{
+  "name": "Brands A–Z",
+  "tag": "section",
+  "max_blocks": 50,
+  "blocks": [
+    {
+      "type": "brand",
+      "name": "Brand",
+      "settings": [
+        {
+          "type": "text",
+          "id": "letter",
+          "label": "Letter (A–Z)",
+          "info": "Used to group brands. Leave blank to auto-detect from name."
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Brand name",
+          "placeholder": "Maison Margiela"
+        },
+        {
+          "type": "text",
+          "id": "tagline",
+          "label": "Tagline",
+          "placeholder": "Deconstruction redefined"
+        },
+        {
+          "type": "text",
+          "id": "gender",
+          "label": "Gender",
+          "placeholder": "W / M"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Collection link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Brands A–Z",
+      "blocks": [
+        { "type": "brand", "settings": { "letter": "A", "name": "Alexander McQueen", "tagline": "Dark romanticism, British precision", "gender": "W / M", "link": "/collections/all" } },
+        { "type": "brand", "settings": { "letter": "A", "name": "Ami Paris", "tagline": "Parisian simplicity, elevated", "gender": "W / M", "link": "/collections/all" } },
+        { "type": "brand", "settings": { "letter": "A", "name": "Amiri", "tagline": "Rock 'n' roll luxury", "gender": "W / M", "link": "/collections/all" } },
+        { "type": "brand", "settings": { "letter": "B", "name": "Balenciaga", "tagline": "Fashion's radical provocateur", "gender": "W / M", "link": "/collections/all" } },
+        { "type": "brand", "settings": { "letter": "C", "name": "Celine", "tagline": "Quiet confidence, refined ease", "gender": "W / M", "link": "/collections/all" } },
+        { "type": "brand", "settings": { "letter": "D", "name": "Diesel", "tagline": "Denim reimagined", "gender": "W / M", "link": "/collections/women-diesel" } },
+        { "type": "brand", "settings": { "letter": "E", "name": "Entire Studios", "tagline": "Unisex essentials, globally minded", "gender": "W / M", "link": "/collections/men-entire-studios" } },
+        { "type": "brand", "settings": { "letter": "F", "name": "Fear of God", "tagline": "American luxury, understated", "gender": "M", "link": "/collections/all" } },
+        { "type": "brand", "settings": { "letter": "J", "name": "Jacquemus", "tagline": "Provençal sun, Parisian edge", "gender": "W / M", "link": "/collections/all" } },
+        { "type": "brand", "settings": { "letter": "L", "name": "Loewe", "tagline": "Spanish craft, contemporary vision", "gender": "W / M", "link": "/collections/women-loewe" } },
+        { "type": "brand", "settings": { "letter": "M", "name": "Maison Margiela", "tagline": "Deconstruction as philosophy", "gender": "W / M", "link": "/collections/men-maison-margiela" } },
+        { "type": "brand", "settings": { "letter": "M", "name": "Maison Mihara Yasuhiro", "tagline": "Tokyo's avant-garde footwear", "gender": "W / M", "link": "/collections/men-maison-mihara-yasuhiro" } },
+        { "type": "brand", "settings": { "letter": "O", "name": "Off-White", "tagline": "Street culture meets luxury", "gender": "W / M", "link": "/collections/all" } },
+        { "type": "brand", "settings": { "letter": "R", "name": "Rick Owens", "tagline": "Darkness, movement, architecture", "gender": "W / M", "link": "/collections/all" } },
+        { "type": "brand", "settings": { "letter": "S", "name": "Sacai", "tagline": "Hybrid construction, Tokyo precision", "gender": "W / M", "link": "/collections/men-sacai" } },
+        { "type": "brand", "settings": { "letter": "S", "name": "Stone Island", "tagline": "Technical outerwear, Italian heritage", "gender": "M", "link": "/collections/all" } },
+        { "type": "brand", "settings": { "letter": "W", "name": "Wooyoungmi", "tagline": "Seoul's quiet luxury menswear", "gender": "M", "link": "/collections/all" } },
+        { "type": "brand", "settings": { "letter": "Y", "name": "Y-3", "tagline": "Yamamoto × adidas, sport refined", "gender": "W / M", "link": "/collections/men-y3" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

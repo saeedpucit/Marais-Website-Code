@@ -1,0 +1,83 @@
+<div class="mh-brands-sec">
+  <div style="max-width:1440px;margin:0 auto;">
+    <div class="mh-sec__hdr mh-fu" style="margin-bottom:36px;">
+      <div>
+        <p class="mh-sec__eyebrow">{{ section.settings.eyebrow }}</p>
+        <h2 class="mh-sec__title">{{ section.settings.title }}</h2>
+      </div>
+      {%- if section.settings.see_all_label != blank and section.settings.see_all_link != blank -%}
+        <a href="{{ section.settings.see_all_link }}" class="mh-see-all">{{ section.settings.see_all_label }}</a>
+      {%- endif -%}
+    </div>
+    <div class="mh-brands__grid mh-fu">
+      {%- for block in section.blocks -%}
+        <a href="{{ block.settings.link }}" class="mh-brands__item" {{ block.shopify_attributes }}>
+          {{ block.settings.name }}
+          {%- if block.settings.gender != blank -%}
+            <span>{{ block.settings.gender }}</span>
+          {%- endif -%}
+        </a>
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) { if (e.isIntersecting) e.target.classList.add('mh-vis'); });
+  }, { threshold: 0.05 });
+  document.querySelectorAll('.mh-brands-sec .mh-fu').forEach(function (el) { io.observe(el); });
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Designers A–Z",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Featured Designers" },
+    { "type": "text", "id": "title", "label": "Title", "default": "Designers A–Z" },
+    { "type": "text", "id": "see_all_label", "label": "See all label", "default": "All Brands" },
+    { "type": "url", "id": "see_all_link", "label": "See all link" }
+  ],
+  "blocks": [
+    {
+      "type": "brand",
+      "name": "Brand",
+      "settings": [
+        { "type": "text", "id": "name", "label": "Brand name", "default": "Brand Name" },
+        { "type": "text", "id": "gender", "label": "Gender label", "default": "W / M", "info": "e.g. W / M, W, M" },
+        { "type": "url", "id": "link", "label": "Link" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Designers A–Z",
+      "blocks": [
+        { "type": "brand", "settings": { "name": "Alexander McQueen", "gender": "W / M" } },
+        { "type": "brand", "settings": { "name": "Ami Paris", "gender": "W / M" } },
+        { "type": "brand", "settings": { "name": "Amiri", "gender": "W / M" } },
+        { "type": "brand", "settings": { "name": "Balenciaga", "gender": "W / M" } },
+        { "type": "brand", "settings": { "name": "Celine", "gender": "W / M" } },
+        { "type": "brand", "settings": { "name": "Diesel", "gender": "W / M" } },
+        { "type": "brand", "settings": { "name": "Fear of God", "gender": "M" } },
+        { "type": "brand", "settings": { "name": "Givenchy", "gender": "W / M" } },
+        { "type": "brand", "settings": { "name": "Jacquemus", "gender": "W / M" } },
+        { "type": "brand", "settings": { "name": "Loewe", "gender": "W / M" } },
+        { "type": "brand", "settings": { "name": "Maison Margiela", "gender": "W / M" } },
+        { "type": "brand", "settings": { "name": "Off-White", "gender": "W / M" } },
+        { "type": "brand", "settings": { "name": "Rick Owens", "gender": "W / M" } },
+        { "type": "brand", "settings": { "name": "Rick Owens DRKSHDW", "gender": "W / M" } },
+        { "type": "brand", "settings": { "name": "Sacai", "gender": "W / M" } },
+        { "type": "brand", "settings": { "name": "Stone Island", "gender": "M" } },
+        { "type": "brand", "settings": { "name": "Wooyoungmi", "gender": "M" } },
+        { "type": "brand", "settings": { "name": "Post Archive Faction", "gender": "W / M" } },
+        { "type": "brand", "settings": { "name": "Represent", "gender": "W / M" } },
+        { "type": "brand", "settings": { "name": "Entire Studios", "gender": "W / M" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

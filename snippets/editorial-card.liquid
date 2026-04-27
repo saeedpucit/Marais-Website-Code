@@ -1,0 +1,28 @@
+{%- comment -%}
+  Renders an editorial article card.
+  Accepts: article, featured (boolean — unused, layout controlled by CSS nth-child)
+{%- endcomment -%}
+
+<a href="{{ article.url }}" class="editorial-card">
+  <div class="editorial-card__img-wrap">
+    {%- if article.image -%}
+      <img
+        class="editorial-card__img"
+        src="{{ article.image | image_url: width: 900 }}"
+        alt="{{ article.image.alt | escape | default: article.title | escape }}"
+        loading="lazy"
+        width="900"
+        height="675"
+      >
+    {%- endif -%}
+  </div>
+  <div class="editorial-card__body">
+    {%- if article.tags.first -%}
+      <span class="editorial-card__tag">{{ article.tags.first }}</span>
+    {%- endif -%}
+    <h3 class="editorial-card__title">{{ article.title }}</h3>
+    {%- if article.excerpt_or_content != blank -%}
+      <p class="editorial-card__excerpt">{{ article.excerpt_or_content | strip_html | truncate: 160 }}</p>
+    {%- endif -%}
+  </div>
+</a>

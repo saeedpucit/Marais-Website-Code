@@ -1,0 +1,118 @@
+<div class="mh-locations">
+  {%- if section.settings.eyebrow != blank or section.settings.title != blank -%}
+    <div class="mh-locations__header">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="mh-team__eyebrow">{{ section.settings.eyebrow }}</p>
+      {%- endif -%}
+      {%- if section.settings.title != blank -%}
+        <h2 class="mh-team__title">{{ section.settings.title }}</h2>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+
+  <div class="mh-locations__grid">
+    {%- for block in section.blocks -%}
+      <div class="mh-loc__card" {{ block.shopify_attributes }}>
+        {%- if block.settings.image != blank -%}
+          <img
+            class="mh-loc__img"
+            src="{{ block.settings.image | image_url: width: 800 }}"
+            alt="{{ block.settings.name | escape }}"
+            loading="lazy"
+            width="800"
+            height="600"
+          >
+        {%- endif -%}
+        <div class="mh-loc__body">
+          <h3 class="mh-loc__name">{{ block.settings.name }}</h3>
+          {%- if block.settings.address != blank -%}
+            <p class="mh-loc__detail">{{ block.settings.address }}</p>
+          {%- endif -%}
+          {%- if block.settings.phone != blank -%}
+            <p class="mh-loc__detail">{{ block.settings.phone }}</p>
+          {%- endif -%}
+          {%- if block.settings.hours != blank -%}
+            <p class="mh-loc__detail">{{ block.settings.hours }}</p>
+          {%- endif -%}
+          {%- if block.settings.maps_link != blank -%}
+            <a href="{{ block.settings.maps_link }}" class="mh-loc__map" target="_blank" rel="noopener">Get Directions &rarr;</a>
+          {%- endif -%}
+        </div>
+      </div>
+    {%- endfor -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Locations",
+  "tag": "section",
+  "max_blocks": 8,
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Find Us"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Our Boutiques"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "location",
+      "name": "Location",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Boutique image"
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Store name",
+          "placeholder": "South Yarra"
+        },
+        {
+          "type": "text",
+          "id": "address",
+          "label": "Address",
+          "placeholder": "1 Chapel Street, South Yarra VIC 3141"
+        },
+        {
+          "type": "text",
+          "id": "phone",
+          "label": "Phone",
+          "placeholder": "+61 3 9827 0000"
+        },
+        {
+          "type": "text",
+          "id": "hours",
+          "label": "Hours",
+          "placeholder": "Mon–Sat 10am–6pm, Sun 11am–5pm"
+        },
+        {
+          "type": "url",
+          "id": "maps_link",
+          "label": "Google Maps link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Locations",
+      "blocks": [
+        { "type": "location", "settings": { "name": "South Yarra", "address": "1 Chapel Street, South Yarra VIC 3141", "hours": "Mon–Sat 10am–6pm, Sun 11am–5pm" } },
+        { "type": "location", "settings": { "name": "Melbourne CBD", "address": "300 Collins Street, Melbourne VIC 3000", "hours": "Mon–Sat 10am–7pm, Sun 11am–6pm" } },
+        { "type": "location", "settings": { "name": "Armadale", "address": "High Street, Armadale VIC 3143", "hours": "Mon–Sat 10am–6pm, Sun 12pm–5pm" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

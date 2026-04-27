@@ -1,0 +1,20 @@
+<div class="filter-size-grid" role="list">
+  {%- for value in filter.values -%}
+    {%- assign is_active = value.active -%}
+    {%- unless is_active -%}{%- if value.count == 0 -%}{%- continue -%}{%- endif -%}{%- endunless -%}
+    <label
+      class="filter-size{% if is_active %} filter-size--active{% endif %}"
+      role="listitem"
+    >
+      <input
+        type="checkbox"
+        class="filter-checkbox sr-only"
+        {% if is_active %}checked{% endif %}
+        {% if is_oos %}disabled{% endif %}
+        data-url-add="{{ value.url_to_add }}"
+        data-url-remove="{{ value.url_to_remove }}"
+      >
+      {{ value.label }}
+    </label>
+  {%- endfor -%}
+</div>

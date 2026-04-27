@@ -1,0 +1,234 @@
+/* ============================================================
+   MARAIS — marais-lookbook.css
+   Full-screen scroll-snap lookbook / campaign page
+   ============================================================ */
+
+/* ── Scroll progress bar ── */
+.lookbook-progress {
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 3px;
+  height: 100vh;
+  z-index: 200;
+  background: rgba(201,168,76,.15);
+  pointer-events: none;
+}
+
+.lookbook-progress__fill {
+  width: 100%;
+  height: 0%;
+  background: #c9a84c;
+  transition: height .1s linear;
+}
+
+/* ── Slides container ── */
+.lookbook {
+  height: 100svh;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ── Individual slide ── */
+.lookbook__slide {
+  height: 100svh;
+  scroll-snap-align: start;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+}
+
+.lookbook__media {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 1.2s cubic-bezier(.16, 1, .3, 1);
+}
+.lookbook__slide.is-visible .lookbook__media { transform: scale(1); }
+.lookbook__slide:not(.is-visible) .lookbook__media { transform: scale(1.04); }
+
+.lookbook__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0,0,0,.75) 0%,
+    rgba(0,0,0,.2) 45%,
+    transparent 70%
+  );
+}
+
+/* ── Slide content (bottom-left) ── */
+.lookbook__content {
+  position: relative;
+  z-index: 10;
+  padding: 48px 56px;
+  max-width: 620px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity .7s ease .2s, transform .7s ease .2s;
+}
+.lookbook__slide.is-visible .lookbook__content {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.lookbook__eyebrow {
+  font-size: 9px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--mh-gold, #c9a84c);
+  font-family: var(--mh-sans, 'Outfit', sans-serif);
+  margin-bottom: 10px;
+  display: block;
+}
+
+.lookbook__title {
+  font-family: var(--mh-serif, 'Cormorant Garamond', serif);
+  font-size: clamp(36px, 5vw, 68px);
+  font-weight: 300;
+  color: #fff;
+  line-height: 1.05;
+  letter-spacing: -.01em;
+  margin-bottom: 16px;
+}
+
+.lookbook__body {
+  font-size: 14px;
+  line-height: 1.7;
+  color: rgba(255,255,255,.7);
+  font-family: var(--mh-sans, 'Outfit', sans-serif);
+  max-width: 400px;
+  margin-bottom: 24px;
+}
+
+.lookbook__cta {
+  display: inline-block;
+  padding: 12px 28px;
+  border: 1px solid rgba(255,255,255,.6);
+  color: #fff;
+  font-size: 11px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  font-family: var(--mh-sans, 'Outfit', sans-serif);
+  text-decoration: none;
+  transition: background .2s, border-color .2s;
+}
+.lookbook__cta:hover { background: rgba(255,255,255,.12); border-color: #fff; }
+
+.lookbook__shop-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.6);
+  font-family: var(--mh-sans, 'Outfit', sans-serif);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin-left: 16px;
+  transition: color .2s;
+}
+.lookbook__shop-btn:hover { color: #fff; }
+.lookbook__shop-btn svg { transition: transform .2s; }
+.lookbook__shop-btn.is-open svg { transform: rotate(180deg); }
+
+/* ── "Shop This Look" product strip ── */
+.lookbook__products {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 20;
+  background: rgba(10,10,10,.88);
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+  padding: 16px 24px;
+  scrollbar-width: none;
+  transform: translateY(100%);
+  transition: transform .4s cubic-bezier(.16, 1, .3, 1);
+}
+.lookbook__products::-webkit-scrollbar { display: none; }
+.lookbook__products.is-open { transform: translateY(0); }
+
+.lookbook__product {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 20px;
+  text-decoration: none;
+  color: #fff;
+  border-right: 1px solid rgba(255,255,255,.08);
+  flex-shrink: 0;
+  max-width: 260px;
+  transition: background .15s;
+}
+.lookbook__product:last-child { border-right: none; }
+.lookbook__product:hover { background: rgba(255,255,255,.05); }
+
+.lookbook__product-img {
+  width: 44px;
+  height: 58px;
+  object-fit: cover;
+  flex-shrink: 0;
+  background: rgba(255,255,255,.06);
+}
+
+.lookbook__product-info { flex: 1; min-width: 0; }
+
+.lookbook__product-vendor {
+  font-size: 8px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--mh-gold, #c9a84c);
+  font-family: var(--mh-sans, 'Outfit', sans-serif);
+  margin-bottom: 3px;
+}
+
+.lookbook__product-title {
+  font-family: var(--mh-serif, 'Cormorant Garamond', serif);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.lookbook__product-price {
+  font-size: 11px;
+  color: rgba(255,255,255,.55);
+  font-family: var(--mh-sans, 'Outfit', sans-serif);
+  margin-top: 3px;
+}
+
+/* ── Slide counter ── */
+.lookbook__counter {
+  position: fixed;
+  right: 24px;
+  bottom: 32px;
+  z-index: 100;
+  font-size: 10px;
+  letter-spacing: .14em;
+  color: rgba(255,255,255,.4);
+  font-family: var(--mh-sans, 'Outfit', sans-serif);
+  pointer-events: none;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .lookbook__content { padding: 32px 24px; max-width: 100%; }
+  .lookbook__title { font-size: clamp(28px, 8vw, 44px); }
+  .lookbook__body { display: none; }
+  .lookbook-progress { display: none; }
+  .lookbook__counter { right: 16px; bottom: 20px; }
+}

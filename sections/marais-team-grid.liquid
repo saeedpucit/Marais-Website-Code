@@ -1,0 +1,90 @@
+<div class="mh-team">
+  {%- if section.settings.eyebrow != blank or section.settings.title != blank -%}
+    <div class="mh-team__header">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="mh-team__eyebrow">{{ section.settings.eyebrow }}</p>
+      {%- endif -%}
+      {%- if section.settings.title != blank -%}
+        <h2 class="mh-team__title">{{ section.settings.title }}</h2>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+
+  <div class="mh-team__grid">
+    {%- for block in section.blocks -%}
+      <div class="mh-team__card" {{ block.shopify_attributes }}>
+        <div class="mh-team__img-wrap">
+          {%- if block.settings.image != blank -%}
+            <img
+              class="mh-team__img"
+              src="{{ block.settings.image | image_url: width: 600 }}"
+              alt="{{ block.settings.name | escape }}"
+              loading="lazy"
+              width="600"
+              height="800"
+            >
+          {%- endif -%}
+        </div>
+        <p class="mh-team__name">{{ block.settings.name }}</p>
+        <p class="mh-team__role">{{ block.settings.role }}</p>
+      </div>
+    {%- endfor -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Team Grid",
+  "tag": "section",
+  "max_blocks": 12,
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "The People"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Meet the Team"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "member",
+      "name": "Team Member",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Portrait"
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Name",
+          "placeholder": "First Last"
+        },
+        {
+          "type": "text",
+          "id": "role",
+          "label": "Role",
+          "placeholder": "Creative Director"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Team Grid",
+      "blocks": [
+        { "type": "member", "settings": { "name": "Karla M.", "role": "Founder & Creative Director" } },
+        { "type": "member", "settings": { "name": "James T.", "role": "Head of Buying" } },
+        { "type": "member", "settings": { "name": "Sophie L.", "role": "Brand Director" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

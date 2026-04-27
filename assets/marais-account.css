@@ -1,0 +1,377 @@
+/* ============================================================
+   MARAIS — marais-account.css
+   Auth (login/register) + all customer account pages
+   ============================================================ */
+
+/* ── Auth pages (login / register) ── */
+.auth-page {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: calc(100vh - 100px);
+}
+
+.auth-page__image {
+  background: var(--mh-cream) center / cover no-repeat;
+  position: sticky;
+  top: 100px;
+  height: calc(100vh - 100px);
+}
+
+.auth-page__form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 80px 60px;
+  background: var(--mh-white);
+}
+
+.auth-page__logo {
+  display: block;
+  margin-bottom: 48px;
+  color: var(--mh-black);
+}
+
+.auth-page__heading {
+  font-family: var(--mh-serif);
+  font-size: 38px;
+  font-weight: 300;
+  letter-spacing: -.01em;
+  margin-bottom: 8px;
+  text-align: center;
+  width: 100%;
+  max-width: 380px;
+}
+
+.auth-page__sub {
+  font-size: 13px;
+  color: var(--mh-gray);
+  letter-spacing: .03em;
+  margin-bottom: 36px;
+  text-align: center;
+  font-family: var(--mh-sans);
+}
+
+.auth-form {
+  width: 100%;
+  max-width: 380px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.auth-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.auth-form__label {
+  font-size: 10px;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  color: var(--mh-gray);
+  font-family: var(--mh-sans);
+}
+
+.auth-form__input {
+  border: none;
+  border-bottom: 1px solid var(--mh-light);
+  padding: 10px 0;
+  font-size: 14px;
+  font-family: var(--mh-sans);
+  color: var(--mh-black);
+  background: transparent;
+  outline: none;
+  transition: border-color .2s;
+  width: 100%;
+}
+.auth-form__input:focus { border-color: var(--mh-black); }
+.auth-form__input::placeholder { color: var(--mh-mid, #b0aca6); }
+
+.auth-form__btn {
+  width: 100%;
+  padding: 14px;
+  background: var(--mh-black);
+  color: #fff;
+  border: none;
+  font-size: 11px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  font-family: var(--mh-sans);
+  cursor: pointer;
+  transition: background .2s;
+  margin-top: 8px;
+}
+.auth-form__btn:hover { background: #222; }
+
+.auth-form__forgot {
+  text-align: right;
+  font-size: 11px;
+  color: var(--mh-gray);
+  text-decoration: none;
+  letter-spacing: .04em;
+  font-family: var(--mh-sans);
+  margin-top: -12px;
+}
+.auth-form__forgot:hover { color: var(--mh-black); }
+
+.auth-page__switch {
+  margin-top: 28px;
+  font-size: 12px;
+  color: var(--mh-gray);
+  font-family: var(--mh-sans);
+  letter-spacing: .04em;
+  text-align: center;
+  max-width: 380px;
+  width: 100%;
+}
+.auth-page__switch a {
+  color: var(--mh-black);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.auth-errors {
+  background: #fff0f0;
+  border: 1px solid var(--mh-red);
+  padding: 12px 16px;
+  font-size: 12px;
+  color: var(--mh-red);
+  font-family: var(--mh-sans);
+  letter-spacing: .03em;
+  list-style: none;
+}
+.auth-errors li + li { margin-top: 4px; }
+
+/* ── Account pages layout ── */
+.account-page {
+  display: flex;
+  align-items: flex-start;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0;
+  min-height: calc(100vh - 200px);
+}
+
+.account-nav {
+  width: 220px;
+  flex-shrink: 0;
+  padding: 48px 32px 48px 40px;
+  border-right: 1px solid var(--mh-light);
+  position: sticky;
+  top: 100px;
+  height: calc(100vh - 100px);
+}
+
+.account-nav__greeting {
+  font-size: 10px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--mh-gray);
+  font-family: var(--mh-sans);
+  margin-bottom: 24px;
+  display: block;
+}
+
+.account-nav__links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.account-nav__link {
+  display: block;
+  padding: 9px 0;
+  font-size: 12px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--mh-gray);
+  font-family: var(--mh-sans);
+  border-bottom: 1px solid transparent;
+  transition: color .2s;
+}
+.account-nav__link:hover { color: var(--mh-black); }
+.account-nav__link--active {
+  color: var(--mh-black);
+  border-bottom-color: var(--mh-black);
+  font-weight: 500;
+}
+
+.account-nav__logout {
+  display: block;
+  margin-top: 32px;
+  font-size: 11px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--mh-gray);
+  text-decoration: none;
+  font-family: var(--mh-sans);
+  transition: color .2s;
+}
+.account-nav__logout:hover { color: var(--mh-red); }
+
+.account-content {
+  flex: 1;
+  padding: 48px 60px;
+}
+
+.account-header {
+  margin-bottom: 40px;
+  border-bottom: 1px solid var(--mh-light);
+  padding-bottom: 24px;
+}
+
+.account-header__greeting {
+  font-family: var(--mh-serif);
+  font-size: 42px;
+  font-weight: 300;
+  letter-spacing: -.01em;
+  margin-bottom: 4px;
+}
+
+.account-header__sub {
+  font-size: 12px;
+  color: var(--mh-gray);
+  letter-spacing: .06em;
+  font-family: var(--mh-sans);
+}
+
+/* ── Order rows ── */
+.order-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.order-table th {
+  font-size: 9px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--mh-gray);
+  font-family: var(--mh-sans);
+  font-weight: 500;
+  padding: 0 0 12px;
+  border-bottom: 1px solid var(--mh-light);
+  text-align: left;
+}
+
+.order-table td {
+  padding: 18px 0;
+  font-size: 13px;
+  font-family: var(--mh-sans);
+  color: var(--mh-black);
+  border-bottom: 1px solid var(--mh-light);
+  letter-spacing: .02em;
+  vertical-align: middle;
+}
+
+.order-table td:last-child { text-align: right; }
+
+.order-status {
+  display: inline-block;
+  font-size: 9px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  font-family: var(--mh-sans);
+}
+.order-status--fulfilled { background: #e8f5e9; color: #2e7d32; }
+.order-status--unfulfilled { background: #fff8e1; color: #f57f17; }
+.order-status--cancelled { background: #fce4ec; color: #c62828; }
+
+.order-link {
+  font-size: 11px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--mh-black);
+  text-decoration: none;
+  border-bottom: 1px solid var(--mh-black);
+  padding-bottom: 1px;
+  font-family: var(--mh-sans);
+}
+.order-link:hover { opacity: .6; }
+
+/* ── Address cards ── */
+.address-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  margin-top: 8px;
+}
+
+.address-card {
+  border: 1px solid var(--mh-light);
+  padding: 24px;
+}
+
+.address-card__default {
+  font-size: 9px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--mh-gold);
+  font-family: var(--mh-sans);
+  margin-bottom: 12px;
+  display: block;
+}
+
+.address-card p {
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--mh-black);
+  font-family: var(--mh-sans);
+  margin-bottom: 16px;
+}
+
+.address-card__actions {
+  display: flex;
+  gap: 16px;
+}
+
+.address-card__btn {
+  font-size: 11px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  font-family: var(--mh-sans);
+  text-decoration: none;
+  color: var(--mh-gray);
+  transition: color .2s;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+}
+.address-card__btn:hover { color: var(--mh-black); }
+.address-card__btn--delete:hover { color: var(--mh-red); }
+
+/* ── Wishlist page ── */
+.wishlist-empty {
+  text-align: center;
+  padding: 80px 0;
+}
+.wishlist-empty__heading {
+  font-family: var(--mh-serif);
+  font-size: 36px;
+  font-weight: 300;
+  margin-bottom: 16px;
+}
+.wishlist-empty__sub {
+  font-size: 13px;
+  color: var(--mh-gray);
+  margin-bottom: 32px;
+  font-family: var(--mh-sans);
+  letter-spacing: .04em;
+}
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .auth-page { grid-template-columns: 1fr; }
+  .auth-page__image { display: none; }
+  .auth-page__form { padding: 60px 32px; }
+  .account-page { flex-direction: column; }
+  .account-nav { width: 100%; position: static; height: auto; border-right: none; border-bottom: 1px solid var(--mh-light); padding: 24px 24px 16px; }
+  .account-nav__links { flex-direction: row; flex-wrap: wrap; gap: 0 24px; }
+  .account-content { padding: 32px 24px; }
+  .address-grid { grid-template-columns: 1fr; }
+}

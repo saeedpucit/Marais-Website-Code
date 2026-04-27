@@ -1,0 +1,60 @@
+{
+  "sections": {
+    "contact_form": {
+      "type": "marais-contact",
+      "settings": {
+        "heading": "Get in Touch",
+        "response_promise": "We respond within 1 business day",
+        "email": "hello@marais.com.au",
+        "phone": "+61 3 9827 0000",
+        "hours": "Mon–Fri 9am–5pm AEST\nSat 10am–4pm AEST"
+      }
+    },
+    "contact_faq": {
+      "type": "marais-faq-accordion",
+      "blocks": {
+        "faq1": {
+          "type": "faq",
+          "settings": {
+            "question": "What is your return policy?",
+            "answer": "<p>We offer a 30-day return policy on all full-price items. Items must be unworn, unwashed, and in their original condition with all tags attached. Sale items are final sale.</p>"
+          }
+        },
+        "faq2": {
+          "type": "faq",
+          "settings": {
+            "question": "Do you offer free shipping?",
+            "answer": "<p>Yes — complimentary standard shipping is included on all orders within Australia. Express and international shipping rates are calculated at checkout.</p>"
+          }
+        },
+        "faq3": {
+          "type": "faq",
+          "settings": {
+            "question": "How do I track my order?",
+            "answer": "<p>Once your order is dispatched you will receive a tracking link via email. You can also view your order status in your account dashboard.</p>"
+          }
+        },
+        "faq4": {
+          "type": "faq",
+          "settings": {
+            "question": "How do I care for my garments?",
+            "answer": "<p>Each garment includes care instructions on its label. For specific care guidance on luxury pieces, please feel free to contact us directly.</p>"
+          }
+        },
+        "faq5": {
+          "type": "faq",
+          "settings": {
+            "question": "Do you offer styling consultations?",
+            "answer": "<p>Yes — our in-store stylists are available by appointment at all boutique locations. You can also reach out via the contact form to arrange a virtual styling session.</p>"
+          }
+        }
+      },
+      "block_order": ["faq1","faq2","faq3","faq4","faq5"],
+      "settings": {
+        "eyebrow": "Need Help?",
+        "title": "Frequently Asked Questions"
+      }
+    }
+  },
+  "order": ["contact_form", "contact_faq"]
+}

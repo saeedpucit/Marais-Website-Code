@@ -1,0 +1,122 @@
+.luxury-editorial {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background: #000;
+}
+
+.luxury-editorial__media--mobile {
+  display: block;
+  width: 100%;
+  height: 100svh;
+  min-height: 400px;
+  object-fit: cover;
+}
+
+.luxury-editorial__media--desktop {
+  display: none;
+  width: 100%;
+  height: 85vh;
+  min-height: 400px;
+  object-fit: cover;
+}
+
+@media screen and (min-width: 750px) {
+  .luxury-editorial__media--mobile {
+    display: none;
+  }
+
+  .luxury-editorial__media--desktop {
+    display: block;
+  }
+}
+
+.luxury-editorial__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.luxury-editorial__content {
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  padding: 0 24px;
+  text-align: center;
+}
+
+.luxury-editorial__content--center {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.luxury-editorial__content--bottom {
+  bottom: 52px;
+}
+
+.luxury-editorial__eyebrow {
+  display: block;
+  font-size: 10px;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  color: #fff;
+  margin-bottom: 12px;
+  font-weight: 400;
+}
+
+.luxury-editorial__heading {
+  display: block;
+  font-size: 24px;
+  letter-spacing: 8px;
+  text-transform: uppercase;
+  color: #fff;
+  font-weight: 300;
+  margin: 0 0 24px;
+  line-height: 1.2;
+}
+
+.luxury-editorial__links {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 36px;
+}
+
+.luxury-editorial__link {
+  display: inline-block;
+  font-size: 10px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: #fff;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.75);
+  padding-bottom: 2px;
+  transition: opacity 0.25s ease;
+}
+
+.luxury-editorial__link:hover {
+  opacity: 0.6;
+}
+
+@media screen and (min-width: 750px) {
+  .luxury-editorial__content--bottom {
+    bottom: 72px;
+  }
+
+  .luxury-editorial__eyebrow {
+    font-size: 11px;
+    letter-spacing: 6px;
+  }
+
+  .luxury-editorial__heading {
+    font-size: 38px;
+    letter-spacing: 12px;
+  }
+
+  .luxury-editorial__link {
+    font-size: 11px;
+    letter-spacing: 5px;
+  }
+}

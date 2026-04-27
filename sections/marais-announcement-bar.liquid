@@ -1,0 +1,70 @@
+{%- assign msg_key = 'mh-ann-' | append: section.settings.message | md5 -%}
+
+<div class="mh-ann{% if section.settings.enable_dismiss %} mh-ann--dismissible{% endif %}"
+     id="mh-ann"
+     data-msg-key="{{ msg_key }}"
+     style="display:none">
+  <span class="mh-ann__text">
+    {{ section.settings.message }}
+    {%- if section.settings.link_label != blank and section.settings.link_url != blank -%}
+      &nbsp;&mdash;&nbsp;<a href="{{ section.settings.link_url }}">{{ section.settings.link_label }}</a>
+    {%- endif -%}
+  </span>
+  {%- if section.settings.enable_dismiss -%}
+    <button class="mh-ann__close" aria-label="Dismiss announcement">
+      <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1l8 8M9 1l-8 8"/></svg>
+    </button>
+  {%- endif -%}
+</div>
+
+<script>
+(function () {
+  var el = document.getElementById('mh-ann');
+  if (!el) return;
+  var key = el.dataset.msgKey;
+  var dismissed = false;
+  try { dismissed = localStorage.getItem(key) === '1'; } catch(e) {}
+  if (!dismissed) el.style.display = '';
+  var btn = el.querySelector('.mh-ann__close');
+  if (btn) {
+    btn.addEventListener('click', function () {
+      el.style.display = 'none';
+      try { localStorage.setItem(key, '1'); } catch(e) {}
+    });
+  }
+}());
+</script>
+
+{% schema %}
+{
+  "name": "Announcement Bar",
+  "settings": [
+    {
+      "type": "text",
+      "id": "message",
+      "label": "Message",
+      "default": "Complimentary Shipping on All Australian Orders · F/W 25 New Arrivals"
+    },
+    {
+      "type": "text",
+      "id": "link_label",
+      "label": "Link label",
+      "default": "Shop Now"
+    },
+    {
+      "type": "url",
+      "id": "link_url",
+      "label": "Link URL"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_dismiss",
+      "label": "Allow visitors to dismiss",
+      "default": true
+    }
+  ],
+  "presets": [
+    { "name": "Announcement Bar" }
+  ]
+}
+{% endschema %}

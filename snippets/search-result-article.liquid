@@ -1,0 +1,26 @@
+{%- comment -%}
+  Renders a single article card in search results.
+  Expects: article object passed as `article`
+{%- endcomment -%}
+
+<a href="{{ article.url }}" class="search-article">
+  <div class="search-article__img-wrap">
+    {%- if article.image -%}
+      <img
+        class="search-article__img"
+        src="{{ article.image | image_url: width: 600 }}"
+        alt="{{ article.image.alt | escape | default: article.title | escape }}"
+        loading="lazy"
+        width="600"
+        height="450"
+      >
+    {%- endif -%}
+  </div>
+  {%- if article.tags.first -%}
+    <p class="search-article__tag">{{ article.tags.first }}</p>
+  {%- endif -%}
+  <h3 class="search-article__title">{{ article.title }}</h3>
+  {%- if article.excerpt_or_content != blank -%}
+    <p class="search-article__excerpt">{{ article.excerpt_or_content | strip_html | truncate: 140 }}</p>
+  {%- endif -%}
+</a>

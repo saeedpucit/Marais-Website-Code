@@ -1,0 +1,119 @@
+{%- assign hour = 'now' | date: '%H' | plus: 0 -%}
+{%- if hour < 12 -%}
+  {%- assign greeting = 'Good morning' -%}
+{%- elsif hour < 17 -%}
+  {%- assign greeting = 'Good afternoon' -%}
+{%- else -%}
+  {%- assign greeting = 'Good evening' -%}
+{%- endif -%}
+
+<div class="account-page">
+  {%- render 'account-nav' -%}
+
+  <div class="account-content">
+
+    <div class="account-header">
+      <h1 class="account-header__greeting">{{ greeting }}, {{ customer.first_name }}</h1>
+      <p class="account-header__sub">Welcome back to MARAIS</p>
+    </div>
+
+    <!-- ── Recent orders ── -->
+    <section style="margin-bottom: 60px">
+      <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:20px">
+        <h2 style="font-family:var(--mh-serif);font-size:22px;font-weight:300">Recent Orders</h2>
+        {%- if customer.orders.size > 3 -%}
+          <a href="{{ routes.account_url }}/orders" style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-family:var(--mh-sans);color:var(--mh-gray);text-decoration:none;border-bottom:1px solid var(--mh-light)">View All</a>
+        {%- endif -%}
+      </div>
+
+      {%- if customer.orders.size > 0 -%}
+        <table class="order-table">
+          <thead>
+            <tr>
+              <th>Order</th>
+              <th>Date</th>
+              <th>Items</th>
+              <th>Status</th>
+              <th>Total</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {%- for order in customer.orders limit: 3 -%}
+              {%- render 'account-order-row', order: order -%}
+            {%- endfor -%}
+          </tbody>
+        </table>
+      {%- else -%}
+        <p style="font-size:13px;color:var(--mh-gray);font-family:var(--mh-sans);letter-spacing:.04em">
+          You haven't placed any orders yet. <a href="/collections/all" style="color:var(--mh-black)">Start shopping</a>
+        </p>
+      {%- endif -%}
+    </section>
+
+    <!-- ── Default address ── -->
+    {%- if customer.default_address -%}
+      <section style="margin-bottom:60px">
+        <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:20px">
+          <h2 style="font-family:var(--mh-serif);font-size:22px;font-weight:300">Default Address</h2>
+          <a href="{{ routes.account_url }}/addresses" style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-family:var(--mh-sans);color:var(--mh-gray);text-decoration:none;border-bottom:1px solid var(--mh-light)">Manage</a>
+        </div>
+        <div class="address-card" style="max-width:360px">
+          <span class="address-card__default">Default</span>
+          <p>
+            {{ customer.default_address.first_name }} {{ customer.default_address.last_name }}<br>
+            {{ customer.default_address.address1 }}<br>
+            {%- if customer.default_address.address2 != blank -%}{{ customer.default_address.address2 }}<br>{%- endif -%}
+            {{ customer.default_address.city }}, {{ customer.default_address.province_code }} {{ customer.default_address.zip }}<br>
+            {{ customer.default_address.country }}
+          </p>
+        </div>
+      </section>
+    {%- endif -%}
+
+    <!-- ── Wishlist preview ── -->
+    <section>
+      <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:20px">
+        <h2 style="font-family:var(--mh-serif);font-size:22px;font-weight:300">Your Curated Edit</h2>
+        <a href="{{ routes.account_url }}/wishlist" style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-family:var(--mh-sans);color:var(--mh-gray);text-decoration:none;border-bottom:1px solid var(--mh-light)">View All</a>
+      </div>
+      <div id="WishlistPreview" style="display:grid;grid-template-columns:repeat(4,1fr);gap:2px">
+        <!-- Rendered by marais-account.js -->
+      </div>
+      <p id="WishlistPreviewEmpty" style="display:none;font-size:13px;color:var(--mh-gray);font-family:var(--mh-sans);letter-spacing:.04em">
+        Your wishlist is empty. <a href="/collections/all" style="color:var(--mh-black)">Discover new arrivals</a>
+      </p>
+    </section>
+
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var preview = document.getElementById('WishlistPreview');
+    var empty   = document.getElementById('WishlistPreviewEmpty');
+    if (!preview) return;
+    try {
+      var items = JSON.parse(localStorage.getItem('marais-wishlist')) || [];
+      items = items.slice(0, 4);
+      if (items.length === 0) {
+        preview.style.display = 'none';
+        if (empty) empty.style.display = '';
+        return;
+      }
+      preview.innerHTML = items.map(function (item) {
+        var img = item.image
+          ? '<img src="' + item.image + '" alt="" style="width:100%;aspect-ratio:3/4;object-fit:cover;display:block" loading="lazy">'
+          : '<div style="width:100%;aspect-ratio:3/4;background:var(--mh-cream)"></div>';
+        return '<a href="' + (item.url || '#') + '" style="text-decoration:none;color:var(--mh-black)">'
+          + img
+          + '<p style="font-size:11px;letter-spacing:.06em;color:var(--mh-gold);font-family:var(--mh-sans);margin-top:8px">' + (item.vendor || '') + '</p>'
+          + '<p style="font-family:var(--mh-serif);font-size:15px;font-weight:400;margin-top:2px">' + (item.title || '') + '</p>'
+          + '</a>';
+      }).join('');
+    } catch (e) {
+      preview.style.display = 'none';
+      if (empty) empty.style.display = '';
+    }
+  });
+</script>

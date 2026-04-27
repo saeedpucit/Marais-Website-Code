@@ -1,0 +1,43 @@
+{%- assign range_min = filter.range_min | divided_by: 100.0 | floor -%}
+{%- assign range_max = filter.range_max | divided_by: 100.0 | ceil -%}
+{%- assign min_display = '' -%}
+{%- assign max_display = '' -%}
+{%- if filter.min_value.value -%}
+  {%- assign min_display = filter.min_value.value | divided_by: 100.0 | floor -%}
+{%- endif -%}
+{%- if filter.max_value.value -%}
+  {%- assign max_display = filter.max_value.value | divided_by: 100.0 | ceil -%}
+{%- endif -%}
+
+<form class="filter-price-form" id="PriceFilterForm">
+  <div class="filter-price-inputs">
+    <div class="filter-price-field">
+      <label for="FilterMinPrice" class="filter-price-field__label">Min AUD</label>
+      <input
+        type="number"
+        id="FilterMinPrice"
+        class="filter-price-field__input"
+        name="{{ filter.min_value.param_name }}"
+        min="{{ range_min }}"
+        max="{{ range_max }}"
+        placeholder="{{ range_min }}"
+        value="{{ min_display }}"
+      >
+    </div>
+    <span class="filter-price-sep" aria-hidden="true">—</span>
+    <div class="filter-price-field">
+      <label for="FilterMaxPrice" class="filter-price-field__label">Max AUD</label>
+      <input
+        type="number"
+        id="FilterMaxPrice"
+        class="filter-price-field__input"
+        name="{{ filter.max_value.param_name }}"
+        min="{{ range_min }}"
+        max="{{ range_max }}"
+        placeholder="{{ range_max }}"
+        value="{{ max_display }}"
+      >
+    </div>
+  </div>
+  <button type="submit" class="filter-price-apply">Apply</button>
+</form>

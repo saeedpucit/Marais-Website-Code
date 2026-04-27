@@ -1,0 +1,154 @@
+{% layout none %}
+
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="canonical" href="{{ canonical_url }}">
+
+  {%- if settings.favicon != blank -%}
+    <link rel="icon" type="image/png" href="{{ settings.favicon | img_url: '32x32' }}">
+  {%- endif -%}
+
+  {%- assign formatted_value = gift_card.initial_value | money_without_trailing_zeros | strip_html -%}
+  <title>MARAIS Gift Card — {{ formatted_value }}</title>
+
+  {{ content_for_header }}
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+  {{ 'marais-gift-card.css' | asset_url | stylesheet_tag }}
+
+  <script src="{{ 'vendor/qrcode.js' | shopify_asset_url }}" defer></script>
+</head>
+
+<body>
+
+  <!-- Header -->
+  <header class="gc-header">
+    <a href="{{ shop.url }}" class="gc-logo" aria-label="MARAIS">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 218 30" height="20" fill="currentColor" aria-hidden="true">
+        <path d="M0 2h5.2l7.1 15.6L19.4 2h5.2v26h-5V12.4l-6.3 13.8h-1.9L5.1 12.4V28H0V2z"/>
+        <path d="M34 2h5.4L51 28h-5.4l-2.6-6.8H31.6L29 28h-5.3L34 2zm5.5 17-4.3-11.2L30.9 19h8.6z"/>
+        <path d="M55 2h11.4c3.2 0 5.7.85 7.3 2.55 1.6 1.7 2.4 4 2.4 6.85 0 2.2-.5 4.05-1.5 5.55s-2.4 2.55-4.2 3.15L76.6 28H71l-5.7-9.3H60V28h-5V2zm5 14.1h5.9c1.7 0 3-.42 3.9-1.27.9-.84 1.35-2.07 1.35-3.68s-.45-2.83-1.35-3.66C68.9 6.66 67.6 6.25 65.9 6.25H60v9.85z"/>
+        <path d="M87 2h5.4L104 28h-5.4l-2.6-6.8H84.6L82 28h-5.3L87 2zm5.5 17-4.3-11.2L83.9 19h8.6z"/>
+        <path d="M109 2h5v26h-5V2z"/>
+        <path d="M118.5 23.9l3.3-3.55c1 1.12 2.12 1.97 3.35 2.55 1.22.58 2.55.87 3.97.87 1.55 0 2.77-.34 3.66-1.01.9-.68 1.35-1.6 1.35-2.75 0-.95-.3-1.72-.9-2.3-.6-.58-1.72-1.07-3.35-1.47l-2.9-.72c-2.35-.58-4.1-1.52-5.25-2.82-1.15-1.3-1.72-2.93-1.72-4.88 0-1.6.38-3.01 1.14-4.23.77-1.22 1.86-2.17 3.28-2.85 1.42-.68 3.07-1.02 4.95-1.02 1.82 0 3.5.32 5.03.95 1.53.63 2.82 1.52 3.87 2.67l-3.12 3.42c-.87-.93-1.82-1.63-2.85-2.1-1.03-.47-2.17-.7-3.42-.7-1.38 0-2.47.32-3.27.95-.8.63-1.2 1.47-1.2 2.52 0 .88.28 1.6.85 2.15.57.55 1.52.98 2.85 1.3l2.9.72c2.52.63 4.42 1.6 5.7 2.92 1.28 1.32 1.92 3.05 1.92 5.18 0 1.67-.4 3.13-1.2 4.38-.8 1.25-1.95 2.22-3.45 2.9-1.5.68-3.25 1.02-5.25 1.02-2.1 0-4.02-.38-5.75-1.14-1.73-.76-3.17-1.85-4.32-3.26z"/>
+      </svg>
+    </a>
+    <p class="gc-greeting">{{ 'gift_cards.issued.subtext' | t }}</p>
+  </header>
+
+  <!-- Gift card object -->
+  <div class="gc-card">
+    <div class="gc-card__top">
+      <div class="gc-card__mark">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 218 30" height="14" fill="currentColor" aria-hidden="true">
+          <path d="M0 2h5.2l7.1 15.6L19.4 2h5.2v26h-5V12.4l-6.3 13.8h-1.9L5.1 12.4V28H0V2z"/>
+          <path d="M34 2h5.4L51 28h-5.4l-2.6-6.8H31.6L29 28h-5.3L34 2zm5.5 17-4.3-11.2L30.9 19h8.6z"/>
+          <path d="M55 2h11.4c3.2 0 5.7.85 7.3 2.55 1.6 1.7 2.4 4 2.4 6.85 0 2.2-.5 4.05-1.5 5.55s-2.4 2.55-4.2 3.15L76.6 28H71l-5.7-9.3H60V28h-5V2zm5 14.1h5.9c1.7 0 3-.42 3.9-1.27.9-.84 1.35-2.07 1.35-3.68s-.45-2.83-1.35-3.66C68.9 6.66 67.6 6.25 65.9 6.25H60v9.85z"/>
+          <path d="M87 2h5.4L104 28h-5.4l-2.6-6.8H84.6L82 28h-5.3L87 2zm5.5 17-4.3-11.2L83.9 19h8.6z"/>
+          <path d="M109 2h5v26h-5V2z"/>
+          <path d="M118.5 23.9l3.3-3.55c1 1.12 2.12 1.97 3.35 2.55 1.22.58 2.55.87 3.97.87 1.55 0 2.77-.34 3.66-1.01.9-.68 1.35-1.6 1.35-2.75 0-.95-.3-1.72-.9-2.3-.6-.58-1.72-1.07-3.35-1.47l-2.9-.72c-2.35-.58-4.1-1.52-5.25-2.82-1.15-1.3-1.72-2.93-1.72-4.88 0-1.6.38-3.01 1.14-4.23.77-1.22 1.86-2.17 3.28-2.85 1.42-.68 3.07-1.02 4.95-1.02 1.82 0 3.5.32 5.03.95 1.53.63 2.82 1.52 3.87 2.67l-3.12 3.42c-.87-.93-1.82-1.63-2.85-2.1-1.03-.47-2.17-.7-3.42-.7-1.38 0-2.47.32-3.27.95-.8.63-1.2 1.47-1.2 2.52 0 .88.28 1.6.85 2.15.57.55 1.52.98 2.85 1.3l2.9.72c2.52.63 4.42 1.6 5.7 2.92 1.28 1.32 1.92 3.05 1.92 5.18 0 1.67-.4 3.13-1.2 4.38-.8 1.25-1.95 2.22-3.45 2.9-1.5.68-3.25 1.02-5.25 1.02-2.1 0-4.02-.38-5.75-1.14-1.73-.76-3.17-1.85-4.32-3.26z"/>
+        </svg>
+      </div>
+      <div class="gc-card__meta">
+        <span class="gc-card__label">Gift Card</span>
+      </div>
+    </div>
+
+    <div class="gc-card__bottom">
+      <span class="gc-card__value">
+        {%- if settings.currency_code_enabled -%}
+          {{ gift_card.initial_value | money_with_currency }}
+        {%- else -%}
+          {{ gift_card.initial_value | money }}
+        {%- endif -%}
+      </span>
+      {%- if gift_card.enabled == false or gift_card.expired -%}
+        <span class="gc-card__expired-badge">{{ 'gift_cards.issued.expired' | t }}</span>
+      {%- endif -%}
+      {%- if gift_card.balance != gift_card.initial_value -%}
+        {%- if settings.currency_code_enabled -%}
+          {%- assign balance = gift_card.balance | money_with_currency -%}
+        {%- else -%}
+          {%- assign balance = gift_card.balance | money -%}
+        {%- endif -%}
+        <p class="gc-card__balance">{{ 'gift_cards.issued.remaining_html' | t: balance: balance }}</p>
+      {%- endif -%}
+    </div>
+  </div>
+
+  <!-- QR code -->
+  <div class="gc-qr-wrap">
+    <div class="gc-qr" data-identifier="{{ gift_card.qr_identifier }}"></div>
+  </div>
+
+  <!-- Code -->
+  <div class="gc-code-section">
+    <p class="gc-code-label">{{ 'gift_cards.issued.gift_card_code' | t }}</p>
+    <input
+      class="gc-code"
+      type="text"
+      value="{{ gift_card.code | format_code }}"
+      aria-label="{{ 'gift_cards.issued.gift_card_code' | t }}"
+      readonly
+    >
+    <div class="gc-copy-row no-print">
+      <button class="gc-copy-btn">{{ 'gift_cards.issued.copy_code' | t }}</button>
+      <span class="gc-copy-success" role="status"></span>
+      <template><span>{{ 'gift_cards.issued.copy_code_success' | t }}</span></template>
+    </div>
+  </div>
+
+  {%- if gift_card.pass_url -%}
+    <div class="gc-apple-wallet no-print">
+      <a href="{{ gift_card.pass_url }}">
+        <img src="{{ 'gift-card/add-to-apple-wallet.svg' | shopify_asset_url }}" width="120" height="40" alt="{{ 'gift_cards.issued.add_to_apple_wallet' | t }}" loading="lazy">
+      </a>
+    </div>
+  {%- endif -%}
+
+  <!-- Actions -->
+  <div class="gc-actions no-print">
+    <a href="{{ shop.url }}" class="gc-btn gc-btn--primary" target="_blank" rel="noopener">
+      {{ 'gift_cards.issued.shop_link' | t }}
+    </a>
+    <button class="gc-btn" onclick="window.print();">
+      {{ 'gift_cards.issued.print_gift_card' | t }}
+    </button>
+  </div>
+
+</body>
+</html>
+
+<script>
+  var qrIdentifier = document.querySelector('[data-identifier]');
+  if (qrIdentifier) {
+    document.addEventListener('DOMContentLoaded', function () {
+      new QRCode(qrIdentifier, {
+        text: qrIdentifier.dataset.identifier,
+        width: 120,
+        height: 120
+      });
+    });
+  }
+
+  var copyBtn = document.querySelector('.gc-copy-btn');
+  var copySuccess = document.querySelector('.gc-copy-success');
+  var copyTemplate = document.querySelector('template');
+  if (copyBtn) {
+    copyBtn.addEventListener('click', function () {
+      var code = document.querySelector('.gc-code');
+      if (!code) return;
+      navigator.clipboard.writeText(code.value).then(function () {
+        if (copyTemplate && copySuccess && !copySuccess.children.length) {
+          copySuccess.appendChild(copyTemplate.content.cloneNode(true));
+        }
+      });
+    });
+  }
+</script>

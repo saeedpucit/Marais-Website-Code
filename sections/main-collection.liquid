@@ -1,0 +1,331 @@
+{%- assign cols             = section.settings.columns_desktop | default: '3' -%}
+{%- assign enable_filtering = section.settings.enable_filtering -%}
+{%- assign enable_sorting   = section.settings.enable_sorting -%}
+{%- assign show_count       = section.settings.show_product_count -%}
+{%- assign desc_pos         = section.settings.collection_description_position | default: 'below-title' -%}
+{%- assign show_coll_image  = section.settings.show_collection_image -%}
+
+{%- paginate collection.products by section.settings.products_per_page -%}
+
+<div class="collection-page">
+
+  <!-- Header -->
+  <div class="collection-page__header" style="position:relative;overflow:hidden">
+    {%- if show_coll_image and collection.image -%}
+      <img
+        src="{{ collection.image | image_url: width: 2000 }}"
+        alt=""
+        aria-hidden="true"
+        loading="eager"
+        style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.06;pointer-events:none;user-select:none"
+      >
+    {%- endif -%}
+    <nav class="collection-page__breadcrumb" aria-label="Breadcrumb" style="position:relative">
+      <a href="/" class="breadcrumb__link">Home</a>
+      <span class="breadcrumb__sep" aria-hidden="true">—</span>
+      <span class="breadcrumb__current">{{ collection.title }}</span>
+    </nav>
+    <div class="collection-page__title-row" style="position:relative">
+      <h1 class="collection-page__title">{{ collection.title }}</h1>
+      {%- if collection.description != blank and desc_pos == 'below-title' -%}
+        <div class="collection-page__description">{{ collection.description }}</div>
+      {%- endif -%}
+    </div>
+  </div>
+
+  <div class="collection-layout">
+
+    <!-- ── Sidebar ── -->
+    {%- if enable_filtering -%}
+
+      {%- assign active_count = 0 -%}
+      {%- for f in collection.filters -%}
+        {%- assign fk = f.label | downcase -%}
+        {%- if fk == 'availability' or fk contains 'availab' or fk == 'gender' or fk contains 'gender' -%}{%- continue -%}{%- endif -%}
+        {%- assign active_count = active_count | plus: f.active_values.size -%}
+        {%- if f.type == 'price_range' -%}
+          {%- if f.min_value.value or f.max_value.value -%}
+            {%- assign active_count = active_count | plus: 1 -%}
+          {%- endif -%}
+        {%- endif -%}
+      {%- endfor -%}
+
+      <aside class="collection-sidebar" id="CollectionSidebar" aria-label="Filters">
+
+        <div class="sidebar__topbar">
+          <span class="sidebar__title">Filter</span>
+          {%- if active_count > 0 -%}
+            <a href="{{ collection.url }}" class="sidebar__clear">Clear ({{ active_count }})</a>
+          {%- endif -%}
+          <button class="sidebar__close-mob" id="SidebarCloseBtn" aria-label="Close filters">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
+          </button>
+        </div>
+
+        {%- if collection.filters.size > 0 -%}
+
+          <!-- Active chips -->
+          {%- if active_count > 0 -%}
+            <div class="active-chips" role="list" aria-label="Active filters">
+              {%- for filter in collection.filters -%}
+                {%- assign ck = filter.label | downcase -%}
+                {%- if ck == 'availability' or ck contains 'availab' or ck == 'gender' or ck contains 'gender' -%}{%- continue -%}{%- endif -%}
+                {%- for value in filter.active_values -%}
+                  <a href="{{ value.url_to_remove }}" class="active-chip" role="listitem">
+                    {{ value.label }}<span class="active-chip__x" aria-hidden="true">×</span>
+                  </a>
+                {%- endfor -%}
+                {%- if filter.type == 'price_range' -%}
+                  {%- if filter.min_value.value or filter.max_value.value -%}
+                    <a href="{{ filter.url_to_remove }}" class="active-chip" role="listitem">
+                      {%- if filter.min_value.value -%}AUD {{ filter.min_value.value | divided_by: 100.0 | floor }}{%- endif -%}
+                      {%- if filter.min_value.value and filter.max_value.value %} – {% endif -%}
+                      {%- if filter.max_value.value -%}{{ filter.max_value.value | divided_by: 100.0 | ceil }}{%- endif -%}
+                      <span class="active-chip__x" aria-hidden="true">×</span>
+                    </a>
+                  {%- endif -%}
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+
+          <!-- Filter groups — native Shopify order -->
+          {%- for filter in collection.filters -%}
+            {%- assign filter_key = filter.label | downcase -%}
+            {%- if filter_key == 'gender' or filter_key contains 'gender' -%}{%- continue -%}{%- endif -%}
+            {%- if filter_key == 'availability' or filter_key contains 'availab' -%}{%- continue -%}{%- endif -%}
+            {%- if filter_key == 'brand' or filter_key == 'vendor' -%}
+              {%- if filter.values.size <= 1 -%}{%- continue -%}{%- endif -%}
+            {%- endif -%}
+
+            {%- assign is_open = false -%}
+            {%- if filter.active_values.size > 0 -%}{%- assign is_open = true -%}{%- endif -%}
+            {%- if filter.type == 'price_range' -%}
+              {%- if filter.min_value.value or filter.max_value.value -%}{%- assign is_open = true -%}{%- endif -%}
+            {%- endif -%}
+
+            <details class="filter-group"{% if is_open %} open{% endif %}>
+              <summary class="filter-group__head">
+                <span class="filter-group__label">
+                  {%- if filter_key contains 'type' or filter_key contains 'categor' -%}Categories{%- else -%}{{ filter.label }}{%- endif -%}
+                  {%- if filter.active_values.size > 0 -%}<span class="filter-group__count">({{ filter.active_values.size }})</span>{%- endif -%}
+                </span>
+                <span class="filter-group__icon" aria-hidden="true">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 1v12M1 7h12"/></svg>
+                </span>
+              </summary>
+              <div class="filter-group__body">
+                {%- if filter.type == 'price_range' -%}
+                  {%- render 'filter-price-range', filter: filter -%}
+                {%- elsif filter_key contains 'colour' or filter_key contains 'color' or filter_key contains 'swatch' or filter_key contains 'shade' or filter_key contains 'hue' -%}
+                  {%- render 'filter-colours', filter: filter -%}
+                {%- elsif filter_key contains 'size' or filter_key == 'sizing' -%}
+                  {%- render 'filter-sizes', filter: filter -%}
+                {%- elsif filter_key contains 'type' or filter_key contains 'categor' or filter_key contains 'style' -%}
+                  {%- render 'filter-product-type', filter: filter -%}
+                {%- else -%}
+                  <ul class="filter-list" role="list">
+                    {%- for value in filter.values -%}
+                      {%- assign is_active   = value.active -%}
+                      {%- assign is_disabled = false -%}
+                      {%- if value.count == 0 and is_active == false -%}{%- assign is_disabled = true -%}{%- endif -%}
+                      <li>
+                        <label class="filter-opt{% if is_active %} filter-opt--active{% endif %}{% if is_disabled %} filter-opt--disabled{% endif %}">
+                          <input
+                            type="checkbox"
+                            class="filter-checkbox"
+                            {% if is_active %}checked{% endif %}
+                            {% if is_disabled %}disabled{% endif %}
+                            data-url-add="{{ value.url_to_add }}"
+                            data-url-remove="{{ value.url_to_remove }}"
+                          >
+                          <span class="filter-checkbox__box" aria-hidden="true"></span>
+                          <span class="filter-opt__label">{{ value.label }}</span>
+                          <span class="filter-opt__count">{{ value.count }}</span>
+                        </label>
+                      </li>
+                    {%- endfor -%}
+                  </ul>
+                {%- endif -%}
+              </div>
+            </details>
+          {%- endfor -%}
+
+        {%- else -%}
+          <p class="sidebar__no-filters">No filters available.</p>
+        {%- endif -%}
+
+      </aside>
+
+      <div class="sidebar-overlay" id="SidebarOverlay" aria-hidden="true"></div>
+
+    {%- endif -%}
+
+    <!-- ── Main ── -->
+    <div class="collection-main">
+
+      {%- if collection.description != blank and desc_pos == 'above-filters' -%}
+        <div class="collection-page__description" style="padding:16px 0 4px;border-bottom:1px solid var(--mh-light);margin-bottom:0">{{ collection.description }}</div>
+      {%- endif -%}
+
+      <!-- Collection bar -->
+      <div class="collection-bar">
+        <div class="collection-bar__left">
+          {%- if enable_filtering -%}
+            <button class="mob-filter-btn" id="MobFilterBtn" aria-expanded="false" aria-controls="CollectionSidebar">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/></svg>
+              Filters
+              {%- if active_count > 0 -%}
+                <span class="mob-filter-btn__count" aria-label="{{ active_count }} active">{{ active_count }}</span>
+              {%- endif -%}
+            </button>
+          {%- endif -%}
+          {%- if show_count -%}
+            <p class="collection-bar__count"><strong>{{ collection.products_count }}</strong> products</p>
+          {%- endif -%}
+        </div>
+
+        <div class="collection-bar__right">
+          {%- if enable_sorting -%}
+            <div class="sort-wrap">
+              <select id="SortBy" class="sort-select" aria-label="Sort products">
+                <option value="manual">Featured</option>
+                <option value="best-selling">Best Selling</option>
+                <option value="title-ascending">A – Z</option>
+                <option value="title-descending">Z – A</option>
+                <option value="price-ascending">Price: Low</option>
+                <option value="price-descending">Price: High</option>
+                <option value="created-descending">Newest</option>
+              </select>
+              <span class="sort-wrap__arrow" aria-hidden="true">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </span>
+            </div>
+          {%- endif -%}
+
+          <div class="grid-toggle" role="group" aria-label="Grid layout">
+            <button class="grid-toggle__btn" data-cols="2" aria-pressed="false" title="2 columns">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor"><rect x="0" y="0" width="5" height="5"/><rect x="7" y="0" width="5" height="5"/><rect x="0" y="7" width="5" height="5"/><rect x="7" y="7" width="5" height="5"/></svg>
+            </button>
+            <button class="grid-toggle__btn" data-cols="3" aria-pressed="false" title="3 columns">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor"><rect x="0" y="0" width="3" height="3"/><rect x="4.5" y="0" width="3" height="3"/><rect x="9" y="0" width="3" height="3"/><rect x="0" y="4.5" width="3" height="3"/><rect x="4.5" y="4.5" width="3" height="3"/><rect x="9" y="4.5" width="3" height="3"/><rect x="0" y="9" width="3" height="3"/><rect x="4.5" y="9" width="3" height="3"/><rect x="9" y="9" width="3" height="3"/></svg>
+            </button>
+            <button class="grid-toggle__btn" data-cols="4" aria-pressed="false" title="4 columns">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor"><rect x="0" y="0" width="2" height="2"/><rect x="3.3" y="0" width="2" height="2"/><rect x="6.6" y="0" width="2" height="2"/><rect x="10" y="0" width="2" height="2"/><rect x="0" y="3.3" width="2" height="2"/><rect x="3.3" y="3.3" width="2" height="2"/><rect x="6.6" y="3.3" width="2" height="2"/><rect x="10" y="3.3" width="2" height="2"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product grid -->
+      {%- if collection.products.size > 0 -%}
+        <ul class="product-grid product-grid--{{ cols }}-col" id="ProductGrid" role="list">
+          {%- for product in collection.products -%}
+            <li>{%- render 'product-card', product: product, index: forloop.index -%}</li>
+          {%- endfor -%}
+        </ul>
+
+        {%- if paginate.pages > 1 -%}
+          <nav class="pagination" aria-label="Pagination">
+            {%- if paginate.previous -%}
+              <a href="{{ paginate.previous.url }}" class="pagination__btn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="15 18 9 12 15 6"/></svg>
+                Previous
+              </a>
+            {%- endif -%}
+            <div class="pagination__pages">
+              {%- for part in paginate.parts -%}
+                {%- if part.is_link -%}
+                  <a href="{{ part.url }}" class="pagination__page">{{ part.title }}</a>
+                {%- elsif part.title == paginate.current_page -%}
+                  <span class="pagination__page pagination__page--current" aria-current="page">{{ part.title }}</span>
+                {%- else -%}
+                  <span class="pagination__page pagination__page--gap">{{ part.title }}</span>
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+            {%- if paginate.next -%}
+              <a href="{{ paginate.next.url }}" class="pagination__btn">
+                Next
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="9 18 15 12 9 6"/></svg>
+              </a>
+            {%- endif -%}
+          </nav>
+        {%- endif -%}
+
+      {%- else -%}
+        <div class="collection-empty">
+          <p class="collection-empty__msg">No products found.</p>
+          {%- if active_count > 0 -%}
+            <a href="{{ collection.url }}" class="collection-empty__clear">Clear all filters</a>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+    </div><!-- /.collection-main -->
+  </div><!-- /.collection-layout -->
+</div><!-- /.collection-page -->
+
+{%- endpaginate -%}
+
+{% schema %}
+{
+  "name": "Collection",
+  "settings": [
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "label": "Products per page",
+      "min": 12,
+      "max": 48,
+      "step": 4,
+      "default": 24
+    },
+    {
+      "type": "select",
+      "id": "columns_desktop",
+      "label": "Desktop columns",
+      "options": [
+        { "value": "2", "label": "2" },
+        { "value": "3", "label": "3" },
+        { "value": "4", "label": "4" }
+      ],
+      "default": "3"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_filtering",
+      "label": "Enable filtering",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sorting",
+      "label": "Enable sorting",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_product_count",
+      "label": "Show product count",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_collection_image",
+      "label": "Show collection image as background wash",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "collection_description_position",
+      "label": "Description position",
+      "options": [
+        { "value": "below-title", "label": "Below title (in header)" },
+        { "value": "above-filters", "label": "Above filter bar" }
+      ],
+      "default": "below-title"
+    }
+  ]
+}
+{% endschema %}

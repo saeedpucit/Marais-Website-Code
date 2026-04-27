@@ -1,0 +1,105 @@
+{%- assign search_performed = false -%}
+{%- if search.performed -%}
+  {%- assign search_performed = true -%}
+{%- endif -%}
+
+{%- assign product_results = search.results | where: 'object_type', 'product' -%}
+{%- assign article_results  = search.results | where: 'object_type', 'article' -%}
+
+<div class="search-page">
+
+  <!-- ── Search hero ── -->
+  <div class="search-hero">
+    <p class="search-hero__eyebrow">Search</p>
+
+    <form class="search-hero__form" action="{{ routes.search_url }}" method="get" role="search">
+      <input type="hidden" name="type" value="product,article">
+      <input
+        class="search-hero__input"
+        type="search"
+        name="q"
+        value="{{ search.terms | escape }}"
+        placeholder="Search designers, styles&hellip;"
+        autocomplete="off"
+        aria-label="Search"
+      >
+      <button class="search-hero__submit" type="submit" aria-label="Submit search">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="11" cy="11" r="8"/>
+          <path d="m21 21-4.35-4.35"/>
+        </svg>
+      </button>
+      <div class="search-autocomplete" aria-live="polite"></div>
+    </form>
+
+    {%- if search_performed -%}
+      <p class="search-summary">
+        {%- if search.results_count == 0 -%}
+          No results for <strong>"{{ search.terms | escape }}"</strong>
+        {%- else -%}
+          <strong>{{ search.results_count }}</strong> result{{ search.results_count | plural: '', 's' }} for <strong>"{{ search.terms | escape }}"</strong>
+        {%- endif -%}
+      </p>
+    {%- endif -%}
+  </div>
+
+  {%- if search_performed and search.results_count > 0 -%}
+
+    <!-- ── Type tabs ── -->
+    <div class="search-tabs" role="tablist">
+      <button class="search-tab is-active" data-tab="all" role="tab">All</button>
+      {%- if product_results.size > 0 -%}
+        <button class="search-tab" data-tab="products" role="tab">
+          Products <span style="opacity:.5">({{ product_results.size }})</span>
+        </button>
+      {%- endif -%}
+      {%- if article_results.size > 0 -%}
+        <button class="search-tab" data-tab="articles" role="tab">
+          Editorial <span style="opacity:.5">({{ article_results.size }})</span>
+        </button>
+      {%- endif -%}
+    </div>
+
+    <!-- ── Results ── -->
+    <div class="search-results">
+
+      {%- if product_results.size > 0 -%}
+        <div class="search-results__section" data-type="products">
+          <h2 class="search-results__section-heading">Products</h2>
+          <div class="search-products-grid">
+            {%- for product in product_results -%}
+              {%- assign index = forloop.index -%}
+              {%- render 'product-card', product: product, index: index -%}
+            {%- endfor -%}
+          </div>
+        </div>
+      {%- endif -%}
+
+      {%- if article_results.size > 0 -%}
+        <div class="search-results__section" data-type="articles">
+          <h2 class="search-results__section-heading">Editorial</h2>
+          <div class="search-articles-grid">
+            {%- for article in article_results -%}
+              {%- render 'search-result-article', article: article -%}
+            {%- endfor -%}
+          </div>
+        </div>
+      {%- endif -%}
+
+    </div>
+
+  {%- elsif search_performed -%}
+
+    <div class="search-empty">
+      <h2 class="search-empty__heading">Nothing found</h2>
+      <p class="search-empty__sub">Try a different term, or browse our collections below</p>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+        <a href="/collections/women" class="mh-btn">Shop Women</a>
+        <a href="/collections/men" class="mh-btn mh-btn--outline">Shop Men</a>
+        <a href="/blogs/news" class="mh-btn mh-btn--outline">Editorial</a>
+      </div>
+    </div>
+
+  {%- endif -%}
+
+</div>

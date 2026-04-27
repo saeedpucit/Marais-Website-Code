@@ -1,0 +1,177 @@
+<div class="account-page">
+  {%- render 'account-nav' -%}
+
+  <div class="account-content">
+
+    <div class="account-header">
+      <h1 class="account-header__greeting">Addresses</h1>
+      <p class="account-header__sub">Manage your saved delivery addresses</p>
+    </div>
+
+    <!-- ── Add new address ── -->
+    <div style="margin-bottom:48px">
+      <button
+        class="mh-btn mh-btn--outline"
+        id="AddAddressToggle"
+        aria-expanded="false"
+        aria-controls="NewAddressForm"
+        style="margin-bottom:24px"
+      >+ Add New Address</button>
+
+      <div id="NewAddressForm" style="display:none;max-width:600px;border:1px solid var(--mh-light);padding:32px">
+        <h3 style="font-family:var(--mh-serif);font-size:22px;font-weight:300;margin-bottom:24px">New Address</h3>
+        {%- form 'customer_address', customer -%}
+          {%- render 'address-form-fields', form: form -%}
+          <div style="display:flex;gap:12px;margin-top:24px">
+            <button type="submit" class="mh-btn">Save Address</button>
+            <button type="button" class="mh-btn mh-btn--outline" id="AddAddressCancel">Cancel</button>
+          </div>
+        {%- endform -%}
+      </div>
+    </div>
+
+    <!-- ── Existing addresses ── -->
+    {%- if customer.addresses.size > 0 -%}
+      <div class="address-grid">
+        {%- for address in customer.addresses -%}
+          <div class="address-card" id="AddressCard-{{ address.id }}">
+            {%- if address == customer.default_address -%}
+              <span class="address-card__default">Default</span>
+            {%- endif -%}
+            <p>
+              {{ address.first_name }} {{ address.last_name }}<br>
+              {{ address.address1 }}<br>
+              {%- if address.address2 != blank -%}{{ address.address2 }}<br>{%- endif -%}
+              {{ address.city }}, {{ address.province_code }} {{ address.zip }}<br>
+              {{ address.country }}<br>
+              {%- if address.phone != blank -%}{{ address.phone }}{%- endif -%}
+            </p>
+
+            <div class="address-card__actions">
+              <button
+                class="address-card__btn"
+                data-edit-id="{{ address.id }}"
+                aria-expanded="false"
+              >Edit</button>
+
+              {%- unless address == customer.default_address -%}
+                {%- form 'customer_address', address, method: 'delete' -%}
+                  <button
+                    type="submit"
+                    class="address-card__btn address-card__btn--delete"
+                    onclick="return confirm('Remove this address?')"
+                  >Delete</button>
+                {%- endform -%}
+              {%- endunless -%}
+            </div>
+
+            <!-- Inline edit form -->
+            <div
+              class="address-card__edit-form"
+              id="EditForm-{{ address.id }}"
+              style="display:none;margin-top:20px;padding-top:20px;border-top:1px solid var(--mh-light)"
+            >
+              {%- form 'customer_address', address -%}
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+                  <div class="auth-form__field">
+                    <label class="auth-form__label" for="EditFirst-{{ address.id }}">First Name</label>
+                    <input id="EditFirst-{{ address.id }}" class="auth-form__input" type="text" name="address[first_name]" value="{{ address.first_name }}">
+                  </div>
+                  <div class="auth-form__field">
+                    <label class="auth-form__label" for="EditLast-{{ address.id }}">Last Name</label>
+                    <input id="EditLast-{{ address.id }}" class="auth-form__input" type="text" name="address[last_name]" value="{{ address.last_name }}">
+                  </div>
+                </div>
+                <div class="auth-form__field" style="margin-top:16px">
+                  <label class="auth-form__label" for="EditAddr1-{{ address.id }}">Address</label>
+                  <input id="EditAddr1-{{ address.id }}" class="auth-form__input" type="text" name="address[address1]" value="{{ address.address1 }}">
+                </div>
+                <div class="auth-form__field" style="margin-top:16px">
+                  <label class="auth-form__label" for="EditAddr2-{{ address.id }}">Apartment / Suite</label>
+                  <input id="EditAddr2-{{ address.id }}" class="auth-form__input" type="text" name="address[address2]" value="{{ address.address2 }}">
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-top:16px">
+                  <div class="auth-form__field">
+                    <label class="auth-form__label" for="EditCity-{{ address.id }}">City</label>
+                    <input id="EditCity-{{ address.id }}" class="auth-form__input" type="text" name="address[city]" value="{{ address.city }}">
+                  </div>
+                  <div class="auth-form__field">
+                    <label class="auth-form__label" for="EditZip-{{ address.id }}">Postcode</label>
+                    <input id="EditZip-{{ address.id }}" class="auth-form__input" type="text" name="address[zip]" value="{{ address.zip }}">
+                  </div>
+                  <div class="auth-form__field">
+                    <label class="auth-form__label" for="EditCountry-{{ address.id }}">Country</label>
+                    <select id="EditCountry-{{ address.id }}" class="auth-form__input" name="address[country]">
+                      {{ all_country_option_tags }}
+                    </select>
+                  </div>
+                </div>
+                <div class="auth-form__field" style="margin-top:16px">
+                  <label class="auth-form__label" for="EditPhone-{{ address.id }}">Phone</label>
+                  <input id="EditPhone-{{ address.id }}" class="auth-form__input" type="tel" name="address[phone]" value="{{ address.phone }}">
+                </div>
+                {%- unless address == customer.default_address -%}
+                  <label style="display:flex;align-items:center;gap:8px;margin-top:16px;font-size:12px;font-family:var(--mh-sans);color:var(--mh-gray);cursor:pointer">
+                    <input type="checkbox" name="address[default]" value="1">
+                    Set as default address
+                  </label>
+                {%- endunless -%}
+                <div style="display:flex;gap:12px;margin-top:20px">
+                  <button type="submit" class="mh-btn">Update Address</button>
+                  <button type="button" class="mh-btn mh-btn--outline address-card__cancel" data-edit-id="{{ address.id }}">Cancel</button>
+                </div>
+              {%- endform -%}
+            </div>
+
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- else -%}
+      <p style="font-size:13px;color:var(--mh-gray);font-family:var(--mh-sans);letter-spacing:.04em">No saved addresses yet.</p>
+    {%- endif -%}
+
+  </div>
+</div>
+
+<script>
+  (function () {
+    /* Add new address toggle */
+    var addBtn    = document.getElementById('AddAddressToggle');
+    var addForm   = document.getElementById('NewAddressForm');
+    var cancelBtn = document.getElementById('AddAddressCancel');
+
+    if (addBtn && addForm) {
+      addBtn.addEventListener('click', function () {
+        var open = addForm.style.display !== 'none';
+        addForm.style.display = open ? 'none' : '';
+        addBtn.setAttribute('aria-expanded', open ? 'false' : 'true');
+        addBtn.textContent = open ? '+ Add New Address' : '− Cancel';
+      });
+      if (cancelBtn) {
+        cancelBtn.addEventListener('click', function () {
+          addForm.style.display = 'none';
+          addBtn.setAttribute('aria-expanded', 'false');
+          addBtn.textContent = '+ Add New Address';
+        });
+      }
+    }
+
+    /* Edit address toggles */
+    document.querySelectorAll('[data-edit-id]').forEach(function (btn) {
+      if (btn.classList.contains('address-card__cancel')) {
+        btn.addEventListener('click', function () {
+          var form = document.getElementById('EditForm-' + btn.dataset.editId);
+          if (form) form.style.display = 'none';
+        });
+      } else {
+        btn.addEventListener('click', function () {
+          var form = document.getElementById('EditForm-' + btn.dataset.editId);
+          if (!form) return;
+          var open = form.style.display !== 'none';
+          form.style.display = open ? 'none' : '';
+          btn.textContent = open ? 'Edit' : 'Cancel';
+        });
+      }
+    });
+  }());
+</script>

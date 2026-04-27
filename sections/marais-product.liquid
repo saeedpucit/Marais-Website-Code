@@ -1,0 +1,685 @@
+{%- liquid
+  assign current_variant = product.selected_or_first_available_variant
+  assign product_form_id = 'mpdp-form-' | append: product.id
+  assign colour_idx = nil
+  assign size_idx = nil
+  for option in product.options_with_values
+    assign opt_down = option.name | downcase
+    if opt_down == 'color' or opt_down == 'colour'
+      assign colour_idx = forloop.index0
+    endif
+    if opt_down == 'size'
+      assign size_idx = forloop.index0
+    endif
+  endfor
+-%}
+
+<!-- Breadcrumb -->
+<nav class="mpdp-bread">
+  <a href="/">Home</a><span>/</span>
+  {%- for col in product.collections limit: 1 -%}
+    <a href="{{ col.url }}">{{ col.title }}</a><span>/</span>
+  {%- endfor -%}
+  <span>{{ product.title }}</span>
+</nav>
+
+<!-- PDP grid -->
+<div class="mpdp">
+
+  <!-- Gallery -->
+  <div class="mpdp-gallery">
+    <div class="mpdp-thumbs" id="mpdpThumbs">
+      {%- for image in product.images -%}
+        <div class="mpdp-thumb{% if forloop.first %} is-active{% endif %}" data-idx="{{ forloop.index0 }}" onclick="mpdpSetImg({{ forloop.index0 }},this)">
+          <img src="{{ image | image_url: width: 160 }}" alt="{{ image.alt | escape }}" loading="lazy" width="160">
+        </div>
+      {%- else -%}
+        <div class="mpdp-thumb is-active mpdp-thumb--ph"></div>
+      {%- endfor -%}
+    </div>
+
+    <div class="mpdp-gallery__main">
+      <div class="mpdp-gallery__wrap" id="mpdpWrap">
+        {%- if product.featured_image -%}
+          <img id="mpdpMainImg" src="{{ product.featured_image | image_url: width: 900 }}" alt="{{ product.featured_image.alt | escape }}" loading="eager" width="900">
+        {%- else -%}
+          <div class="mpdp-gallery__ph"></div>
+        {%- endif -%}
+        {%- unless current_variant.available -%}
+          <div class="mpdp-badge">Sold Out</div>
+        {%- else -%}
+          <div class="mpdp-badge">New Season</div>
+        {%- endunless -%}
+        <div class="mpdp-zoom-hint">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/><path d="M11 8v6M8 11h6"/></svg> Zoom
+        </div>
+      </div>
+      {%- if product.images.size > 1 -%}
+        <div class="mpdp-dots" id="mpdpDots">
+          {%- for image in product.images -%}
+            <button class="mpdp-dot{% if forloop.first %} is-on{% endif %}" onclick="mpdpSetImg({{ forloop.index0 }},null)" aria-label="Image {{ forloop.index }}"></button>
+          {%- endfor -%}
+        </div>
+        <button class="mpdp-arrow mpdp-arrow--prev" onclick="mpdpPrev()" aria-label="Previous">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <button class="mpdp-arrow mpdp-arrow--next" onclick="mpdpNext()" aria-label="Next">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+      {%- endif -%}
+    </div>
+  </div>
+
+  <!-- Info panel -->
+  <div class="mpdp-info">
+    <p class="mpdp-info__vendor">{{ product.vendor }}</p>
+    <h1 class="mpdp-info__name">{{ product.title }}</h1>
+    {%- if product.metafields.custom.collection_label != blank -%}
+      <p class="mpdp-info__col">{{ product.metafields.custom.collection_label }}</p>
+    {%- endif -%}
+
+    <div class="mpdp-info__price-row">
+      {%- if current_variant.compare_at_price > current_variant.price -%}
+        <s class="mpdp-info__was" id="mpdpWas">{{ current_variant.compare_at_price | money }}</s>
+        <span class="mpdp-info__price mpdp-info__price--sale" id="mpdpPrice">{{ current_variant.price | money }}</span>
+      {%- else -%}
+        <span class="mpdp-info__price" id="mpdpPrice">{{ current_variant.price | money }}</span>
+      {%- endif -%}
+    </div>
+    <p class="mpdp-info__tax">Inc. GST. Free shipping &amp; returns.</p>
+
+    {%- form 'product', product, id: product_form_id, novalidate: true -%}
+      <input type="hidden" name="id" id="mpdpVid" value="{{ current_variant.id }}">
+
+      {%- for option in product.options_with_values -%}
+        {%- liquid
+          assign opt_down = option.name | downcase
+          assign is_col = false
+          assign is_sz = false
+          if opt_down == 'color' or opt_down == 'colour'
+            assign is_col = true
+          endif
+          if opt_down == 'size'
+            assign is_sz = true
+          endif
+        -%}
+
+        {%- if is_col -%}
+          <div class="mpdp-opt">
+            <div class="mpdp-opt__label">Colour <span id="mpdpColLabel">{{ option.selected_value }}</span></div>
+            <div class="mpdp-colours">
+              {%- for val in option.values -%}
+                <div class="mpdp-colour{% if val == option.selected_value %} is-active{% endif %}"
+                  data-value="{{ val | escape }}"
+                  data-oi="{{ forloop.parentloop.index0 }}"
+                  title="{{ val | escape }}"
+                  onclick="mpdpSelectOpt(this,'{{ val | escape }}',{{ forloop.parentloop.index0 }})"></div>
+              {%- endfor -%}
+            </div>
+          </div>
+
+        {%- elsif is_sz -%}
+          <div class="mpdp-opt">
+            <div class="mpdp-opt__label">Size <span id="mpdpSzLabel">—</span></div>
+            <div class="mpdp-sizes">
+              {%- for val in option.values -%}
+                <button type="button" class="mpdp-sz"
+                  data-value="{{ val | escape }}"
+                  data-oi="{{ forloop.parentloop.index0 }}"
+                  onclick="mpdpSelectSz(this,'{{ val | escape }}',{{ forloop.parentloop.index0 }})">{{ val }}</button>
+              {%- endfor -%}
+            </div>
+            <button type="button" class="mpdp-sz-link" onclick="mpdpOpenSzGuide()">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 3H3v18h18V3z"/><path d="M9 3v4M15 3v4M3 9h4M3 15h4M21 9h-4M21 15h-4M9 21v-4M15 21v-4"/></svg>
+              Size Guide
+            </button>
+          </div>
+
+        {%- else -%}
+          <div class="mpdp-opt">
+            <div class="mpdp-opt__label">{{ option.name }} <span>{{ option.selected_value }}</span></div>
+            <div class="mpdp-sizes">
+              {%- for val in option.values -%}
+                <button type="button" class="mpdp-sz{% if val == option.selected_value %} is-active{% endif %}"
+                  data-value="{{ val | escape }}"
+                  data-oi="{{ forloop.parentloop.index0 }}"
+                  onclick="mpdpSelectOpt(this,'{{ val | escape }}',{{ forloop.parentloop.index0 }})">{{ val }}</button>
+              {%- endfor -%}
+            </div>
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+
+      <div class="mpdp-cta">
+        <button type="submit" name="add" id="mpdpAtcBtn" class="mpdp-btn-atc"
+          {%- unless current_variant.available %} disabled{%- endunless %}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+          <span id="mpdpAtcLabel">{%- if current_variant.available -%}Add to Bag{%- else -%}Sold Out{%- endif -%}</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+        <button type="button" class="mpdp-btn-wish" id="mpdpWishBtn" onclick="mpdpToggleWish()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" id="mpdpWishIco"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          <span id="mpdpWishLabel">Save to Wishlist</span>
+        </button>
+      </div>
+    {%- endform -%}
+
+    <!-- Trust -->
+    <div class="mpdp-trust">
+      <div class="mpdp-trust__item">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        Free express delivery — order by 2pm for next business day
+      </div>
+      <div class="mpdp-trust__item">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        In store at MARAIS QV, Bourke St &amp; Chadstone
+      </div>
+      <div class="mpdp-trust__item">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        Free returns within 30 days
+      </div>
+      <div class="mpdp-trust__item">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Authentic — 100% verified by MARAIS quality control
+      </div>
+    </div>
+
+    <!-- Accordion -->
+    <div class="mpdp-accord">
+      {%- if product.description != blank -%}
+        <div class="mpdp-accord__item is-open">
+          <div class="mpdp-accord__head" onclick="mpdpAccord(this)">
+            Description
+            <div class="mpdp-accord__ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 5v14M5 12h14"/></svg></div>
+          </div>
+          <div class="mpdp-accord__body"><div class="mpdp-accord__inner">{{ product.description }}</div></div>
+        </div>
+      {%- endif -%}
+
+      {%- if section.settings.composition != blank -%}
+        <div class="mpdp-accord__item">
+          <div class="mpdp-accord__head" onclick="mpdpAccord(this)">
+            Composition &amp; Care
+            <div class="mpdp-accord__ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 5v14M5 12h14"/></svg></div>
+          </div>
+          <div class="mpdp-accord__body"><div class="mpdp-accord__inner">{{ section.settings.composition }}</div></div>
+        </div>
+      {%- endif -%}
+
+      <div class="mpdp-accord__item">
+        <div class="mpdp-accord__head" onclick="mpdpAccord(this)">
+          Delivery &amp; Returns
+          <div class="mpdp-accord__ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 5v14M5 12h14"/></svg></div>
+        </div>
+        <div class="mpdp-accord__body">
+          <div class="mpdp-accord__inner">
+            <ul>
+              <li>Free express delivery — next business day if ordered by 2pm AEDT</li>
+              <li>Standard delivery 2–4 business days</li>
+              <li>International delivery 5–10 business days</li>
+              <li>Free returns within 30 days of purchase</li>
+              <li>Items must be unworn with tags attached</li>
+              <li>In-store returns accepted at any MARAIS boutique</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Related products -->
+<div class="mpdp-rel" id="mpdpRel" style="display:none">
+  <div class="mpdp-rel__inner">
+    <div class="mpdp-rel__hdr">
+      <div>
+        <p class="mh-sec__eyebrow">You May Also Like</p>
+        <h2 class="mh-sec__title">Complete the Look</h2>
+      </div>
+      <a href="/collections/all" class="mh-see-all">View All</a>
+    </div>
+    <div class="mpdp-rel__grid" id="mpdpRelGrid"></div>
+  </div>
+</div>
+
+<!-- Cart sidebar -->
+<div class="mpdp-cart-ov" id="mpdpCartOv" onclick="mpdpCloseCart()"></div>
+<div class="mpdp-cart-sb" id="mpdpCartSb">
+  <div class="mpdp-cart-sb__hdr">
+    <h2 class="mpdp-cart-sb__h">Your Bag</h2>
+    <button class="mpdp-cart-sb__x" onclick="mpdpCloseCart()">&times;</button>
+  </div>
+  <div class="mpdp-cart-sb__body" id="mpdpCartBody">
+    <p class="mpdp-cart-sb__empty">Your bag is empty</p>
+  </div>
+  <div class="mpdp-cart-sb__foot">
+    <div class="mpdp-cart-sb__tot"><span>Total</span><strong id="mpdpCartTot">{{ cart.total_price | money }}</strong></div>
+    <a href="/cart" class="mpdp-cart-sb__checkout">Proceed to Checkout</a>
+    <p class="mpdp-cart-sb__note">Complimentary shipping on all Australian orders</p>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="mpdp-toast" id="mpdpToast"></div>
+
+<!-- Size guide modal -->
+<div class="mpdp-modal-bg" id="mpdpSzModal" onclick="if(event.target===this)this.classList.remove('is-open')">
+  <div class="mpdp-modal">
+    <button class="mpdp-modal__x" onclick="document.getElementById('mpdpSzModal').classList.remove('is-open')">&times;</button>
+    <h2 class="mpdp-modal__title">Size Guide</h2>
+    <p class="mpdp-modal__sub">All measurements in centimetres. If between sizes, size up for a relaxed fit.</p>
+    <table class="mpdp-sz-table">
+      <thead><tr><th>Size</th><th>EU</th><th>Chest</th><th>Waist</th><th>Hip</th></tr></thead>
+      <tbody>
+        <tr><td>XS</td><td>36</td><td>82–85</td><td>63–66</td><td>89–92</td></tr>
+        <tr><td>S</td><td>38</td><td>86–89</td><td>67–70</td><td>93–96</td></tr>
+        <tr><td>M</td><td>40</td><td>90–93</td><td>71–74</td><td>97–100</td></tr>
+        <tr><td>L</td><td>42</td><td>94–97</td><td>75–78</td><td>101–104</td></tr>
+        <tr><td>XL</td><td>44</td><td>98–101</td><td>79–82</td><td>105–108</td></tr>
+        <tr><td>XXL</td><td>46</td><td>102–105</td><td>83–86</td><td>109–112</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Mobile sticky bar -->
+<div class="mpdp-sticky" id="mpdpSticky">
+  <div class="mpdp-sticky__top">
+    <span class="mpdp-sticky__name">{{ product.title | truncate: 32 }}</span>
+    <span class="mpdp-sticky__price" id="mpdpStickyPrice">{{ current_variant.price | money }}</span>
+  </div>
+  <button class="mpdp-btn-atc" style="margin:0" onclick="mpdpMobileAtc()">Add to Bag</button>
+</div>
+
+<!-- Data for JS -->
+<script type="application/json" id="mpdpVarData">{{ product.variants | json }}</script>
+<script type="application/json" id="mpdpImgData">[{%- for img in product.images -%}{"src":"{{ img | image_url: width: 900 }}","alt":"{{ img.alt | escape }}"}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}]</script>
+
+<style>
+.mpdp-bread{max-width:1560px;margin:0 auto;padding:16px 32px;display:flex;align-items:center;flex-wrap:wrap;gap:6px;font-size:11px;letter-spacing:.07em;color:var(--mh-gray);font-family:var(--mh-sans)}
+.mpdp-bread a{color:var(--mh-gray);text-decoration:none;text-transform:uppercase;transition:color .2s}.mpdp-bread a:hover{color:var(--mh-black)}.mpdp-bread span{color:var(--mh-mid,#b8b4ae)}
+.mpdp{max-width:1560px;margin:0 auto;padding:0 32px 80px;display:grid;grid-template-columns:1fr 480px;gap:0;align-items:start}
+
+/* Gallery */
+.mpdp-gallery{display:flex;gap:10px;position:sticky;top:64px}
+.mpdp-thumbs{display:flex;flex-direction:column;gap:6px;width:74px;flex-shrink:0}
+.mpdp-thumb{width:74px;height:90px;overflow:hidden;cursor:pointer;border:1.5px solid transparent;transition:border-color .2s;background:var(--mh-cream)}
+.mpdp-thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s ease}
+.mpdp-thumb:hover img{transform:scale(1.06)}
+.mpdp-thumb.is-active{border-color:var(--mh-black)}
+.mpdp-thumb--ph{background:var(--mh-light)}
+.mpdp-gallery__main{flex:1;position:relative}
+.mpdp-gallery__wrap{background:var(--mh-cream);position:relative;overflow:hidden;cursor:zoom-in}
+.mpdp-gallery__wrap img{width:100%;aspect-ratio:3/4;object-fit:cover;display:block;transition:transform .6s cubic-bezier(.25,.46,.45,.94)}
+.mpdp-gallery__wrap:hover img{transform:scale(1.04)}
+.mpdp-gallery__ph{width:100%;aspect-ratio:3/4;background:var(--mh-light)}
+.mpdp-badge{position:absolute;top:20px;left:20px;background:var(--mh-black);color:#fff;font-size:9px;letter-spacing:.14em;text-transform:uppercase;padding:5px 12px;pointer-events:none}
+.mpdp-zoom-hint{position:absolute;bottom:20px;right:20px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:rgba(0,0,0,.38);display:flex;align-items:center;gap:5px;pointer-events:none;font-family:var(--mh-sans)}
+.mpdp-dots{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);display:flex;gap:6px}
+.mpdp-dot{width:6px;height:6px;border-radius:50%;background:rgba(0,0,0,.18);border:none;cursor:pointer;padding:0;transition:background .2s}
+.mpdp-dot.is-on{background:var(--mh-black)}
+.mpdp-arrow{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.9);border:none;width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:2;transition:background .2s}
+.mpdp-arrow:hover{background:#fff}.mpdp-arrow--prev{left:10px}.mpdp-arrow--next{right:10px}
+
+/* Info */
+.mpdp-info{padding:48px 0 48px 52px;position:sticky;top:64px;max-height:calc(100vh - 64px);overflow-y:auto}
+.mpdp-info::-webkit-scrollbar{width:0}
+.mpdp-info__vendor{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--mh-gray);margin-bottom:10px;font-family:var(--mh-sans)}
+.mpdp-info__name{font-family:var(--mh-serif);font-size:clamp(28px,3vw,42px);font-weight:300;line-height:1.1;margin-bottom:6px;letter-spacing:-.01em}
+.mpdp-info__col{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--mh-gold);margin-bottom:24px;font-family:var(--mh-sans)}
+.mpdp-info__price-row{display:flex;align-items:baseline;gap:10px;margin-bottom:6px}
+.mpdp-info__price{font-family:var(--mh-serif);font-size:28px;font-weight:400;letter-spacing:.02em}
+.mpdp-info__price--sale{color:var(--mh-red)}
+.mpdp-info__was{font-size:16px;color:var(--mh-gray);text-decoration:line-through;font-family:var(--mh-sans)}
+.mpdp-info__tax{font-size:11px;color:var(--mh-gray);letter-spacing:.06em;margin-bottom:28px;font-family:var(--mh-sans)}
+
+/* Options */
+.mpdp-opt{margin-bottom:22px}
+.mpdp-opt__label{font-size:11px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:12px;display:flex;justify-content:space-between;font-family:var(--mh-sans)}
+.mpdp-opt__label span{color:var(--mh-gray);font-weight:400}
+.mpdp-colours{display:flex;gap:8px;flex-wrap:wrap}
+.mpdp-colour{width:36px;height:36px;border-radius:50%;cursor:pointer;border:1.5px solid transparent;background:var(--mh-light);position:relative;transition:all .2s}
+.mpdp-colour::after{content:'';position:absolute;inset:-4px;border-radius:50%;border:1.5px solid transparent;transition:border-color .2s}
+.mpdp-colour.is-active::after,.mpdp-colour:hover::after{border-color:var(--mh-black)}
+.mpdp-sizes{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:8px}
+.mpdp-sz{padding:11px 8px;text-align:center;font-size:13px;letter-spacing:.04em;cursor:pointer;border:1px solid var(--mh-light);background:transparent;font-family:var(--mh-sans);color:var(--mh-black);transition:all .2s}
+.mpdp-sz:hover:not(.is-active):not(.is-oos){background:var(--mh-cream);border-color:var(--mh-light)}
+.mpdp-sz.is-active{background:var(--mh-black);color:#fff;border-color:var(--mh-black)}
+.mpdp-sz.is-oos{color:var(--mh-gray);cursor:not-allowed;position:relative;text-decoration:line-through}
+.mpdp-sz-link{background:none;border:none;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--mh-gray);text-decoration:underline;cursor:pointer;display:inline-flex;align-items:center;gap:6px;margin-bottom:24px;font-family:var(--mh-sans);padding:0}
+.mpdp-sz-link:hover{color:var(--mh-black)}
+
+/* CTA */
+.mpdp-cta{display:flex;flex-direction:column;gap:10px;margin-bottom:24px}
+.mpdp-btn-atc{width:100%;padding:18px;background:var(--mh-black);color:#fff;border:none;font-size:12px;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;font-family:var(--mh-sans);transition:background .2s;display:flex;align-items:center;justify-content:center;gap:10px}
+.mpdp-btn-atc:hover:not(:disabled){background:#222}
+.mpdp-btn-atc:disabled{background:var(--mh-gray);cursor:not-allowed}
+.mpdp-btn-wish{width:100%;padding:17px;background:transparent;color:var(--mh-black);border:1px solid var(--mh-light);font-size:12px;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;font-family:var(--mh-sans);transition:all .2s;display:flex;align-items:center;justify-content:center;gap:10px}
+.mpdp-btn-wish:hover,.mpdp-btn-wish.is-wished{border-color:var(--mh-black)}
+.mpdp-btn-wish.is-wished{background:var(--mh-cream)}
+
+/* Trust */
+.mpdp-trust{display:flex;flex-direction:column;margin-bottom:28px;border-top:1px solid var(--mh-light);border-bottom:1px solid var(--mh-light)}
+.mpdp-trust__item{display:flex;align-items:center;gap:13px;padding:12px 0;font-size:12px;letter-spacing:.03em;color:var(--mh-gray);border-bottom:1px solid var(--mh-light);font-family:var(--mh-sans)}
+.mpdp-trust__item:last-child{border-bottom:none}
+.mpdp-trust__item svg{color:var(--mh-black);flex-shrink:0}
+
+/* Accordion */
+.mpdp-accord{border-top:1px solid var(--mh-light)}
+.mpdp-accord__item{border-bottom:1px solid var(--mh-light)}
+.mpdp-accord__head{display:flex;justify-content:space-between;align-items:center;padding:15px 0;cursor:pointer;font-size:12px;letter-spacing:.12em;text-transform:uppercase;user-select:none;font-family:var(--mh-sans);transition:opacity .2s}
+.mpdp-accord__head:hover{opacity:.6}
+.mpdp-accord__ico{width:20px;height:20px;display:flex;align-items:center;justify-content:center;transition:transform .3s;color:var(--mh-gray)}
+.mpdp-accord__item.is-open .mpdp-accord__ico{transform:rotate(45deg)}
+.mpdp-accord__body{max-height:0;overflow:hidden;transition:max-height .4s cubic-bezier(.25,.46,.45,.94)}
+.mpdp-accord__item.is-open .mpdp-accord__body{max-height:600px}
+.mpdp-accord__inner{padding-bottom:20px;font-size:13px;line-height:1.85;color:var(--mh-gray);letter-spacing:.03em;font-family:var(--mh-sans)}
+.mpdp-accord__inner ul{padding-left:16px;margin-top:8px}.mpdp-accord__inner ul li{margin-bottom:5px}
+
+/* Related */
+.mpdp-rel{background:var(--mh-cream);padding:80px 32px}
+.mpdp-rel__inner{max-width:1560px;margin:0 auto}
+.mpdp-rel__hdr{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:40px}
+.mpdp-rel__grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px}
+.mpdp-rel-card{position:relative;overflow:hidden;background:var(--mh-cream);cursor:pointer;text-decoration:none;color:var(--mh-black);display:block}
+.mpdp-rel-img{aspect-ratio:3/4;overflow:hidden;background:var(--mh-cream)}
+.mpdp-rel-img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s cubic-bezier(.25,.46,.45,.94)}
+.mpdp-rel-card:hover .mpdp-rel-img img{transform:scale(1.05)}
+.mpdp-rel-info{padding:14px 16px 18px;background:#fff}
+.mpdp-rel-vendor{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--mh-gray);margin-bottom:4px;font-family:var(--mh-sans)}
+.mpdp-rel-name{font-family:var(--mh-serif);font-size:17px;font-weight:300;line-height:1.2;margin-bottom:10px}
+.mpdp-rel-price{font-size:13px;letter-spacing:.04em;font-family:var(--mh-sans)}
+
+/* Cart sidebar */
+.mpdp-cart-ov{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:1800;opacity:0;pointer-events:none;transition:opacity .3s}
+.mpdp-cart-ov.is-open{opacity:1;pointer-events:all}
+.mpdp-cart-sb{position:fixed;right:0;top:0;bottom:0;width:420px;background:var(--mh-white);z-index:1900;transform:translateX(100%);transition:transform .4s cubic-bezier(.25,.46,.45,.94);display:flex;flex-direction:column}
+.mpdp-cart-sb.is-open{transform:translateX(0)}
+.mpdp-cart-sb__hdr{padding:28px 30px;border-bottom:1px solid var(--mh-light);display:flex;justify-content:space-between;align-items:center}
+.mpdp-cart-sb__h{font-family:var(--mh-serif);font-size:26px;font-weight:300}
+.mpdp-cart-sb__x{background:none;border:none;cursor:pointer;font-size:22px;color:var(--mh-gray);line-height:1;transition:color .2s;font-family:var(--mh-sans)}.mpdp-cart-sb__x:hover{color:var(--mh-black)}
+.mpdp-cart-sb__body{flex:1;overflow-y:auto;padding:28px 30px}
+.mpdp-cart-sb__empty{color:var(--mh-gray);font-size:13px;text-align:center;padding:40px 0;font-family:var(--mh-sans)}
+.mpdp-ci{display:flex;gap:16px;margin-bottom:24px;padding-bottom:24px;border-bottom:1px solid var(--mh-light)}
+.mpdp-ci__img{width:84px;height:104px;background:var(--mh-cream);flex-shrink:0;overflow:hidden}
+.mpdp-ci__img img{width:100%;height:100%;object-fit:cover;display:block}
+.mpdp-ci__vendor{font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--mh-gray);margin-bottom:4px;font-family:var(--mh-sans)}
+.mpdp-ci__name{font-family:var(--mh-serif);font-size:17px;font-weight:300;margin-bottom:5px}
+.mpdp-ci__meta{font-size:12px;color:var(--mh-gray);letter-spacing:.04em;margin-bottom:8px;font-family:var(--mh-sans)}
+.mpdp-ci__price{font-size:14px;letter-spacing:.04em;font-family:var(--mh-sans)}
+.mpdp-cart-sb__foot{padding:24px 30px;border-top:1px solid var(--mh-light)}
+.mpdp-cart-sb__tot{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;font-size:14px;font-family:var(--mh-sans)}
+.mpdp-cart-sb__tot strong{font-family:var(--mh-serif);font-size:24px;font-weight:400}
+.mpdp-cart-sb__checkout{display:block;width:100%;background:var(--mh-black);color:#fff;border:none;padding:18px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;font-family:var(--mh-sans);transition:background .2s;text-align:center;text-decoration:none;margin-bottom:10px}
+.mpdp-cart-sb__checkout:hover{background:#222}
+.mpdp-cart-sb__note{text-align:center;font-size:11px;color:var(--mh-gray);letter-spacing:.04em;font-family:var(--mh-sans)}
+
+/* Toast */
+.mpdp-toast{position:fixed;bottom:40px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--mh-black);color:#fff;padding:14px 28px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;z-index:2000;opacity:0;transition:all .3s;pointer-events:none;white-space:nowrap;font-family:var(--mh-sans)}
+.mpdp-toast.is-on{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* Size modal */
+.mpdp-modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:2000;opacity:0;pointer-events:none;transition:opacity .3s;display:flex;align-items:center;justify-content:center}
+.mpdp-modal-bg.is-open{opacity:1;pointer-events:all}
+.mpdp-modal{background:#fff;width:90%;max-width:640px;max-height:85vh;overflow-y:auto;padding:40px;position:relative}
+.mpdp-modal__x{position:absolute;top:20px;right:20px;background:none;border:none;font-size:22px;cursor:pointer;color:var(--mh-gray);font-family:var(--mh-sans)}.mpdp-modal__x:hover{color:var(--mh-black)}
+.mpdp-modal__title{font-family:var(--mh-serif);font-size:32px;font-weight:300;margin-bottom:16px}
+.mpdp-modal__sub{font-size:13px;color:var(--mh-gray);margin-bottom:24px;line-height:1.7;font-family:var(--mh-sans)}
+.mpdp-sz-table{width:100%;border-collapse:collapse;font-size:13px;font-family:var(--mh-sans)}
+.mpdp-sz-table th{text-align:left;padding:10px 0;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--mh-gray);border-bottom:1px solid var(--mh-light);font-weight:400}
+.mpdp-sz-table td{padding:12px 0;border-bottom:1px solid var(--mh-light);letter-spacing:.03em}
+.mpdp-sz-table tr:last-child td{border-bottom:none}
+.mpdp-sz-table td:first-child{font-weight:500}
+
+/* Sticky mobile bar */
+.mpdp-sticky{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--mh-white);border-top:1px solid var(--mh-light);padding:16px 20px;z-index:800;flex-direction:column;gap:10px}
+.mpdp-sticky__top{display:flex;justify-content:space-between;align-items:center}
+.mpdp-sticky__name{font-family:var(--mh-serif);font-size:17px;font-weight:300}
+.mpdp-sticky__price{font-size:15px;letter-spacing:.04em;font-family:var(--mh-sans)}
+
+@media(max-width:1100px){
+  .mpdp{grid-template-columns:1fr;padding:0 24px 60px}
+  .mpdp-gallery{position:relative;top:0}
+  .mpdp-info{position:relative;top:0;padding:32px 0;max-height:none;overflow-y:visible}
+  .mpdp-rel__grid{grid-template-columns:repeat(2,1fr)}
+  .mpdp-sticky{display:flex}
+}
+@media(max-width:700px){
+  .mpdp{padding:0 16px 80px}
+  .mpdp-thumbs{display:none}
+  .mpdp-bread{padding:12px 16px}
+  .mpdp-sizes{grid-template-columns:repeat(3,1fr)}
+  .mpdp-rel{padding:56px 16px}
+  .mpdp-cart-sb{width:100%}
+  .mpdp-rel__grid{grid-template-columns:1fr 1fr}
+}
+</style>
+
+<script>
+(function(){
+  var VARIANTS = JSON.parse(document.getElementById('mpdpVarData').textContent);
+  var IMAGES   = JSON.parse(document.getElementById('mpdpImgData').textContent);
+  var selOpts  = {};
+  var curImg   = 0;
+  var wished   = false;
+  var toastTimer;
+
+  // ── Colour swatch backgrounds ──────────────────────────────
+  var COLOUR_MAP = {
+    'black':'#111','white':'#f5f5f0','off white':'#f0ede8','ivory':'#f2efe8',
+    'navy':'#1a2a4a','navy blue':'#1a2a4a','blue':'#1a3060','light blue':'#6090c0',
+    'red':'#b5001e','burgundy':'#6a0020','bordeaux':'#8a1a1a','wine':'#722030',
+    'green':'#1a3a1a','dark green':'#1a3a1a','olive':'#4a4a18','khaki':'#7a7040',
+    'brown':'#5a3a1a','dark brown':'#2a1a0a','camel':'#c09060','tan':'#c8a870',
+    'grey':'#808080','gray':'#808080','light grey':'#c0c0be','charcoal':'#404040',
+    'beige':'#d4c8b0','sand':'#c8b898','cream':'#f0ede8',
+    'gold':'#c9a84c','yellow':'#d4b820','orange':'#d06020','pink':'#d08090',
+    'purple':'#602080','lilac':'#b090c0','stone':'#b0a898',
+  };
+  document.querySelectorAll('.mpdp-colour').forEach(function(el){
+    var name = (el.getAttribute('title') || '').toLowerCase();
+    var hex = COLOUR_MAP[name];
+    if(hex) el.style.background = hex;
+  });
+
+  // ── Gallery ───────────────────────────────────────────────
+  window.mpdpSetImg = function(idx, thumbEl){
+    curImg = idx;
+    if(IMAGES[idx]){
+      var img = document.getElementById('mpdpMainImg');
+      if(img){ img.src = IMAGES[idx].src; img.alt = IMAGES[idx].alt || ''; }
+    }
+    document.querySelectorAll('.mpdp-thumb').forEach(function(t,i){ t.classList.toggle('is-active', i===idx); });
+    document.querySelectorAll('.mpdp-dot').forEach(function(d,i){ d.classList.toggle('is-on', i===idx); });
+  };
+  window.mpdpNext = function(){ mpdpSetImg((curImg+1) % IMAGES.length, null); };
+  window.mpdpPrev = function(){ mpdpSetImg((curImg-1+IMAGES.length) % IMAGES.length, null); };
+  document.addEventListener('keydown', function(e){
+    if(e.key==='ArrowLeft') mpdpPrev();
+    if(e.key==='ArrowRight') mpdpNext();
+    if(e.key==='Escape'){ mpdpCloseCart(); document.getElementById('mpdpSzModal').classList.remove('is-open'); }
+  });
+
+  // ── Variant selection ─────────────────────────────────────
+  window.mpdpSelectOpt = function(el, val, oi){
+    document.querySelectorAll('.mpdp-colour[data-oi="'+oi+'"],.mpdp-sz[data-oi="'+oi+'"]').forEach(function(b){ b.classList.remove('is-active'); });
+    el.classList.add('is-active');
+    selOpts[oi] = val;
+    var colLabel = document.getElementById('mpdpColLabel');
+    if(colLabel && el.classList.contains('mpdp-colour')) colLabel.textContent = val;
+    findVariant();
+  };
+  window.mpdpSelectSz = function(el, val, oi){
+    if(el.classList.contains('is-oos')) return;
+    document.querySelectorAll('.mpdp-sz[data-oi="'+oi+'"]').forEach(function(b){ b.classList.remove('is-active'); });
+    el.classList.add('is-active');
+    selOpts[oi] = val;
+    var szLabel = document.getElementById('mpdpSzLabel');
+    if(szLabel) szLabel.textContent = val;
+    findVariant();
+  };
+
+  function findVariant(){
+    var optKeys = Object.keys(selOpts);
+    var match = VARIANTS.find(function(v){
+      return optKeys.every(function(oi){ return v['option'+(parseInt(oi)+1)] === selOpts[oi]; });
+    });
+    if(!match) return;
+    document.getElementById('mpdpVid').value = match.id;
+    var priceEl = document.getElementById('mpdpPrice');
+    var wasEl   = document.getElementById('mpdpWas');
+    var priceFormatted = formatMoney(match.price);
+    if(priceEl) priceEl.textContent = priceFormatted;
+    if(wasEl){
+      if(match.compare_at_price > match.price){
+        wasEl.textContent = formatMoney(match.compare_at_price);
+        wasEl.style.display = '';
+        priceEl && priceEl.classList.add('mpdp-info__price--sale');
+      } else {
+        wasEl.style.display = 'none';
+        priceEl && priceEl.classList.remove('mpdp-info__price--sale');
+      }
+    }
+    var atcBtn   = document.getElementById('mpdpAtcBtn');
+    var atcLabel = document.getElementById('mpdpAtcLabel');
+    var stickyP  = document.getElementById('mpdpStickyPrice');
+    if(stickyP) stickyP.textContent = priceFormatted;
+    if(atcBtn){
+      atcBtn.disabled = !match.available;
+      if(atcLabel) atcLabel.textContent = match.available ? 'Add to Bag' : 'Sold Out';
+    }
+    if(match.featured_image && match.featured_image.position){
+      var imgIdx = match.featured_image.position - 1;
+      if(imgIdx >= 0 && imgIdx < IMAGES.length) mpdpSetImg(imgIdx, null);
+    }
+    history.replaceState(null,'','?variant='+match.id);
+  }
+
+  function formatMoney(cents){
+    return 'AUD $' + (cents/100).toFixed(2).replace(/\.00$/,'').replace(/\B(?=(\d{3})+(?!\d))/g,',');
+  }
+
+  // ── Mark OOS sizes ────────────────────────────────────────
+  document.querySelectorAll('.mpdp-sz').forEach(function(btn){
+    var oi  = parseInt(btn.dataset.oi);
+    var val = btn.dataset.value;
+    var opts = Object.assign({},selOpts);
+    opts[oi] = val;
+    var anyAvail = VARIANTS.some(function(v){
+      return Object.keys(opts).every(function(k){ return v['option'+(parseInt(k)+1)] === opts[k]; }) && v.available;
+    });
+    if(!anyAvail && VARIANTS.length > 1) btn.classList.add('is-oos');
+  });
+
+  // ── Add to cart ───────────────────────────────────────────
+  var form = document.getElementById('{{ product_form_id }}');
+  if(form){
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      var vid = document.getElementById('mpdpVid').value;
+      if(!vid) return;
+      var atcBtn = document.getElementById('mpdpAtcBtn');
+      if(atcBtn) atcBtn.disabled = true;
+      fetch('/cart/add.js',{
+        method:'POST',
+        headers:{'Content-Type':'application/json','X-Requested-With':'XMLHttpRequest'},
+        body:JSON.stringify({id:parseInt(vid),quantity:1})
+      }).then(function(r){ return r.json(); }).then(function(item){
+        mpdpToast('Added to bag');
+        mpdpRefreshCart();
+        mpdpOpenCart();
+      }).catch(function(){ mpdpToast('Could not add to bag'); })
+      .finally(function(){ if(atcBtn) atcBtn.disabled = false; });
+    });
+  }
+
+  window.mpdpMobileAtc = function(){ if(form) form.dispatchEvent(new Event('submit',{bubbles:true,cancelable:true})); };
+
+  function mpdpRefreshCart(){
+    fetch('/cart.js').then(function(r){ return r.json(); }).then(function(cart){
+      var totEl = document.getElementById('mpdpCartTot');
+      if(totEl) totEl.textContent = formatMoney(cart.total_price);
+      var badge = document.querySelector('.mh-cart-badge');
+      if(badge) badge.textContent = cart.item_count;
+      else if(cart.item_count > 0){
+        var cartBtn = document.querySelector('.mh-cart-btn');
+        if(cartBtn){
+          var b = document.createElement('span');
+          b.className = 'mh-cart-badge';
+          b.textContent = cart.item_count;
+          cartBtn.appendChild(b);
+        }
+      }
+      var body = document.getElementById('mpdpCartBody');
+      if(!body) return;
+      if(cart.items.length === 0){
+        body.innerHTML = '<p class="mpdp-cart-sb__empty">Your bag is empty</p>';
+        return;
+      }
+      body.innerHTML = cart.items.map(function(item){
+        var imgHtml = item.featured_image ? '<img src="'+item.featured_image.url+'" alt="'+item.title+'">' : '';
+        return '<div class="mpdp-ci"><div class="mpdp-ci__img">'+imgHtml+'</div><div><p class="mpdp-ci__vendor">'+item.vendor+'</p><p class="mpdp-ci__name">'+item.product_title+'</p><p class="mpdp-ci__meta">'+item.variant_title+'</p><p class="mpdp-ci__price">'+formatMoney(item.final_price)+'</p></div></div>';
+      }).join('');
+    });
+  }
+
+  // ── Cart sidebar ──────────────────────────────────────────
+  window.mpdpOpenCart  = function(){ document.getElementById('mpdpCartOv').classList.add('is-open'); document.getElementById('mpdpCartSb').classList.add('is-open'); document.body.style.overflow='hidden'; mpdpRefreshCart(); };
+  window.mpdpCloseCart = function(){ document.getElementById('mpdpCartOv').classList.remove('is-open'); document.getElementById('mpdpCartSb').classList.remove('is-open'); document.body.style.overflow=''; };
+  var cartIco = document.querySelector('.mh-cart-btn');
+  if(cartIco) cartIco.addEventListener('click',function(e){ e.preventDefault(); mpdpOpenCart(); });
+
+  // ── Accordion ─────────────────────────────────────────────
+  window.mpdpAccord = function(head){
+    var item = head.parentElement;
+    document.querySelectorAll('.mpdp-accord__item').forEach(function(i){ if(i!==item) i.classList.remove('is-open'); });
+    item.classList.toggle('is-open');
+  };
+
+  // ── Wishlist ──────────────────────────────────────────────
+  window.mpdpToggleWish = function(){
+    wished = !wished;
+    var btn   = document.getElementById('mpdpWishBtn');
+    var label = document.getElementById('mpdpWishLabel');
+    btn.classList.toggle('is-wished', wished);
+    if(label) label.textContent = wished ? 'Saved to Wishlist' : 'Save to Wishlist';
+    var ico = document.getElementById('mpdpWishIco');
+    if(ico){ ico.setAttribute('fill', wished ? 'currentColor' : 'none'); ico.setAttribute('stroke', wished ? 'none' : 'currentColor'); }
+    mpdpToast(wished ? 'Saved to wishlist' : 'Removed from wishlist');
+  };
+
+  // ── Toast ─────────────────────────────────────────────────
+  function mpdpToast(msg){ var t=document.getElementById('mpdpToast'); t.textContent=msg; t.classList.add('is-on'); clearTimeout(toastTimer); toastTimer=setTimeout(function(){ t.classList.remove('is-on'); },2400); }
+
+  // ── Size guide ────────────────────────────────────────────
+  window.mpdpOpenSzGuide = function(){ document.getElementById('mpdpSzModal').classList.add('is-open'); };
+
+  // ── Related products ──────────────────────────────────────
+  fetch('/recommendations/products.json?product_id={{ product.id }}&limit=4&intent=related')
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      if(!data.products || !data.products.length) return;
+      var grid = document.getElementById('mpdpRelGrid');
+      if(!grid) return;
+      grid.innerHTML = data.products.map(function(p){
+        var img = p.featured_image ? '<img src="'+p.featured_image+'" alt="'+p.title+'" loading="lazy">' : '';
+        return '<a href="'+p.url+'" class="mpdp-rel-card"><div class="mpdp-rel-img">'+img+'</div><div class="mpdp-rel-info"><p class="mpdp-rel-vendor">'+p.vendor+'</p><h3 class="mpdp-rel-name">'+p.title+'</h3><p class="mpdp-rel-price">'+formatMoney(p.price)+'</p></div></a>';
+      }).join('');
+      document.getElementById('mpdpRel').style.display = '';
+    }).catch(function(){});
+
+  // Initial cart fetch to update badge
+  mpdpRefreshCart();
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Product",
+  "tag": "div",
+  "settings": [
+    { "type": "richtext", "id": "composition", "label": "Composition & Care text (shown in accordion if set)" }
+  ],
+  "presets": [{ "name": "Product" }]
+}
+{% endschema %}
