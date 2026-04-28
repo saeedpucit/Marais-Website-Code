@@ -1,27 +1,18 @@
 {
   "sections": {
-    "about_hero": {
-      "type": "luxury-editorial",
-      "settings": {
-        "eyebrow": "Est. 2004 — Melbourne",
-        "heading": "Born in Melbourne,\nDressed by the World",
-        "overlay_opacity": 30,
-        "text_position": "bottom",
-        "link1_label": "Shop Now",
-        "link1_url": "/collections/all"
-      }
-    },
+
     "about_feature": {
       "type": "marais-editorial-feature",
       "settings": {
         "image_side": "left",
         "eyebrow": "Our Story",
         "heading": "Two Decades of Curation",
-        "body": "<p>Founded in Melbourne in 2004, MARAIS began as a singular vision: to bring the world's most considered designers to Australian wardrobes. What started as a single boutique in South Yarra has grown into five locations and a global online presence.</p><p>We believe fashion is more than clothing — it is a form of self-expression, craft, and culture. Every brand we carry is chosen with intention. Every piece tells a story.</p>",
-        "cta_label": "Shop the Collection",
-        "cta_link": "/collections/all"
+        "body": "<p>For over two decades, MARAIS has stood as a cornerstone of the Australian luxury landscape. Established in Melbourne, our journey began with a vision to bring the world's most prestigious fashion houses to local shores — fostering a sophisticated dialogue between global trends and the Australian lifestyle.</p><p>What began as a single boutique has grown into a multi-destination experience. With several flagship locations across Melbourne and the 2021 launch of our global digital platform, MARAIS continues to define the height of high-end retail.</p>",
+        "cta_label": "Visit Our Boutiques",
+        "cta_link": "/pages/storelocations"
       }
     },
+
     "about_stats": {
       "type": "marais-stats-bar",
       "blocks": {
@@ -33,42 +24,161 @@
       "block_order": ["s1","s2","s3","s4"],
       "settings": {}
     },
-    "about_team": {
-      "type": "marais-team-grid",
+
+    "about_curation": {
+      "type": "marais-curation",
       "blocks": {
-        "m1": { "type": "member", "settings": { "name": "Karla M.", "role": "Founder & Creative Director" } },
-        "m2": { "type": "member", "settings": { "name": "James T.", "role": "Head of Buying" } },
-        "m3": { "type": "member", "settings": { "name": "Sophie L.", "role": "Brand Director" } }
+        "p1": { "type": "pillar", "settings": { "title": "Ready-to-Wear",        "body": "From iconic heritage houses to the avant-garde new guard — every season's most considered pieces, chosen without compromise." } },
+        "p2": { "type": "pillar", "settings": { "title": "Accessories",           "body": "An expansive selection of footwear, bags, and leather goods from the houses that define the form." } },
+        "p3": { "type": "pillar", "settings": { "title": "Lifestyle & Jewellery", "body": "A sophisticated range of fine jewellery and curated lifestyle products — chosen for artistry and enduring appeal." } }
       },
-      "block_order": ["m1","m2","m3"],
+      "block_order": ["p1","p2","p3"],
       "settings": {
-        "eyebrow": "The People",
-        "title": "Meet the Team"
+        "eyebrow": "The MARAIS Curation",
+        "title": "A Living Edit",
+        "intro": "Our edit is a living, breathing collection. Whether a debut from an emerging designer or a limited-run piece from an established icon, every item is chosen for its artistry and enduring appeal."
       }
     },
+
+    "about_timeline": {
+      "type": "marais-timeline",
+      "blocks": {
+
+        "era1": { "type": "era", "settings": { "title": "The Early Years", "subtitle": "Establishing Luxury" } },
+
+        "m1": { "type": "milestone", "settings": {
+          "year": "2004",
+          "headline": "The Multi-Brand Debut",
+          "body": "MARAIS makes its landmark debut at Melbourne's historic Royal Arcade, introducing a sophisticated curation of international heavyweights including Balenciaga, Lanvin, Givenchy, Mastermind, and Rick Owens."
+        }},
+
+        "m2": { "type": "milestone", "settings": {
+          "year": "2012",
+          "headline": "Mastermind Japan Anniversary",
+          "body": "A prestigious honorary event is hosted by MARAIS Multi, featuring an exclusive appearance by Mastermind Japan founder, Masaaki Homma."
+        }},
+
+        "era2": { "type": "era", "settings": { "title": "Strategic Expansion", "subtitle": "& Specialisation" } },
+
+        "m3": { "type": "milestone", "settings": {
+          "year": "2014",
+          "headline": "A New Identity",
+          "body": "The original multi-brand concept undergoes a strategic transformation into MARAIS Men."
+        }},
+
+        "m4": { "type": "milestone", "settings": {
+          "year": "2014",
+          "headline": "The Women's Flagship",
+          "body": "Elevating the Melbourne retail landscape, the MARAIS Women flagship opens its doors on Bourke Street."
+        }},
+
+        "era3": { "type": "era", "settings": { "title": "The Givenchy Partnership", "subtitle": "National Expansion" } },
+
+        "m5": { "type": "milestone", "settings": {
+          "year": "2015",
+          "headline": "Sydney Launch",
+          "body": "MARAIS facilitates the launch of Australia's first Givenchy Boutique at Westfield Sydney."
+        }},
+
+        "m6": { "type": "milestone", "settings": {
+          "year": "2016",
+          "headline": "Queensland Arrival",
+          "body": "Expansion continues with the opening of Givenchy Pacific Fair on the Gold Coast."
+        }},
+
+        "m7": { "type": "milestone", "settings": {
+          "year": "2016",
+          "headline": "Givenchy Chadstone",
+          "body": "Givenchy Chadstone officially opens at the Fashion Capital, Chadstone Shopping Centre."
+        }},
+
+        "m8": { "type": "milestone", "settings": {
+          "year": "2019",
+          "headline": "Department Store Presence",
+          "body": "The Givenchy partnership expands into luxury retail with a concession at David Jones, Sydney."
+        }},
+
+        "era4": { "type": "era", "settings": { "title": "Pioneering Collaborations", "subtitle": "Global Firsts" } },
+
+        "m9": { "type": "milestone", "settings": {
+          "year": "2017",
+          "headline": "A World First for Chanel",
+          "body": "MARAIS Women makes fashion history by hosting the world's only all-categories Chanel Pop-Up for the Métiers d'Art Pre-Fall 2017 collection."
+        }},
+
+        "m10": { "type": "milestone", "settings": {
+          "year": "2017",
+          "headline": "The Off-White Era",
+          "body": "MARAIS brings Virgil Abloh's vision to Australia, launching the first Off-White store at QV Melbourne, followed by a second at Westfield Sydney."
+        }},
+
+        "m11": { "type": "milestone", "settings": {
+          "year": "2019",
+          "headline": "Loewe Paula's Ibiza",
+          "body": "LOEWE debuted its highly anticipated Paula's Ibiza collection in Australia with an exclusive pop-up at MARAIS in the heart of Melbourne."
+        }},
+
+        "era5": { "type": "era", "settings": { "title": "Modern Growth", "subtitle": "Digital Transformation & Beyond" } },
+
+        "m12": { "type": "milestone", "settings": {
+          "year": "2021",
+          "headline": "Digital Evolution",
+          "body": "The brand goes global with the official launch of MARAIS Online."
+        }},
+
+        "m13": { "type": "milestone", "settings": {
+          "year": "2022",
+          "headline": "Men's Flagship Relocation",
+          "body": "A new era for menswear begins with the opening of the MARAIS Men flagship at QV Melbourne."
+        }},
+
+        "m14": { "type": "milestone", "settings": {
+          "year": "2023",
+          "headline": "Chadstone Menswear",
+          "body": "The MARAIS Men footprint expands to Chadstone Shopping Centre."
+        }},
+
+        "m15": { "type": "milestone", "settings": {
+          "year": "2024",
+          "headline": "The Expansion Milestone",
+          "body": "A banner year for the brand, marked by the dual openings of MARAIS Women at both Chadstone and QV Melbourne."
+        }}
+
+      },
+      "block_order": ["era1","m1","m2","era2","m3","m4","era3","m5","m6","m7","m8","era4","m9","m10","m11","era5","m12","m13","m14","m15"],
+      "settings": {
+        "eyebrow": "Our History",
+        "title": "The Evolution of MARAIS"
+      }
+    },
+
     "about_locations": {
       "type": "marais-locations",
       "blocks": {
-        "l1": { "type": "location", "settings": { "name": "South Yarra", "address": "1 Chapel Street, South Yarra VIC 3141", "phone": "+61 3 9827 0000", "hours": "Mon–Sat 10am–6pm, Sun 11am–5pm" } },
-        "l2": { "type": "location", "settings": { "name": "Melbourne CBD", "address": "300 Collins Street, Melbourne VIC 3000", "phone": "+61 3 9650 0000", "hours": "Mon–Sat 10am–7pm, Sun 11am–6pm" } },
-        "l3": { "type": "location", "settings": { "name": "Armadale", "address": "High Street, Armadale VIC 3143", "phone": "+61 3 9824 0000", "hours": "Mon–Sat 10am–6pm, Sun 12pm–5pm" } }
+        "l1": { "type": "location", "settings": { "name": "Marais Women's Boutique", "address": "73-77 Bourke Street, Melbourne VIC 3000", "phone": "+61 3 8658 9555" } },
+        "l2": { "type": "location", "settings": { "name": "Marais Women QV",         "address": "Shop SW282 QV, 286 Swanston St, Melbourne VIC 3000", "phone": "+61 3 8658 9550" } },
+        "l3": { "type": "location", "settings": { "name": "Marais QV",               "address": "Shop SW288 QV, 286 Swanston St, Melbourne VIC 3000", "phone": "+61 3 8658 9550" } },
+        "l4": { "type": "location", "settings": { "name": "Marais Chadstone",         "address": "Shop G34, Chadstone Shopping Centre, 1341 Dandenong Rd VIC 3148", "phone": "+61 3 9639 0314" } },
+        "l5": { "type": "location", "settings": { "name": "Marais Men Lux Chadstone", "address": "Shop G39, Chadstone Shopping Centre, 1341 Dandenong Rd VIC 3148", "phone": "+61 3 9639 0314" } }
       },
-      "block_order": ["l1","l2","l3"],
+      "block_order": ["l1","l2","l3","l4","l5"],
       "settings": {
         "eyebrow": "Find Us",
         "title": "Our Boutiques"
       }
     },
+
     "about_newsletter": {
       "type": "marais-newsletter",
       "settings": {}
     }
+
   },
   "order": [
-    "about_hero",
     "about_feature",
     "about_stats",
-    "about_team",
+    "about_curation",
+    "about_timeline",
     "about_locations",
     "about_newsletter"
   ]

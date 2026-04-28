@@ -1,4 +1,4 @@
-<div class="mh-locations">
+<div class="mh-locations{% if section.settings.layout == 'rows' %} mh-locations--rows{% endif %}">
   {%- if section.settings.eyebrow != blank or section.settings.title != blank -%}
     <div class="mh-locations__header">
       {%- if section.settings.eyebrow != blank -%}
@@ -10,37 +10,81 @@
     </div>
   {%- endif -%}
 
-  <div class="mh-locations__grid">
-    {%- for block in section.blocks -%}
-      <div class="mh-loc__card" {{ block.shopify_attributes }}>
-        {%- if block.settings.image != blank -%}
-          <img
-            class="mh-loc__img"
-            src="{{ block.settings.image | image_url: width: 800 }}"
-            alt="{{ block.settings.name | escape }}"
-            loading="lazy"
-            width="800"
-            height="600"
-          >
-        {%- endif -%}
-        <div class="mh-loc__body">
-          <h3 class="mh-loc__name">{{ block.settings.name }}</h3>
-          {%- if block.settings.address != blank -%}
-            <p class="mh-loc__detail">{{ block.settings.address }}</p>
-          {%- endif -%}
-          {%- if block.settings.phone != blank -%}
-            <p class="mh-loc__detail">{{ block.settings.phone }}</p>
-          {%- endif -%}
-          {%- if block.settings.hours != blank -%}
-            <p class="mh-loc__detail">{{ block.settings.hours }}</p>
-          {%- endif -%}
-          {%- if block.settings.maps_link != blank -%}
-            <a href="{{ block.settings.maps_link }}" class="mh-loc__map" target="_blank" rel="noopener">Get Directions &rarr;</a>
+  {%- if section.settings.layout == 'rows' -%}
+
+    <div class="mh-loc__rows">
+      {%- for block in section.blocks -%}
+        <div class="mh-loc__row" {{ block.shopify_attributes }}>
+          <div class="mh-loc__info">
+            <h3 class="mh-loc__name">{{ block.settings.name }}</h3>
+            {%- if block.settings.address != blank -%}
+              <p class="mh-loc__detail">{{ block.settings.address | newline_to_br }}</p>
+            {%- endif -%}
+            {%- if block.settings.phone != blank -%}
+              <p class="mh-loc__detail">
+                <a href="tel:{{ block.settings.phone | remove: ' ' }}" class="mh-loc__tel">{{ block.settings.phone }}</a>
+              </p>
+            {%- endif -%}
+            {%- if block.settings.hours != blank -%}
+              <p class="mh-loc__detail mh-loc__hours">{{ block.settings.hours }}</p>
+            {%- endif -%}
+            {%- if block.settings.maps_link != blank -%}
+              <a href="{{ block.settings.maps_link }}" class="mh-loc__map" target="_blank" rel="noopener">Get Directions &rarr;</a>
+            {%- endif -%}
+          </div>
+          {%- if block.settings.embed_url != blank -%}
+            <div class="mh-loc__embed-wrap">
+              <iframe
+                src="{{ block.settings.embed_url }}"
+                class="mh-loc__embed"
+                width="100%"
+                height="220"
+                style="border:0;"
+                allowfullscreen
+                loading="lazy"
+                title="{{ block.settings.name | escape }} map"
+              ></iframe>
+            </div>
           {%- endif -%}
         </div>
-      </div>
-    {%- endfor -%}
-  </div>
+      {%- endfor -%}
+    </div>
+
+  {%- else -%}
+
+    <div class="mh-locations__grid">
+      {%- for block in section.blocks -%}
+        <div class="mh-loc__card" {{ block.shopify_attributes }}>
+          {%- if block.settings.image != blank -%}
+            <img
+              class="mh-loc__img"
+              src="{{ block.settings.image | image_url: width: 800 }}"
+              alt="{{ block.settings.name | escape }}"
+              loading="lazy"
+              width="800"
+              height="600"
+            >
+          {%- endif -%}
+          <div class="mh-loc__body">
+            <h3 class="mh-loc__name">{{ block.settings.name }}</h3>
+            {%- if block.settings.address != blank -%}
+              <p class="mh-loc__detail">{{ block.settings.address }}</p>
+            {%- endif -%}
+            {%- if block.settings.phone != blank -%}
+              <p class="mh-loc__detail">{{ block.settings.phone }}</p>
+            {%- endif -%}
+            {%- if block.settings.hours != blank -%}
+              <p class="mh-loc__detail">{{ block.settings.hours }}</p>
+            {%- endif -%}
+            {%- if block.settings.maps_link != blank -%}
+              <a href="{{ block.settings.maps_link }}" class="mh-loc__map" target="_blank" rel="noopener">Get Directions &rarr;</a>
+            {%- endif -%}
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+
+  {%- endif -%}
 </div>
 
 {% schema %}
@@ -60,6 +104,16 @@
       "id": "title",
       "label": "Heading",
       "default": "Our Boutiques"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        { "value": "cards", "label": "Card grid" },
+        { "value": "rows", "label": "Rows with map" }
+      ],
+      "default": "cards"
     }
   ],
   "blocks": [
@@ -79,16 +133,16 @@
           "placeholder": "South Yarra"
         },
         {
-          "type": "text",
+          "type": "textarea",
           "id": "address",
           "label": "Address",
-          "placeholder": "1 Chapel Street, South Yarra VIC 3141"
+          "placeholder": "73-77 Bourke Street,\nMelbourne VIC 3000"
         },
         {
           "type": "text",
           "id": "phone",
           "label": "Phone",
-          "placeholder": "+61 3 9827 0000"
+          "placeholder": "+61 3 8658 9555"
         },
         {
           "type": "text",
@@ -99,7 +153,13 @@
         {
           "type": "url",
           "id": "maps_link",
-          "label": "Google Maps link"
+          "label": "Google Maps link (directions)"
+        },
+        {
+          "type": "text",
+          "id": "embed_url",
+          "label": "Google Maps embed URL",
+          "info": "Paste the embed src URL from Google Maps → Share → Embed a map"
         }
       ]
     }
@@ -108,9 +168,7 @@
     {
       "name": "Locations",
       "blocks": [
-        { "type": "location", "settings": { "name": "South Yarra", "address": "1 Chapel Street, South Yarra VIC 3141", "hours": "Mon–Sat 10am–6pm, Sun 11am–5pm" } },
-        { "type": "location", "settings": { "name": "Melbourne CBD", "address": "300 Collins Street, Melbourne VIC 3000", "hours": "Mon–Sat 10am–7pm, Sun 11am–6pm" } },
-        { "type": "location", "settings": { "name": "Armadale", "address": "High Street, Armadale VIC 3143", "hours": "Mon–Sat 10am–6pm, Sun 12pm–5pm" } }
+        { "type": "location", "settings": { "name": "South Yarra", "address": "1 Chapel Street, South Yarra VIC 3141", "hours": "Mon–Sat 10am–6pm, Sun 11am–5pm" } }
       ]
     }
   ]

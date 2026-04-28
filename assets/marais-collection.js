@@ -1,14 +1,48 @@
 /**
  * MARAIS — marais-collection.js
- * Native Shopify storefront filter interactions.
- * No AJAX — all filtering uses standard URL navigation.
+ * Shopify storefront filter interactions with AJAX filtering.
  */
 
 'use strict';
 
 (function () {
 
-  function navigateTo(url) { window.location.href = url; }
+  /* ── AJAX filter navigation ── */
+
+  function fetchFilter(url, pushState) {
+    var sidebar = document.getElementById('CollectionSidebar');
+    var main    = document.getElementById('CollectionMain');
+    if (main) main.classList.add('is-loading');
+
+    fetch(url)
+      .then(function (r) { return r.text(); })
+      .then(function (html) {
+        var doc        = new DOMParser().parseFromString(html, 'text/html');
+        var newSidebar = doc.getElementById('CollectionSidebar');
+        var newMain    = doc.getElementById('CollectionMain');
+        if (newSidebar && sidebar) sidebar.replaceWith(newSidebar);
+        if (newMain    && main)    main.replaceWith(newMain);
+        if (pushState !== false) history.pushState(null, '', url);
+        initFiltersAndUI();
+      })
+      .catch(function () { window.location.href = url; });
+  }
+
+  function navigateTo(url) { fetchFilter(url); }
+
+  window.addEventListener('popstate', function () {
+    fetchFilter(location.href, false);
+  });
+
+  /* Intercept <a> filter links — category tree, active chips, pagination */
+  document.addEventListener('click', function (e) {
+    var link = e.target.closest('.fcat-opt, .active-chip, .pagination a');
+    if (!link) return;
+    e.preventDefault();
+    fetchFilter(link.href);
+  });
+
+  /* ── Filter controls ── */
 
   function initFilterCheckboxes() {
     document.querySelectorAll('.filter-checkbox').forEach(function (cb) {
@@ -95,6 +129,65 @@
     });
   }
 
+  function initColourSwatches() {
+    var CM = {
+      /* Blacks */
+      'black':'#111','noir':'#111','jet':'#111','off-black':'#222',
+      /* Whites */
+      'white':'#f5f5f5','bright-white':'#f5f5f5','optic-white':'#f5f5f5',
+      /* Creams / ivories */
+      'ivory':'#fffff0','cream':'#fffdd0','ecru':'#fffdd0','off-white':'#f8f4ef','bone':'#f8f4ef','parchment':'#f8f4ef',
+      /* Neutrals */
+      'beige':'#f5f0e8','nude':'#f5f0e8','natural':'#f5f0e8','linen':'#f5f0e8',
+      'sand':'#c2b280','stone':'#c2b280','oat':'#c2b280','wheat':'#c2b280',
+      'camel':'#c19a6b','caramel':'#c19a6b','honey':'#c19a6b',
+      'tan':'#d2b48c','toffee':'#d2b48c',
+      'taupe':'#b09f8c','mushroom':'#b09f8c','mink':'#b09f8c',
+      /* Browns */
+      'brown':'#8b4513','chocolate':'#7b3f00','cognac':'#7b3f00','tobacco':'#7b3f00',
+      /* Greys */
+      'grey':'#878787','gray':'#878787','slate':'#878787',
+      'light-grey':'#cccccc','light-gray':'#cccccc','pale-grey':'#cccccc','silver-grey':'#cccccc',
+      'silver':'#c0c0c0',
+      'charcoal':'#36454f','dark-grey':'#36454f','dark-gray':'#36454f','graphite':'#36454f','anthracite':'#36454f',
+      /* Reds */
+      'red':'#cc0000','tomato':'#cc0000','scarlet':'#cc0000','crimson':'#cc0000',
+      'burgundy':'#800020','wine':'#800020','bordeaux':'#800020','merlot':'#800020','claret':'#800020','oxblood':'#800020',
+      /* Pinks */
+      'pink':'#ffc0cb','blush':'#ffb6c1','petal':'#ffb6c1','powder-pink':'#ffb6c1','baby-pink':'#ffb6c1','peach':'#ffb6c1',
+      'rose':'#e75480','dusty-rose':'#e75480','antique-rose':'#e75480',
+      'coral':'#ff7f50','terracotta':'#ff7f50',
+      /* Oranges / Yellows */
+      'orange':'#ff6600','amber':'#ff6600','rust':'#b7410e','burnt-orange':'#b7410e',
+      'yellow':'#ffd700','butter':'#ffd700',
+      'mustard':'#ffdb58','ochre':'#ffdb58','saffron':'#ffdb58',
+      'olive':'#808000','khaki':'#808000',
+      /* Greens */
+      'green':'#3a7d44','bottle-green':'#3a7d44','hunter-green':'#3a7d44',
+      'sage':'#9caf88','pistachio':'#9caf88','celadon':'#9caf88',
+      'emerald':'#006400','forest':'#228b22','racing-green':'#228b22',
+      'mint':'#98ff98','aqua':'#00ffff','teal':'#008080','jade':'#008080','duck-egg':'#008080',
+      /* Blues */
+      'blue':'#1e3a8a','royal-blue':'#1e3a8a','electric-blue':'#1e3a8a',
+      'navy':'#001f5b','navy-blue':'#001f5b','dark-navy':'#001f5b','midnight':'#001f5b','midnight-blue':'#001f5b','marine':'#001f5b',
+      'cobalt':'#0047ab','indigo':'#0047ab',
+      'denim':'#1560bd','chambray':'#1560bd',
+      'sky':'#87ceeb','powder-blue':'#87ceeb','baby-blue':'#87ceeb','cornflower':'#87ceeb',
+      /* Purples */
+      'purple':'#6b21a8','violet':'#6b21a8','plum':'#6b21a8','aubergine':'#6b21a8','eggplant':'#6b21a8',
+      'lilac':'#c084fc','lavender':'#c084fc','mauve':'#c084fc',
+      /* Metallics */
+      'metallic':'#a8a9ad','pewter':'#a8a9ad','bronze':'#a8a9ad',
+      'gold':'#d4a017','champagne':'#d4a017',
+      /* Multi / print */
+      'multi':'#b86bdf','multicolour':'#b86bdf','multicolor':'#b86bdf','print':'#b86bdf','pattern':'#b86bdf'
+    };
+    document.querySelectorAll('.product-card__swatch[data-c]').forEach(function (el) {
+      var key = el.getAttribute('data-c').replace(/ /g, '-');
+      if (CM[key]) el.style.background = CM[key];
+    });
+  }
+
   function initColourLabel() {
     var label = document.getElementById('ColourFilterLabel');
     if (!label) return;
@@ -112,6 +205,8 @@
       });
     });
   }
+
+  /* ── Product card interactions ── */
 
   function initWishlist() {
     var wishlist = JSON.parse(localStorage.getItem('marais-wishlist') || '[]');
@@ -247,16 +342,14 @@
 
       var galleryHTML = '';
       if (hasGallery) {
-        galleryHTML = '<div class="qv-gallery">';
-        galleryHTML += '<img class="qv-gallery__main" id="QvMainImg" src="' + sizedImg(imgs[0].src, '900x') + '" alt="' + esc(p.title) + '">';
-        if (imgs.length > 1) {
-          galleryHTML += '<div class="qv-gallery__thumbs">';
-          imgs.slice(0, 6).forEach(function (img, i) {
-            galleryHTML += '<img class="qv-thumb' + (i === 0 ? ' is-active' : '') + '" src="' + sizedImg(img.src, '120x') + '" data-full="' + sizedImg(img.src, '900x') + '" alt="">';
-          });
-          galleryHTML += '</div>';
-        }
-        galleryHTML += '</div>';
+        galleryHTML = '<div class="qv-gallery"><div class="qv-gallery-grid">';
+        imgs.forEach(function (img, i) {
+          var isHalf = (i % 3 !== 0);
+          var cls = 'qv-gallery-img' + (isHalf ? ' qv-gallery-img--half' : '');
+          var load = i < 2 ? 'eager' : 'lazy';
+          galleryHTML += '<img class="' + cls + '" src="' + sizedImg(img.src, '900x') + '" alt="' + (i === 0 ? esc(p.title) : '') + '" loading="' + load + '">';
+        });
+        galleryHTML += '</div></div>';
       }
 
       var compareAt = p.compare_at_price_max;
@@ -294,15 +387,6 @@
       content.className = '';
       content.innerHTML = galleryHTML + infoHTML;
       panel.style.gridTemplateColumns = hasGallery ? '' : '1fr';
-
-      content.querySelectorAll('.qv-thumb').forEach(function (thumb) {
-        thumb.addEventListener('click', function () {
-          content.querySelectorAll('.qv-thumb').forEach(function (t) { t.classList.remove('is-active'); });
-          this.classList.add('is-active');
-          var main = document.getElementById('QvMainImg');
-          if (main) main.src = this.dataset.full;
-        });
-      });
 
       content.querySelectorAll('.qv-opt').forEach(function (btn) {
         btn.addEventListener('click', function () {
@@ -421,17 +505,23 @@
     });
   }
 
-  document.addEventListener('DOMContentLoaded', function () {
+  /* ── Re-run after every AJAX swap ── */
+  function initFiltersAndUI() {
     initFilterCheckboxes();
     initSortSelect();
     initGridToggle();
     initMobileSidebar();
     initPriceForm();
+    initColourSwatches();
     initColourLabel();
     initWishlist();
     initQuickAdd();
     initQuickView();
-    initSizePills();
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    initFiltersAndUI();
+    initSizePills(); /* delegated on document — init once only */
   });
 
 })();

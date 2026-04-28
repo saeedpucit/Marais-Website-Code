@@ -1,0 +1,54 @@
+<div class="mh-contact-info">
+  <div class="mh-contact-info__inner">
+    {%- if section.settings.eyebrow != blank -%}
+      <p class="mh-contact-info__eyebrow">{{ section.settings.eyebrow }}</p>
+    {%- endif -%}
+    {%- if section.settings.title != blank -%}
+      <h2 class="mh-contact-info__title">{{ section.settings.title }}</h2>
+    {%- endif -%}
+
+    {%- for block in section.blocks -%}
+      <div class="mh-contact-info__row" {{ block.shopify_attributes }}>
+        <span class="mh-contact-info__label">{{ block.settings.label }}</span>
+        <a href="mailto:{{ block.settings.email }}" class="mh-contact-info__link">{{ block.settings.email }}</a>
+      </div>
+    {%- endfor -%}
+
+    {%- if section.settings.note != blank -%}
+      <p class="mh-contact-info__note">{{ section.settings.note }}</p>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Contact Info",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Get in Touch" },
+    { "type": "text", "id": "title",   "label": "Heading",  "default": "Contact Information" },
+    { "type": "textarea", "id": "note", "label": "Note", "default": "The feedback of our customers is vital to improving and maintaining the MARAIS experience." }
+  ],
+  "blocks": [
+    {
+      "type": "contact",
+      "name": "Contact row",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label",          "placeholder": "Product enquiries" },
+        { "type": "text", "id": "email", "label": "Email address",  "placeholder": "enquiries@marais.com.au" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Contact Info",
+      "blocks": [
+        { "type": "contact", "settings": { "label": "Product enquiries",   "email": "enquiries@marais.com.au" } },
+        { "type": "contact", "settings": { "label": "Customer care",       "email": "customercare@marais.com.au" } },
+        { "type": "contact", "settings": { "label": "General information", "email": "info@marais.com.au" } },
+        { "type": "contact", "settings": { "label": "Press / Media",       "email": "marketing@marais.com.au" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

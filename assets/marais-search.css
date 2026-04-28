@@ -1,7 +1,103 @@
 /* ============================================================
    MARAIS — marais-search.css
-   Search results page
+   Header search panel + search results page
    ============================================================ */
+
+/* ── Header search panel ── */
+.mh-search-panel {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--mh-white);
+  border-top: 1px solid var(--mh-light);
+  border-bottom: 1px solid var(--mh-light);
+  z-index: 998;
+  opacity: 0;
+  transform: translateY(-8px);
+  pointer-events: none;
+  transition: opacity .2s ease, transform .2s ease;
+  box-shadow: 0 8px 32px rgba(0,0,0,.06);
+}
+.mh-search-panel.is-open {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.mh-search-panel__inner {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 24px 32px;
+}
+
+.mh-search-panel__form {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid var(--mh-black);
+  padding-bottom: 12px;
+  margin-bottom: 16px;
+}
+
+.mh-search-panel__icon {
+  color: var(--mh-gray);
+  flex-shrink: 0;
+}
+
+.mh-search-panel__input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font-family: var(--mh-serif);
+  font-size: 22px;
+  font-weight: 300;
+  color: var(--mh-black);
+  outline: none;
+  letter-spacing: .02em;
+}
+.mh-search-panel__input::placeholder {
+  color: var(--mh-gray);
+  font-style: italic;
+}
+
+.mh-search-panel__close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--mh-gray);
+  padding: 4px;
+  flex-shrink: 0;
+  transition: color .2s;
+  line-height: 1;
+}
+.mh-search-panel__close:hover { color: var(--mh-black); }
+
+.mh-search-panel__results { margin-top: 0; }
+
+.mh-search-panel__view-all {
+  display: block;
+  padding: 12px 16px;
+  font-family: var(--mh-sans);
+  font-size: 12px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--mh-gray);
+  text-decoration: none;
+  border-top: 1px solid var(--mh-light);
+  margin-top: 4px;
+  transition: color .15s;
+}
+.mh-search-panel__view-all:hover { color: var(--mh-black); }
+
+.mh-search-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.25);
+  z-index: 997;
+}
+.mh-search-overlay.is-open { display: block; }
 
 .search-page { max-width: 1440px; margin: 0 auto; }
 

@@ -1,19 +1,38 @@
 {
   "sections": {
-    "marais_hero": {
+
+    "hero_women": {
       "type": "marais-hero",
       "settings": {
-        "badge": "Fall / Winter 2025 — New Arrivals",
+        "badge": "F/W 2025 — Women's New Arrivals",
         "heading_line1": "The",
-        "heading_line2": "Luxury",
+        "heading_line2": "Women's",
         "heading_italic": "Edit",
-        "subtext": "Melbourne's premier multi-brand luxury boutique. Maison Margiela, Rick Owens, Loewe, Balenciaga and more — curated with intention.",
-        "cta1_label": "Shop Women",
-        "cta1_link": "/collections/women",
-        "cta2_label": "Shop Men",
-        "cta2_link": "/collections/men"
+        "subtext": "From Maison Margiela to Loewe, Sacai to Balenciaga — Melbourne's most considered women's edit, curated for those who dress with intention.",
+        "cta1_label": "New Arrivals",
+        "cta1_link": "/collections/womens-new-arrivals",
+        "cta2_label": "Shop Women",
+        "cta2_link": "/collections/women",
+        "gender": "women"
       }
     },
+
+    "hero_men": {
+      "type": "marais-hero",
+      "settings": {
+        "badge": "F/W 2025 — Men's New Arrivals",
+        "heading_line1": "The",
+        "heading_line2": "Men's",
+        "heading_italic": "Edit",
+        "subtext": "Fear of God, Rick Owens, Stone Island, Wooyoungmi — the defining pieces of the season, chosen without compromise.",
+        "cta1_label": "New Arrivals",
+        "cta1_link": "/collections/new-men",
+        "cta2_label": "Shop Men",
+        "cta2_link": "/collections/men",
+        "gender": "men"
+      }
+    },
+
     "marais_ticker": {
       "type": "marais-ticker",
       "blocks": {
@@ -31,28 +50,50 @@
       "block_order": ["t1","t2","t3","t4","t5","t6","t7","t8","t9","t10"],
       "settings": {}
     },
-    "marais_category_grid": {
+
+    "cat_women": {
       "type": "marais-category-grid",
       "blocks": {
-        "cat1": { "type": "category", "settings": { "label": "New Season", "name": "Down Jackets & Outerwear", "bg_color": "#12122a", "link": "/collections/all" } },
-        "cat2": { "type": "category", "settings": { "label": "Footwear", "name": "Shoes & Sneakers", "bg_color": "#0d1a0c", "link": "/collections/all" } },
-        "cat3": { "type": "category", "settings": { "label": "Carry", "name": "Bags", "bg_color": "#1a0c0c", "link": "/collections/all" } },
-        "cat4": { "type": "category", "settings": { "label": "Finish", "name": "Accessories", "bg_color": "#0c0c1a", "link": "/collections/all" } },
-        "cat5": { "type": "category", "settings": { "label": "Lifestyle", "name": "Home & Objects", "bg_color": "#1a180a", "link": "/collections/all" } }
+        "cw1": { "type": "category", "settings": { "label": "Just In", "name": "New Arrivals", "bg_color": "#12122a", "link": "/collections/womens-new-arrivals" } },
+        "cw2": { "type": "category", "settings": { "label": "Women", "name": "Clothing", "bg_color": "#0d1a0c", "link": "/collections/women-clothing" } },
+        "cw3": { "type": "category", "settings": { "label": "Women", "name": "Shoes", "bg_color": "#1a0c0c", "link": "/collections/women-shoes" } },
+        "cw4": { "type": "category", "settings": { "label": "Women", "name": "Bags", "bg_color": "#0c0c1a", "link": "/collections/women-bags" } },
+        "cw5": { "type": "category", "settings": { "label": "Women", "name": "Accessories", "bg_color": "#1a180a", "link": "/collections/women-accessories" } }
       },
-      "block_order": ["cat1","cat2","cat3","cat4","cat5"],
+      "block_order": ["cw1","cw2","cw3","cw4","cw5"],
       "settings": {
-        "eyebrow": "Shop by Category",
-        "title": "The Edit",
-        "see_all_label": "Shop All",
-        "see_all_link": "/collections/all"
+        "eyebrow": "Women's Edit",
+        "title": "Shop by Category",
+        "see_all_label": "Shop All Women",
+        "see_all_link": "/collections/women",
+        "gender": "women"
       }
     },
+
+    "cat_men": {
+      "type": "marais-category-grid",
+      "blocks": {
+        "cm1": { "type": "category", "settings": { "label": "Just In", "name": "New Arrivals", "bg_color": "#0a0a0a", "link": "/collections/new-men" } },
+        "cm2": { "type": "category", "settings": { "label": "Men", "name": "Clothing", "bg_color": "#0d1a0c", "link": "/collections/men-clothing" } },
+        "cm3": { "type": "category", "settings": { "label": "Men", "name": "Shoes", "bg_color": "#1a0c0c", "link": "/collections/men-shoes" } },
+        "cm4": { "type": "category", "settings": { "label": "Men", "name": "Bags", "bg_color": "#0c0c1a", "link": "/collections/men-bags" } },
+        "cm5": { "type": "category", "settings": { "label": "Men", "name": "Accessories", "bg_color": "#1a180a", "link": "/collections/men-accessories" } }
+      },
+      "block_order": ["cm1","cm2","cm3","cm4","cm5"],
+      "settings": {
+        "eyebrow": "Men's Edit",
+        "title": "Shop by Category",
+        "see_all_label": "Shop All Men",
+        "see_all_link": "/collections/men",
+        "gender": "men"
+      }
+    },
+
     "marais_products": {
       "type": "marais-products",
       "blocks": {
-        "tab_women": { "type": "tab", "settings": { "label": "Women", "collection": "women-new-arrivals" } },
-        "tab_men": { "type": "tab", "settings": { "label": "Men", "collection": "men-new-arrivals" } }
+        "tab_women": { "type": "tab", "settings": { "label": "Women", "collection": "women-new-arrivals", "gender": "women" } },
+        "tab_men":   { "type": "tab", "settings": { "label": "Men",   "collection": "men-new-arrivals",   "gender": "men"   } }
       },
       "block_order": ["tab_women","tab_men"],
       "settings": {
@@ -64,19 +105,39 @@
         "see_all_link": "/collections/all"
       }
     },
-    "marais_banner_1": {
+
+    "banner_women": {
       "type": "marais-collection-banner",
       "settings": {
         "layout": "image-left",
-        "eyebrow": "New Season",
+        "eyebrow": "Women's New Season",
         "heading": "The",
         "heading_italic": "Autumn Edit",
-        "body": "Defining pieces from Maison Margiela, Rick Owens, Loewe and more — curated for the season ahead.",
-        "cta_label": "Explore Now",
-        "cta_link": "/collections/all",
-        "bg_color": "#f5f2ed"
+        "body": "Defining pieces from Maison Margiela, Loewe, Sacai and more — curated for the season ahead.",
+        "cta_label": "Shop Women",
+        "cta_link": "/collections/women",
+        "bg_color": "#f5f2ed",
+        "text_color": "#0a0a0a",
+        "gender": "women"
       }
     },
+
+    "banner_men": {
+      "type": "marais-collection-banner",
+      "settings": {
+        "layout": "image-right",
+        "eyebrow": "Men's New Season",
+        "heading": "The",
+        "heading_italic": "Men's Autumn Edit",
+        "body": "Rick Owens, Fear of God, Stone Island, Wooyoungmi — the season's most considered men's pieces.",
+        "cta_label": "Shop Men",
+        "cta_link": "/collections/men",
+        "bg_color": "#0a0a0a",
+        "text_color": "#fafaf8",
+        "gender": "men"
+      }
+    },
+
     "marais_brands_az": {
       "type": "marais-brands-az",
       "blocks": {
@@ -109,20 +170,7 @@
         "see_all_link": "/collections/all"
       }
     },
-    "marais_banner_2": {
-      "type": "marais-collection-banner",
-      "settings": {
-        "layout": "image-right",
-        "eyebrow": "Editorial",
-        "heading": "Dressed",
-        "heading_italic": "with Intention",
-        "body": "Discover the stories behind our most considered collections — where craft meets culture.",
-        "cta_label": "Read the Journal",
-        "cta_link": "/blogs/news",
-        "bg_color": "#0a0a0a",
-        "text_color": "#fafaf8"
-      }
-    },
+
     "marais_brand_story": {
       "type": "marais-brand-story",
       "settings": {
@@ -140,6 +188,7 @@
         "stat3_label": "Global Brands"
       }
     },
+
     "marais_editorial_grid": {
       "type": "marais-editorial-grid",
       "blocks": {
@@ -155,6 +204,7 @@
         "see_all_link": "/blogs/news"
       }
     },
+
     "marais_newsletter": {
       "type": "marais-newsletter",
       "settings": {
@@ -166,14 +216,17 @@
       }
     }
   },
+
   "order": [
-    "marais_hero",
+    "hero_women",
+    "hero_men",
     "marais_ticker",
-    "marais_category_grid",
-    "marais_banner_1",
+    "cat_women",
+    "cat_men",
     "marais_products",
+    "banner_women",
+    "banner_men",
     "marais_brands_az",
-    "marais_banner_2",
     "marais_brand_story",
     "marais_editorial_grid",
     "marais_newsletter"

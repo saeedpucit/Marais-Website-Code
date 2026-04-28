@@ -1,4 +1,4 @@
-<section class="mh-hero">
+<section class="mh-hero"{% unless section.settings.gender == 'both' %} data-gender="{{ section.settings.gender }}"{% endunless %}>
   {%- if section.settings.bg_image != blank -%}
     <div class="mh-hero__bg" style="position:absolute;inset:0;">
       <img src="{{ section.settings.bg_image | image_url: width: 2000 }}" alt="" loading="eager" style="width:100%;height:100%;object-fit:cover;">
@@ -92,7 +92,8 @@
     { "type": "text", "id": "cta1_label", "label": "CTA 1 label", "default": "Shop Women" },
     { "type": "url", "id": "cta1_link", "label": "CTA 1 link" },
     { "type": "text", "id": "cta2_label", "label": "CTA 2 label", "default": "Shop Men" },
-    { "type": "url", "id": "cta2_link", "label": "CTA 2 link" }
+    { "type": "url", "id": "cta2_link", "label": "CTA 2 link" },
+    { "type": "select", "id": "gender", "label": "Show for", "options": [{ "value": "both", "label": "Everyone" }, { "value": "women", "label": "Women only" }, { "value": "men", "label": "Men only" }], "default": "both" }
   ],
   "presets": [{ "name": "Hero" }]
 }

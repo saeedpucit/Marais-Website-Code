@@ -25,12 +25,10 @@
   {{ content_for_header }}
 
   {{ 'marais-homepage.css' | asset_url | stylesheet_tag }}
-  {%- if template.name == 'collection' -%}
+  {%- if template.name == 'collection' or template.name == 'index' or template.name == 'search' -%}
     {{ 'marais-collection.css' | asset_url | stylesheet_tag }}
   {%- endif -%}
-  {%- if template.name == 'search' -%}
-    {{ 'marais-search.css' | asset_url | stylesheet_tag }}
-  {%- endif -%}
+  {{ 'marais-search.css' | asset_url | stylesheet_tag }}
   {%- if template.name == 'cart' -%}
     {{ 'marais-cart.css' | asset_url | stylesheet_tag }}
   {%- endif -%}
@@ -67,22 +65,21 @@
         <!-- Centred Logo -->
         <div class="mh-logo">
           <a href="/" aria-label="MARAIS">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 218 30" height="20" fill="currentColor" aria-hidden="true">
-              <path d="M0 2h5.2l7.1 15.6L19.4 2h5.2v26h-5V12.4l-6.3 13.8h-1.9L5.1 12.4V28H0V2z"/>
-              <path d="M34 2h5.4L51 28h-5.4l-2.6-6.8H31.6L29 28h-5.3L34 2zm5.5 17-4.3-11.2L30.9 19h8.6z"/>
-              <path d="M55 2h11.4c3.2 0 5.7.85 7.3 2.55 1.6 1.7 2.4 4 2.4 6.85 0 2.2-.5 4.05-1.5 5.55s-2.4 2.55-4.2 3.15L76.6 28H71l-5.7-9.3H60V28h-5V2zm5 14.1h5.9c1.7 0 3-.42 3.9-1.27.9-.84 1.35-2.07 1.35-3.68s-.45-2.83-1.35-3.66C68.9 6.66 67.6 6.25 65.9 6.25H60v9.85z"/>
-              <path d="M87 2h5.4L104 28h-5.4l-2.6-6.8H84.6L82 28h-5.3L87 2zm5.5 17-4.3-11.2L83.9 19h8.6z"/>
-              <path d="M109 2h5v26h-5V2z"/>
-              <path d="M118.5 23.9l3.3-3.55c1 1.12 2.12 1.97 3.35 2.55 1.22.58 2.55.87 3.97.87 1.55 0 2.77-.34 3.66-1.01.9-.68 1.35-1.6 1.35-2.75 0-.95-.3-1.72-.9-2.3-.6-.58-1.72-1.07-3.35-1.47l-2.9-.72c-2.35-.58-4.1-1.52-5.25-2.82-1.15-1.3-1.72-2.93-1.72-4.88 0-1.6.38-3.01 1.14-4.23.77-1.22 1.86-2.17 3.28-2.85 1.42-.68 3.07-1.02 4.95-1.02 1.82 0 3.5.32 5.03.95 1.53.63 2.82 1.52 3.87 2.67l-3.12 3.42c-.87-.93-1.82-1.63-2.85-2.1-1.03-.47-2.17-.7-3.42-.7-1.38 0-2.47.32-3.27.95-.8.63-1.2 1.47-1.2 2.52 0 .88.28 1.6.85 2.15.57.55 1.52.98 2.85 1.3l2.9.72c2.52.63 4.42 1.6 5.7 2.92 1.28 1.32 1.92 3.05 1.92 5.18 0 1.67-.4 3.13-1.2 4.38-.8 1.25-1.95 2.22-3.45 2.9-1.5.68-3.25 1.02-5.25 1.02-2.1 0-4.02-.38-5.75-1.14-1.73-.76-3.17-1.85-4.32-3.26z"/>
-            </svg>
+            <img
+              src="{{ 'logo transparent 9 1.png' | asset_url }}"
+              alt="MARAIS"
+              height="36"
+              width="auto"
+              style="height:36px;width:auto;display:block;"
+            >
           </a>
         </div>
 
         <!-- Right Icons -->
         <div class="mh-hdr__right">
-          <a href="/search" class="mh-icon-btn mh-hide-mob" aria-label="Search">
+          <button class="mh-icon-btn mh-hide-mob" id="mh-search-trigger" aria-label="Search" aria-expanded="false" aria-controls="mh-search-panel">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-          </a>
+          </button>
           <a href="/account" class="mh-icon-btn mh-hide-mob" aria-label="Account">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
           </a>
@@ -103,638 +100,84 @@
     <!-- ── Row 2: Women category nav ── -->
     <nav class="mh-subnav" data-g="women" aria-label="Women">
       <div class="mh-subnav__inner">
-
-        <div class="mh-subnav__item">
-          <a href="/collections/womens-new-arrivals" class="mh-highlight">New Arrivals</a>
-        </div>
-
-        <!-- TRENDING -->
-        <div class="mh-subnav__item">
-          <a href="/collections/women">Trending</a>
-          <div class="mh-mega">
-            <div class="mh-mega__cats">
-              <span class="mh-mega__lbl">Categories</span>
-              <a href="/collections/women-clothing">Clothing</a>
-              <a href="/collections/women-shoes">Shoes</a>
-              <a href="/collections/women-bags">Bags</a>
-              <a href="/collections/women-accessories">Accessories</a>
-            </div>
-            <div class="mh-mega__main">
-              <span class="mh-mega__lbl">Trending Now</span>
-              <div class="mh-mega__featured">
-                <a href="/collections/womens-new-arrivals">New Arrivals</a>
-                <a href="/collections/women-loewe">Loewe</a>
-                <a href="/collections/women-sacai">Sacai</a>
-                <a href="/collections/women-accs-sunglasses">Sunglasses</a>
-              </div>
-            </div>
-            <div class="mh-mega__products" data-collection="/collections/womens-new-arrivals">
-              <span class="mh-mega__lbl">Latest Products</span>
-              <div class="mh-mega__products-list"><span class="mh-mega__loading">Loading&hellip;</span></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- DESIGNERS -->
-        <div class="mh-subnav__item">
-          <a href="/pages/designers">Designers</a>
-          <div class="mh-mega">
-            <div class="mh-mega__cats">
-              <span class="mh-mega__lbl">Categories</span>
-              <a href="/collections/women-clothing">Clothing</a>
-              <a href="/collections/women-shoes">Shoes</a>
-              <a href="/collections/women-bags">Bags</a>
-              <a href="/collections/women-accessories">Accessories</a>
-            </div>
-            <div class="mh-mega__main">
-              <span class="mh-mega__lbl">Designers</span>
-              <div class="mh-mega__brands-grid">
-                <div>
-                  <a href="/collections/women-alaia">Alaia</a>
-                  <a href="/collections/women-alexander-mcqueen">Alexander McQueen</a>
-                  <a href="/collections/women-amiri">Amiri</a>
-                  <a href="/collections/women-autry">Autry</a>
-                  <a href="/collections/women-balenciaga">Balenciaga</a>
-                  <a href="/collections/women-balmain">Balmain</a>
-                  <a href="/collections/brad-gunn">Brad Gunn</a>
-                  <a href="/collections/women-chloe">Chlo&eacute;</a>
-                  <a href="/collections/women-coperni">Coperni</a>
-                  <a href="/collections/creed">Creed</a>
-                  <a href="/collections/women-diesel">Diesel</a>
-                  <a href="/collections/women-doublet">Doublet</a>
-                  <a href="/collections/women-entire-studios">Entire Studios</a>
-                  <a href="/collections/women-fax-copy-express">Fax Copy Express</a>
-                  <a href="/collections/gentle-monster">Gentle Monster</a>
-                  <a href="/collections/women-we11done">We11done</a>
-                </div>
-                <div>
-                  <a href="/collections/women-jacquemus">Jacquemus</a>
-                  <a href="/collections/women-khaite">Khaite</a>
-                  <a href="/collections/women-lemaire">Lemaire</a>
-                  <a href="/collections/women-loewe">Loewe</a>
-                  <a href="/collections/women-maison-margiela">Maison Margiela</a>
-                  <a href="/collections/women-maison-mihara-yasuhiro">Maison Mihara Yasuhiro</a>
-                  <a href="/collections/women-marni">Marni</a>
-                  <a href="/collections/women-noir-kei-ninomiya">Noir Kei Ninomiya</a>
-                  <a href="/collections/women-off-white">Off-White</a>
-                  <a href="/collections/women-rick-owens">Rick Owens</a>
-                  <a href="/collections/women-rick-owens-drkshdw">Rick Owens DRKSHDW</a>
-                  <a href="/collections/women-sacai">Sacai</a>
-                  <a href="/collections/trudon">Trudon</a>
-                  <a href="/collections/women-veja-shoes">Veja</a>
-                  <a href="/collections/women-wales-bonner">Wales Bonner</a>
-                  <a href="/pages/designers" style="color:var(--mh-gold);margin-top:8px">View All &rarr;</a>
-                </div>
-              </div>
-            </div>
-            <div class="mh-mega__products" data-collection="/collections/women">
-              <span class="mh-mega__lbl">Latest Products</span>
-              <div class="mh-mega__products-list"><span class="mh-mega__loading">Loading&hellip;</span></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- CLOTHING -->
-        <div class="mh-subnav__item">
-          <a href="/collections/women-clothing">Clothing</a>
-          <div class="mh-mega">
-            <div class="mh-mega__cats">
-              <span class="mh-mega__lbl">Categories</span>
-              <a href="/collections/women-clothing" class="is-active">Clothing</a>
-              <a href="/collections/women-shoes">Shoes</a>
-              <a href="/collections/women-bags">Bags</a>
-              <a href="/collections/women-accessories">Accessories</a>
-            </div>
-            <div class="mh-mega__main">
-              <div class="mh-mega__main-cols">
-                <div class="mh-mega__sub">
-                  <span class="mh-mega__lbl">Sub-categories</span>
-                  <a href="/collections/women-clothing">View All Clothing</a>
-                  <a href="/collections/women-clothing-coats">Coats</a>
-                  <a href="/collections/women-clothing-jackets">Jackets</a>
-                  <a href="/collections/women-clothing-knitwears">Knitwear</a>
-                  <a href="/collections/women-clothing-dresses">Dresses</a>
-                  <a href="/collections/women-clothing-tops">Tops</a>
-                  <a href="/collections/women-clothing-pants">Pants &amp; Trousers</a>
-                  <a href="/collections/women-clothing-jeans">Jeans</a>
-                  <a href="/collections/women-clothing-skirts">Skirts</a>
-                  <a href="/collections/women-clothing-shorts">Shorts</a>
-                </div>
-                <div class="mh-mega__cat-designers">
-                  <span class="mh-mega__lbl">Designers</span>
-                  <a href="/collections/women-alaia-clothing">Ala&iuml;a</a>
-                  <a href="/collections/women-balenciaga-clothing">Balenciaga</a>
-                  <a href="/collections/women-chloe-clothing">Chlo&eacute;</a>
-                  <a href="/collections/women-jacquemus-clothing">Jacquemus</a>
-                  <a href="/collections/women-loewe-clothing">Loewe</a>
-                  <a href="/collections/women-maison-margiela-clothing">Maison Margiela</a>
-                  <a href="/collections/women-rick-owens-clothing">Rick Owens</a>
-                  <a href="/collections/women-sacai-clothing">Sacai</a>
-                  <a href="/collections/women-entire-studios-clothing">Entire Studios</a>
-                  <a href="/collections/women-we11done-clothing">We11done</a>
-                </div>
-              </div>
-            </div>
-            <div class="mh-mega__products" data-collection="/collections/women-clothing">
-              <span class="mh-mega__lbl">Latest Products</span>
-              <div class="mh-mega__products-list"><span class="mh-mega__loading">Loading&hellip;</span></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- SHOES -->
-        <div class="mh-subnav__item">
-          <a href="/collections/women-shoes">Shoes</a>
-          <div class="mh-mega">
-            <div class="mh-mega__cats">
-              <span class="mh-mega__lbl">Categories</span>
-              <a href="/collections/women-clothing">Clothing</a>
-              <a href="/collections/women-shoes" class="is-active">Shoes</a>
-              <a href="/collections/women-bags">Bags</a>
-              <a href="/collections/women-accessories">Accessories</a>
-            </div>
-            <div class="mh-mega__main">
-              <div class="mh-mega__main-cols">
-                <div class="mh-mega__sub">
-                  <span class="mh-mega__lbl">Sub-categories</span>
-                  <a href="/collections/women-shoes">View All Shoes</a>
-                  <a href="/collections/women-shoes-sneakers">Sneakers</a>
-                  <a href="/collections/women-shoes-boots">Boots</a>
-                  <a href="/collections/women-shoes-sandals">Sandals &amp; Slides</a>
-                  <a href="/collections/women-shoes-pumps">Pumps &amp; Heels</a>
-                  <a href="/collections/women-shoes-loafers">Loafers</a>
-                  <a href="/collections/women-shoes-espadrilles">Espadrilles</a>
-                </div>
-                <div class="mh-mega__cat-designers">
-                  <span class="mh-mega__lbl">Designers</span>
-                  <a href="/collections/women-alaia-shoes">Ala&iuml;a</a>
-                  <a href="/collections/women-alexander-mcqueen-shoes">Alexander McQueen</a>
-                  <a href="/collections/women-amiri-shoes">Amiri</a>
-                  <a href="/collections/women-autry-shoes">Autry</a>
-                  <a href="/collections/women-balenciaga-shoes">Balenciaga</a>
-                  <a href="/collections/women-loewe-shoes">Loewe</a>
-                  <a href="/collections/women-maison-margiela-shoes">Maison Margiela</a>
-                  <a href="/collections/women-maison-mihara-yasuhiro-shoes">MMY</a>
-                  <a href="/collections/women-rick-owens-shoes">Rick Owens</a>
-                  <a href="/collections/women-veja-shoes">Veja</a>
-                </div>
-              </div>
-            </div>
-            <div class="mh-mega__products" data-collection="/collections/women-shoes">
-              <span class="mh-mega__lbl">Latest Products</span>
-              <div class="mh-mega__products-list"><span class="mh-mega__loading">Loading&hellip;</span></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- BAGS -->
-        <div class="mh-subnav__item">
-          <a href="/collections/women-bags">Bags</a>
-          <div class="mh-mega">
-            <div class="mh-mega__cats">
-              <span class="mh-mega__lbl">Categories</span>
-              <a href="/collections/women-clothing">Clothing</a>
-              <a href="/collections/women-shoes">Shoes</a>
-              <a href="/collections/women-bags" class="is-active">Bags</a>
-              <a href="/collections/women-accessories">Accessories</a>
-            </div>
-            <div class="mh-mega__main">
-              <div class="mh-mega__main-cols">
-                <div class="mh-mega__sub">
-                  <span class="mh-mega__lbl">Sub-categories</span>
-                  <a href="/collections/women-bags">View All Bags</a>
-                  <a href="/collections/women-bags-shoulder-bags">Shoulder Bags</a>
-                  <a href="/collections/women-bags-mini-crossbody">Mini &amp; Crossbody</a>
-                  <a href="/collections/women-bags-shopper-tote-bags">Totes &amp; Shoppers</a>
-                  <a href="/collections/women-bags-backpacks">Backpacks</a>
-                  <a href="/collections/women-bags-clutches">Clutches</a>
-                  <a href="/collections/women-bags-bucket">Bucket Bags</a>
-                </div>
-                <div class="mh-mega__cat-designers">
-                  <span class="mh-mega__lbl">Designers</span>
-                  <a href="/collections/women-alaia-bags">Ala&iuml;a</a>
-                  <a href="/collections/women-balenciaga-bags">Balenciaga</a>
-                  <a href="/collections/women-chloe-bags">Chlo&eacute;</a>
-                  <a href="/collections/women-coperni-bags">Coperni</a>
-                  <a href="/collections/women-jacquemus-bags">Jacquemus</a>
-                  <a href="/collections/women-loewe-bags">Loewe</a>
-                  <a href="/collections/women-maison-margiela-bags">Maison Margiela</a>
-                  <a href="/collections/women-marni-bags">Marni</a>
-                  <a href="/collections/women-rick-owens-bags">Rick Owens</a>
-                  <a href="/collections/women-sacai-bags">Sacai</a>
-                </div>
-              </div>
-            </div>
-            <div class="mh-mega__products" data-collection="/collections/women-bags">
-              <span class="mh-mega__lbl">Latest Products</span>
-              <div class="mh-mega__products-list"><span class="mh-mega__loading">Loading&hellip;</span></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- ACCESSORIES -->
-        <div class="mh-subnav__item">
-          <a href="/collections/women-accessories">Accessories</a>
-          <div class="mh-mega">
-            <div class="mh-mega__cats">
-              <span class="mh-mega__lbl">Categories</span>
-              <a href="/collections/women-clothing">Clothing</a>
-              <a href="/collections/women-shoes">Shoes</a>
-              <a href="/collections/women-bags">Bags</a>
-              <a href="/collections/women-accessories" class="is-active">Accessories</a>
-            </div>
-            <div class="mh-mega__main">
-              <div class="mh-mega__main-cols">
-                <div class="mh-mega__sub">
-                  <span class="mh-mega__lbl">Sub-categories</span>
-                  <a href="/collections/women-accessories">View All Accessories</a>
-                  <a href="/collections/women-accs-jewelry">Jewellery</a>
-                  <a href="/collections/women-accs-hats">Hats &amp; Caps</a>
-                  <a href="/collections/women-accs-sunglasses">Sunglasses</a>
-                  <a href="/collections/women-accs-belts">Belts</a>
-                  <a href="/collections/women-accs-scarves">Scarves</a>
-                </div>
-                <div class="mh-mega__cat-designers">
-                  <span class="mh-mega__lbl">Designers</span>
-                  <a href="/collections/women-balenciaga-accessories">Balenciaga</a>
-                  <a href="/collections/women-coperni-accessories">Coperni</a>
-                  <a href="/collections/gentle-monster">Gentle Monster</a>
-                  <a href="/collections/women-jacquemus-accessories">Jacquemus</a>
-                  <a href="/collections/women-loewe-accessories">Loewe</a>
-                  <a href="/collections/women-maison-margiela-accessories">Maison Margiela</a>
-                  <a href="/collections/women-rick-owens-accessories">Rick Owens</a>
-                  <a href="/collections/women-sacai-accessories">Sacai</a>
-                  <a href="/collections/trudon">Trudon</a>
-                </div>
-              </div>
-            </div>
-            <div class="mh-mega__products" data-collection="/collections/women-accessories">
-              <span class="mh-mega__lbl">Latest Products</span>
-              <div class="mh-mega__products-list"><span class="mh-mega__loading">Loading&hellip;</span></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- SALE -->
-        <div class="mh-subnav__item">
-          <a href="/collections/women-sale" class="mh-highlight">Sale</a>
-          <div class="mh-mega">
-            <div class="mh-mega__cats">
-              <span class="mh-mega__lbl">Categories</span>
-              <a href="/collections/women-clothing">Clothing</a>
-              <a href="/collections/women-shoes">Shoes</a>
-              <a href="/collections/women-bags">Bags</a>
-              <a href="/collections/women-accessories">Accessories</a>
-            </div>
-            <div class="mh-mega__main">
-              <div class="mh-mega__main-cols">
-                <div class="mh-mega__sub">
-                  <span class="mh-mega__lbl">Shop By Category</span>
-                  <a href="/collections/women-sale">All Women's Sale</a>
-                  <a href="/collections/women-sale-clothing">Clothing Sale</a>
-                  <a href="/collections/women-sale-shoes">Shoes Sale</a>
-                  <a href="/collections/women-sale-bags">Bags Sale</a>
-                  <a href="/collections/women-sale-accs">Accessories Sale</a>
-                </div>
-                <div class="mh-mega__cat-designers">
-                  <span class="mh-mega__lbl">Shop By Discount</span>
-                  <div class="mh-mega__sale-tiers">
-                    <a href="/collections/women-sale-less-than-30">30% Off</a>
-                    <a href="/collections/women-sale-less-tan-40">40% Off</a>
-                    <a href="/collections/women-sale-less-than-50">50% Off</a>
-                    <a href="/collections/women-60-off">60%+ Off</a>
+        {%- for link in linklists['womens-menu'].links -%}
+          {%- assign link_lower = link.title | downcase -%}
+          {%- assign is_highlight = false -%}
+          {%- if link_lower contains 'sale' or link_lower contains 'new arrivals' -%}
+            {%- assign is_highlight = true -%}
+          {%- endif -%}
+          <div class="mh-subnav__item">
+            <a href="{{ link.url }}"{% if is_highlight %} class="mh-highlight"{% endif %}>{{ link.title }}</a>
+            {%- unless is_highlight -%}
+              <div class="mh-mega{% if link.links.size == 0 %} mh-mega--slim{% endif %}">
+                {%- if link.links.size > 0 -%}
+                  <div class="mh-mega__main">
+                    {%- if link_lower contains 'designer' -%}
+                      <span class="mh-mega__lbl">Designers</span>
+                      {%- assign half = link.links.size | divided_by: 2 -%}
+                      <div class="mh-mega__brands-grid">
+                        <div>{%- for child in link.links limit: half -%}<a href="{{ child.url }}">{{ child.title }}</a>{%- endfor -%}</div>
+                        <div>{%- for child in link.links offset: half -%}<a href="{{ child.url }}">{{ child.title }}</a>{%- endfor -%}</div>
+                      </div>
+                    {%- else -%}
+                      <div class="mh-mega__main-cols">
+                        <div class="mh-mega__sub">
+                          <span class="mh-mega__lbl">{{ link.title }}</span>
+                          {%- for child in link.links -%}<a href="{{ child.url }}">{{ child.title }}</a>{%- endfor -%}
+                        </div>
+                      </div>
+                    {%- endif -%}
                   </div>
+                {%- endif -%}
+                <div class="mh-mega__products" data-collection="{{ link.url }}">
+                  <div class="mh-mega__products-list"><span class="mh-mega__loading">Loading&hellip;</span></div>
                 </div>
               </div>
-            </div>
-            <div class="mh-mega__products" data-collection="/collections/women-sale">
-              <span class="mh-mega__lbl">Latest Products</span>
-              <div class="mh-mega__products-list"><span class="mh-mega__loading">Loading&hellip;</span></div>
-            </div>
+            {%- endunless -%}
           </div>
-        </div>
-
-        <div class="mh-subnav__item">
-          <a href="/blogs/editorial">Editorial</a>
-        </div>
-
+        {%- endfor -%}
       </div>
     </nav>
 
     <!-- ── Row 2: Men category nav ── -->
     <nav class="mh-subnav mh-subnav--hidden" data-g="men" aria-label="Men">
       <div class="mh-subnav__inner">
-
-        <div class="mh-subnav__item">
-          <a href="/collections/new-men" class="mh-highlight">New Arrivals</a>
-        </div>
-
-        <!-- TRENDING -->
-        <div class="mh-subnav__item">
-          <a href="/collections/men">Trending</a>
-          <div class="mh-mega">
-            <div class="mh-mega__cats">
-              <span class="mh-mega__lbl">Categories</span>
-              <a href="/collections/men-clothing">Clothing</a>
-              <a href="/collections/men-shoes">Shoes</a>
-              <a href="/collections/men-bags">Bags</a>
-              <a href="/collections/men-accessories">Accessories</a>
-            </div>
-            <div class="mh-mega__main">
-              <span class="mh-mega__lbl">Trending Now</span>
-              <div class="mh-mega__featured">
-                <a href="/collections/men">New Arrivals</a>
-                <a href="/collections/men-kidsuper">KidSuper x Mercedes</a>
-                <a href="/collections/men-ami-paris">Ami Paris</a>
-                <a href="/collections/men-willy-chavarria">Willy Chavarria x Adidas</a>
-              </div>
-            </div>
-            <div class="mh-mega__products" data-collection="/collections/new-men">
-              <span class="mh-mega__lbl">Latest Products</span>
-              <div class="mh-mega__products-list"><span class="mh-mega__loading">Loading&hellip;</span></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- DESIGNERS -->
-        <div class="mh-subnav__item">
-          <a href="/pages/designers">Designers</a>
-          <div class="mh-mega">
-            <div class="mh-mega__cats">
-              <span class="mh-mega__lbl">Categories</span>
-              <a href="/collections/men-clothing">Clothing</a>
-              <a href="/collections/men-shoes">Shoes</a>
-              <a href="/collections/men-bags">Bags</a>
-              <a href="/collections/men-accessories">Accessories</a>
-            </div>
-            <div class="mh-mega__main">
-              <span class="mh-mega__lbl">Designers</span>
-              <div class="mh-mega__brands-grid">
-                <div>
-                  <a href="/collections/men-alexander-mcqueen">Alexander McQueen</a>
-                  <a href="/collections/men-ami-paris">Ami Paris</a>
-                  <a href="/collections/men-amiri">Amiri</a>
-                  <a href="/collections/men-autry">Autry</a>
-                  <a href="/collections/men-balenciaga">Balenciaga</a>
-                  <a href="/collections/men-balmain">Balmain</a>
-                  <a href="/collections/men-casablanca">Casablanca</a>
-                  <a href="/collections/creed">Creed</a>
-                  <a href="/collections/men-diesel">Diesel</a>
-                  <a href="/collections/men-doublet">Doublet</a>
-                  <a href="/collections/men-entire-studios">Entire Studios</a>
-                  <a href="/collections/men-fear-of-god">Fear of God</a>
-                  <a href="/collections/gentle-monster">Gentle Monster</a>
-                  <a href="/collections/men-jacquemus">Jacquemus</a>
-                  <a href="/collections/men-kidsuper">KidSuper</a>
-                </div>
-                <div>
-                  <a href="/collections/men-lemaire">Lemaire</a>
-                  <a href="/collections/men-loewe">Loewe</a>
-                  <a href="/collections/men-maison-margiela">Maison Margiela</a>
-                  <a href="/collections/men-maison-mihara-yasuhiro">Maison Mihara Yasuhiro</a>
-                  <a href="/collections/men-off-white">Off-White</a>
-                  <a href="/collections/men-palm-angels">Palm Angels</a>
-                  <a href="/collections/men-post-archive-faction">Post Archive Faction</a>
-                  <a href="/collections/men-represent">Represent</a>
-                  <a href="/collections/men-rick-owens">Rick Owens</a>
-                  <a href="/collections/men-rick-owens-drkshdw">Rick Owens DRKSHDW</a>
-                  <a href="/collections/men-sacai">Sacai</a>
-                  <a href="/collections/men-stone-island">Stone Island</a>
-                  <a href="/collections/men-wales-bonner">Wales Bonner</a>
-                  <a href="/collections/men-we11done">We11done</a>
-                  <a href="/collections/men-y3">Y-3</a>
-                  <a href="/pages/designers" style="color:var(--mh-gold);margin-top:8px">View All &rarr;</a>
-                </div>
-              </div>
-            </div>
-            <div class="mh-mega__products" data-collection="/collections/men">
-              <span class="mh-mega__lbl">Latest Products</span>
-              <div class="mh-mega__products-list"><span class="mh-mega__loading">Loading&hellip;</span></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- CLOTHING -->
-        <div class="mh-subnav__item">
-          <a href="/collections/men-clothing">Clothing</a>
-          <div class="mh-mega">
-            <div class="mh-mega__cats">
-              <span class="mh-mega__lbl">Categories</span>
-              <a href="/collections/men-clothing" class="is-active">Clothing</a>
-              <a href="/collections/men-shoes">Shoes</a>
-              <a href="/collections/men-bags">Bags</a>
-              <a href="/collections/men-accessories">Accessories</a>
-            </div>
-            <div class="mh-mega__main">
-              <div class="mh-mega__main-cols">
-                <div class="mh-mega__sub">
-                  <span class="mh-mega__lbl">Sub-categories</span>
-                  <a href="/collections/men-clothing">View All Clothing</a>
-                  <a href="/collections/men-clothing-coats">Coats</a>
-                  <a href="/collections/men-clothing-jackets">Jackets</a>
-                  <a href="/collections/men-clothing-hoodies">Hoodies &amp; Sweatshirts</a>
-                  <a href="/collections/men-clothing-t-shirts">T-Shirts</a>
-                  <a href="/collections/men-clothing-knitwears">Knitwear</a>
-                  <a href="/collections/men-clothing-pants">Pants</a>
-                  <a href="/collections/men-clothing-jeans">Jeans</a>
-                  <a href="/collections/men-clothing-shorts">Shorts</a>
-                </div>
-                <div class="mh-mega__cat-designers">
-                  <span class="mh-mega__lbl">Designers</span>
-                  <a href="/collections/men-ami-paris-clothing">Ami Paris</a>
-                  <a href="/collections/men-balenciaga-clothing">Balenciaga</a>
-                  <a href="/collections/men-entire-studios-clothing">Entire Studios</a>
-                  <a href="/collections/men-fear-of-god-clothing">Fear of God</a>
-                  <a href="/collections/men-lemaire-clothing">Lemaire</a>
-                  <a href="/collections/men-loewe-clothing">Loewe</a>
-                  <a href="/collections/men-maison-margiela-clothing">Maison Margiela</a>
-                  <a href="/collections/men-rick-owens-clothing">Rick Owens</a>
-                  <a href="/collections/men-sacai-clothing">Sacai</a>
-                  <a href="/collections/men-stone-island-clothing">Stone Island</a>
-                </div>
-              </div>
-            </div>
-            <div class="mh-mega__products" data-collection="/collections/men-clothing">
-              <span class="mh-mega__lbl">Latest Products</span>
-              <div class="mh-mega__products-list"><span class="mh-mega__loading">Loading&hellip;</span></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- SHOES -->
-        <div class="mh-subnav__item">
-          <a href="/collections/men-shoes">Shoes</a>
-          <div class="mh-mega">
-            <div class="mh-mega__cats">
-              <span class="mh-mega__lbl">Categories</span>
-              <a href="/collections/men-clothing">Clothing</a>
-              <a href="/collections/men-shoes" class="is-active">Shoes</a>
-              <a href="/collections/men-bags">Bags</a>
-              <a href="/collections/men-accessories">Accessories</a>
-            </div>
-            <div class="mh-mega__main">
-              <div class="mh-mega__main-cols">
-                <div class="mh-mega__sub">
-                  <span class="mh-mega__lbl">Sub-categories</span>
-                  <a href="/collections/men-shoes">View All Shoes</a>
-                  <a href="/collections/men-shoes-sneakers">Sneakers</a>
-                  <a href="/collections/men-shoes-boots">Boots</a>
-                  <a href="/collections/men-shoes-lace-ups-oxfords">Lace Ups &amp; Oxfords</a>
-                  <a href="/collections/men-shoes-sandals">Sandals &amp; Slides</a>
-                  <a href="/collections/men-shoes-loafers">Loafers</a>
-                </div>
-                <div class="mh-mega__cat-designers">
-                  <span class="mh-mega__lbl">Designers</span>
-                  <a href="/collections/men-alexander-mcqueen-shoes">Alexander McQueen</a>
-                  <a href="/collections/men-amiri-shoes">Amiri</a>
-                  <a href="/collections/men-autry-shoes">Autry</a>
-                  <a href="/collections/men-balenciaga-shoes">Balenciaga</a>
-                  <a href="/collections/men-loewe-shoes">Loewe</a>
-                  <a href="/collections/men-maison-margiela-shoes">Maison Margiela</a>
-                  <a href="/collections/men-maison-mihara-yasuhiro-shoes">MMY</a>
-                  <a href="/collections/men-rick-owens-shoes">Rick Owens</a>
-                  <a href="/collections/men-represent-shoes">Represent</a>
-                  <a href="/collections/men-veja-shoes">Veja</a>
-                </div>
-              </div>
-            </div>
-            <div class="mh-mega__products" data-collection="/collections/men-shoes">
-              <span class="mh-mega__lbl">Latest Products</span>
-              <div class="mh-mega__products-list"><span class="mh-mega__loading">Loading&hellip;</span></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- BAGS -->
-        <div class="mh-subnav__item">
-          <a href="/collections/men-bags">Bags</a>
-          <div class="mh-mega">
-            <div class="mh-mega__cats">
-              <span class="mh-mega__lbl">Categories</span>
-              <a href="/collections/men-clothing">Clothing</a>
-              <a href="/collections/men-shoes">Shoes</a>
-              <a href="/collections/men-bags" class="is-active">Bags</a>
-              <a href="/collections/men-accessories">Accessories</a>
-            </div>
-            <div class="mh-mega__main">
-              <div class="mh-mega__main-cols">
-                <div class="mh-mega__sub">
-                  <span class="mh-mega__lbl">Sub-categories</span>
-                  <a href="/collections/men-bags">View All Bags</a>
-                  <a href="/collections/men-bags-backpacks">Backpacks</a>
-                  <a href="/collections/men-bags-shoulder-bags">Shoulder Bags</a>
-                  <a href="/collections/men-bags-mini-crossbody">Mini &amp; Crossbody</a>
-                  <a href="/collections/men-bags-shopper-tote-bags">Shopper &amp; Tote</a>
-                  <a href="/collections/men-bags-belt-bags">Belt Bags</a>
-                </div>
-                <div class="mh-mega__cat-designers">
-                  <span class="mh-mega__lbl">Designers</span>
-                  <a href="/collections/men-balenciaga-bags">Balenciaga</a>
-                  <a href="/collections/men-jacquemus-bags">Jacquemus</a>
-                  <a href="/collections/men-lemaire-bags">Lemaire</a>
-                  <a href="/collections/men-loewe-bags">Loewe</a>
-                  <a href="/collections/men-maison-margiela-bags">Maison Margiela</a>
-                  <a href="/collections/men-maison-mihara-yasuhiro-bags">MMY</a>
-                  <a href="/collections/men-rick-owens-bags">Rick Owens</a>
-                  <a href="/collections/men-stone-island-bags">Stone Island</a>
-                  <a href="/collections/men-y3-bags">Y-3</a>
-                </div>
-              </div>
-            </div>
-            <div class="mh-mega__products" data-collection="/collections/men-bags">
-              <span class="mh-mega__lbl">Latest Products</span>
-              <div class="mh-mega__products-list"><span class="mh-mega__loading">Loading&hellip;</span></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- ACCESSORIES -->
-        <div class="mh-subnav__item">
-          <a href="/collections/men-accessories">Accessories</a>
-          <div class="mh-mega">
-            <div class="mh-mega__cats">
-              <span class="mh-mega__lbl">Categories</span>
-              <a href="/collections/men-clothing">Clothing</a>
-              <a href="/collections/men-shoes">Shoes</a>
-              <a href="/collections/men-bags">Bags</a>
-              <a href="/collections/men-accessories" class="is-active">Accessories</a>
-            </div>
-            <div class="mh-mega__main">
-              <div class="mh-mega__main-cols">
-                <div class="mh-mega__sub">
-                  <span class="mh-mega__lbl">Sub-categories</span>
-                  <a href="/collections/men-accessories">View All Accessories</a>
-                  <a href="/collections/men-accs-jewelry">Jewellery</a>
-                  <a href="/collections/men-accs-hats">Hats &amp; Caps</a>
-                  <a href="/collections/men-accs-sunglasses">Sunglasses</a>
-                  <a href="/collections/men-accs-belts">Belts</a>
-                  <a href="/collections/men-accs-scarves">Scarves</a>
-                  <a href="/collections/men-accs-wallets-pouches">Wallets &amp; Pouches</a>
-                </div>
-                <div class="mh-mega__cat-designers">
-                  <span class="mh-mega__lbl">Designers</span>
-                  <a href="/collections/men-balenciaga-accessories">Balenciaga</a>
-                  <a href="/collections/creed">Creed</a>
-                  <a href="/collections/gentle-monster">Gentle Monster</a>
-                  <a href="/collections/men-loewe-accessories">Loewe</a>
-                  <a href="/collections/men-maison-margiela-accessories">Maison Margiela</a>
-                  <a href="/collections/men-off-white-accessories">Off-White</a>
-                  <a href="/collections/men-sacai-accessories">Sacai</a>
-                  <a href="/collections/men-stone-island-accessories">Stone Island</a>
-                  <a href="/collections/trudon">Trudon</a>
-                </div>
-              </div>
-            </div>
-            <div class="mh-mega__products" data-collection="/collections/men-accessories">
-              <span class="mh-mega__lbl">Latest Products</span>
-              <div class="mh-mega__products-list"><span class="mh-mega__loading">Loading&hellip;</span></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- SALE -->
-        <div class="mh-subnav__item">
-          <a href="/collections/men-sale" class="mh-highlight">Sale</a>
-          <div class="mh-mega">
-            <div class="mh-mega__cats">
-              <span class="mh-mega__lbl">Categories</span>
-              <a href="/collections/men-clothing">Clothing</a>
-              <a href="/collections/men-shoes">Shoes</a>
-              <a href="/collections/men-bags">Bags</a>
-              <a href="/collections/men-accessories">Accessories</a>
-            </div>
-            <div class="mh-mega__main">
-              <div class="mh-mega__main-cols">
-                <div class="mh-mega__sub">
-                  <span class="mh-mega__lbl">Shop By Category</span>
-                  <a href="/collections/men-sale">All Men's Sale</a>
-                  <a href="/collections/men-sale-clothing">Clothing Sale</a>
-                  <a href="/collections/men-sale-shoes">Shoes Sale</a>
-                  <a href="/collections/men-sale-bags">Bags Sale</a>
-                  <a href="/collections/men-sale-accs">Accessories Sale</a>
-                </div>
-                <div class="mh-mega__cat-designers">
-                  <span class="mh-mega__lbl">Shop By Discount</span>
-                  <div class="mh-mega__sale-tiers">
-                    <a href="/collections/men-sale-less-than-30">30% Off</a>
-                    <a href="/collections/men-sale-less-than-40">40% Off</a>
-                    <a href="/collections/men-sale-less-than-50">50% Off</a>
-                    <a href="/collections/men-60-off">60%+ Off</a>
+        {%- for link in linklists['mens-menu'].links -%}
+          {%- assign link_lower = link.title | downcase -%}
+          {%- assign is_highlight = false -%}
+          {%- if link_lower contains 'sale' or link_lower contains 'new arrivals' -%}
+            {%- assign is_highlight = true -%}
+          {%- endif -%}
+          <div class="mh-subnav__item">
+            <a href="{{ link.url }}"{% if is_highlight %} class="mh-highlight"{% endif %}>{{ link.title }}</a>
+            {%- unless is_highlight -%}
+              <div class="mh-mega{% if link.links.size == 0 %} mh-mega--slim{% endif %}">
+                {%- if link.links.size > 0 -%}
+                  <div class="mh-mega__main">
+                    {%- if link_lower contains 'designer' -%}
+                      <span class="mh-mega__lbl">Designers</span>
+                      {%- assign half = link.links.size | divided_by: 2 -%}
+                      <div class="mh-mega__brands-grid">
+                        <div>{%- for child in link.links limit: half -%}<a href="{{ child.url }}">{{ child.title }}</a>{%- endfor -%}</div>
+                        <div>{%- for child in link.links offset: half -%}<a href="{{ child.url }}">{{ child.title }}</a>{%- endfor -%}</div>
+                      </div>
+                    {%- else -%}
+                      <div class="mh-mega__main-cols">
+                        <div class="mh-mega__sub">
+                          <span class="mh-mega__lbl">{{ link.title }}</span>
+                          {%- for child in link.links -%}<a href="{{ child.url }}">{{ child.title }}</a>{%- endfor -%}
+                        </div>
+                      </div>
+                    {%- endif -%}
                   </div>
+                {%- endif -%}
+                <div class="mh-mega__products" data-collection="{{ link.url }}">
+                  <div class="mh-mega__products-list"><span class="mh-mega__loading">Loading&hellip;</span></div>
                 </div>
               </div>
-            </div>
-            <div class="mh-mega__products" data-collection="/collections/men-sale">
-              <span class="mh-mega__lbl">Latest Products</span>
-              <div class="mh-mega__products-list"><span class="mh-mega__loading">Loading&hellip;</span></div>
-            </div>
+            {%- endunless -%}
           </div>
-        </div>
-
-        <div class="mh-subnav__item">
-          <a href="/blogs/editorial">Editorial</a>
-        </div>
-
+        {%- endfor -%}
       </div>
     </nav>
 
@@ -749,12 +192,19 @@
       function set(g) {
         document.querySelectorAll('.js-gender').forEach(function (t) { t.classList.toggle('mh-gender__tab--active', t.dataset.g === g); });
         document.querySelectorAll('.mh-subnav').forEach(function (n) { n.classList.toggle('mh-subnav--hidden', n.dataset.g !== g); });
+        document.querySelectorAll('[data-gender]').forEach(function (el) {
+          var eg = el.dataset.gender;
+          if (eg === 'both' || !eg) return;
+          el.style.display = (eg === g) ? '' : 'none';
+        });
+        var gTab = document.querySelector('.mh-prod__tab[data-gender="' + g + '"]');
+        if (gTab && !gTab.classList.contains('mh-prod__tab--active')) gTab.click();
       }
 
       /* Mega menu: lazy-load latest products on first hover */
       var _cache = {};
-      function fmt(cents) {
-        return new Intl.NumberFormat('en-AU', { style: 'currency', currency: 'AUD' }).format(cents / 100);
+      function fmt(price) {
+        return new Intl.NumberFormat('en-AU', { style: 'currency', currency: 'AUD' }).format(price);
       }
       function loadProducts(panel) {
         var col = panel.dataset.collection;
@@ -793,7 +243,33 @@
     }());
     </script>
 
+    <!-- HEADER SEARCH PANEL -->
+    <div class="mh-search-panel" id="mh-search-panel" aria-hidden="true" role="search">
+      <div class="mh-search-panel__inner">
+        <form class="mh-search-panel__form" action="/search" method="get">
+          <input type="hidden" name="type" value="product,article">
+          <svg class="mh-search-panel__icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <input
+            type="search"
+            name="q"
+            id="mh-search-input"
+            class="mh-search-panel__input"
+            placeholder="Search products, editorials…"
+            autocomplete="off"
+            aria-label="Search"
+          >
+          <button type="button" class="mh-search-panel__close" id="mh-search-close" aria-label="Close search">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1l14 14M15 1L1 15"/></svg>
+          </button>
+        </form>
+        <div class="mh-search-panel__results" id="mh-search-panel-results"></div>
+      </div>
+    </div>
+
   </header>
+
+  <!-- SEARCH OVERLAY -->
+  <div class="mh-search-overlay" id="mh-search-overlay"></div>
 
   <!-- MOBILE NAV DRAWER -->
   <div class="mh-mob-overlay" id="mh-mob-overlay" aria-hidden="true"></div>
@@ -823,165 +299,52 @@
 
     <!-- Women nav -->
     <div class="mh-mob-nav__section" data-g="women">
-      <a href="/collections/womens-new-arrivals" class="mh-mob-nav__highlight">New Arrivals</a>
-      <details class="mh-mob-nav__group">
-        <summary class="mh-mob-nav__group-title">Trending <svg class="mh-mob-nav__chevron" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4l4 4 4-4"/></svg></summary>
-        <div class="mh-mob-nav__sub">
-          <a href="/collections/womens-new-arrivals">New Arrivals</a>
-          <a href="/collections/women-loewe">Loewe</a>
-          <a href="/collections/women-sacai">Sacai</a>
-          <a href="/collections/women-accs-sunglasses">Sunglasses</a>
-        </div>
-      </details>
-      <details class="mh-mob-nav__group">
-        <summary class="mh-mob-nav__group-title">Designers <svg class="mh-mob-nav__chevron" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4l4 4 4-4"/></svg></summary>
-        <div class="mh-mob-nav__sub">
-          <a href="/collections/women-alexander-mcqueen">Alexander McQueen</a>
-          <a href="/collections/women-ami-paris">Ami Paris</a>
-          <a href="/collections/women-balenciaga">Balenciaga</a>
-          <a href="/collections/women-loewe">Loewe</a>
-          <a href="/collections/women-maison-margiela">Maison Margiela</a>
-          <a href="/collections/women-rick-owens">Rick Owens</a>
-          <a href="/collections/women-sacai">Sacai</a>
-          <a href="/pages/designers">View All Designers →</a>
-        </div>
-      </details>
-      <details class="mh-mob-nav__group">
-        <summary class="mh-mob-nav__group-title">Clothing <svg class="mh-mob-nav__chevron" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4l4 4 4-4"/></svg></summary>
-        <div class="mh-mob-nav__sub">
-          <a href="/collections/women-clothing">View All Clothing</a>
-          <a href="/collections/women-clothing-coats">Coats</a>
-          <a href="/collections/women-clothing-jackets">Jackets</a>
-          <a href="/collections/women-clothing-knitwears">Knitwear</a>
-          <a href="/collections/women-clothing-dresses">Dresses</a>
-          <a href="/collections/women-clothing-tops">Tops</a>
-          <a href="/collections/women-clothing-pants">Pants &amp; Trousers</a>
-          <a href="/collections/women-clothing-jeans">Jeans</a>
-          <a href="/collections/women-clothing-skirts">Skirts</a>
-        </div>
-      </details>
-      <details class="mh-mob-nav__group">
-        <summary class="mh-mob-nav__group-title">Shoes <svg class="mh-mob-nav__chevron" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4l4 4 4-4"/></svg></summary>
-        <div class="mh-mob-nav__sub">
-          <a href="/collections/women-shoes">View All Shoes</a>
-          <a href="/collections/women-shoes-sneakers">Sneakers</a>
-          <a href="/collections/women-shoes-boots">Boots</a>
-          <a href="/collections/women-shoes-sandals">Sandals &amp; Slides</a>
-          <a href="/collections/women-shoes-pumps">Pumps &amp; Heels</a>
-          <a href="/collections/women-shoes-loafers">Loafers</a>
-          <a href="/collections/women-shoes-ballerinas">Ballerinas</a>
-        </div>
-      </details>
-      <details class="mh-mob-nav__group">
-        <summary class="mh-mob-nav__group-title">Bags <svg class="mh-mob-nav__chevron" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4l4 4 4-4"/></svg></summary>
-        <div class="mh-mob-nav__sub">
-          <a href="/collections/women-bags">View All Bags</a>
-          <a href="/collections/women-bags-shoulder-bags">Shoulder Bags</a>
-          <a href="/collections/women-bags-mini-crossbody">Mini &amp; Crossbody</a>
-          <a href="/collections/women-bags-shopper-tote-bags">Totes &amp; Shoppers</a>
-          <a href="/collections/women-bags-backpacks">Backpacks</a>
-          <a href="/collections/women-bags-clutches">Clutches</a>
-        </div>
-      </details>
-      <details class="mh-mob-nav__group">
-        <summary class="mh-mob-nav__group-title">Accessories <svg class="mh-mob-nav__chevron" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4l4 4 4-4"/></svg></summary>
-        <div class="mh-mob-nav__sub">
-          <a href="/collections/women-accessories">View All Accessories</a>
-          <a href="/collections/women-accs-jewelry">Jewellery</a>
-          <a href="/collections/women-accs-hats">Hats &amp; Caps</a>
-          <a href="/collections/women-accs-sunglasses">Sunglasses</a>
-          <a href="/collections/women-accs-belts">Belts</a>
-          <a href="/collections/women-accs-scarves">Scarves</a>
-        </div>
-      </details>
-      <a href="/collections/women-sale" class="mh-mob-nav__highlight">Sale</a>
-      <a href="/blogs/editorial" class="mh-mob-nav__link">Editorial</a>
+      {%- for link in linklists['womens-menu'].links -%}
+        {%- assign link_lower = link.title | downcase -%}
+        {%- assign is_highlight = false -%}
+        {%- if link_lower contains 'sale' or link_lower contains 'new arrivals' -%}
+          {%- assign is_highlight = true -%}
+        {%- endif -%}
+        {%- if link.links.size > 0 -%}
+          <details class="mh-mob-nav__group">
+            <summary class="mh-mob-nav__group-title">{{ link.title }} <svg class="mh-mob-nav__chevron" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4l4 4 4-4"/></svg></summary>
+            <div class="mh-mob-nav__sub">
+              {%- for child in link.links -%}<a href="{{ child.url }}">{{ child.title }}</a>{%- endfor -%}
+            </div>
+          </details>
+        {%- else -%}
+          <a href="{{ link.url }}" class="{% if is_highlight %}mh-mob-nav__highlight{% else %}mh-mob-nav__link{% endif %}">{{ link.title }}</a>
+        {%- endif -%}
+      {%- endfor -%}
     </div>
 
     <!-- Men nav -->
     <div class="mh-mob-nav__section mh-mob-nav__section--hidden" data-g="men">
-      <a href="/collections/new-men" class="mh-mob-nav__highlight">New Arrivals</a>
-      <details class="mh-mob-nav__group">
-        <summary class="mh-mob-nav__group-title">Trending <svg class="mh-mob-nav__chevron" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4l4 4 4-4"/></svg></summary>
-        <div class="mh-mob-nav__sub">
-          <a href="/collections/new-men">New Arrivals</a>
-          <a href="/collections/men-kidsuper">KidSuper</a>
-          <a href="/collections/men-ami-paris">Ami Paris</a>
-          <a href="/collections/men-willy-chavarria">Willy Chavarria</a>
-        </div>
-      </details>
-      <details class="mh-mob-nav__group">
-        <summary class="mh-mob-nav__group-title">Designers <svg class="mh-mob-nav__chevron" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4l4 4 4-4"/></svg></summary>
-        <div class="mh-mob-nav__sub">
-          <a href="/collections/men-alexander-mcqueen">Alexander McQueen</a>
-          <a href="/collections/men-ami-paris">Ami Paris</a>
-          <a href="/collections/men-balenciaga">Balenciaga</a>
-          <a href="/collections/men-lemaire">Lemaire</a>
-          <a href="/collections/men-loewe">Loewe</a>
-          <a href="/collections/men-maison-margiela">Maison Margiela</a>
-          <a href="/collections/men-rick-owens">Rick Owens</a>
-          <a href="/collections/men-sacai">Sacai</a>
-          <a href="/pages/designers">View All Designers →</a>
-        </div>
-      </details>
-      <details class="mh-mob-nav__group">
-        <summary class="mh-mob-nav__group-title">Clothing <svg class="mh-mob-nav__chevron" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4l4 4 4-4"/></svg></summary>
-        <div class="mh-mob-nav__sub">
-          <a href="/collections/men-clothing">View All Clothing</a>
-          <a href="/collections/men-clothing-coats">Coats</a>
-          <a href="/collections/men-clothing-jackets">Jackets</a>
-          <a href="/collections/men-clothing-hoodies">Hoodies &amp; Sweatshirts</a>
-          <a href="/collections/men-clothing-t-shirts">T-Shirts</a>
-          <a href="/collections/men-clothing-knitwears">Knitwear</a>
-          <a href="/collections/men-clothing-pants">Pants</a>
-          <a href="/collections/men-clothing-jeans">Jeans</a>
-          <a href="/collections/men-clothing-shorts">Shorts</a>
-        </div>
-      </details>
-      <details class="mh-mob-nav__group">
-        <summary class="mh-mob-nav__group-title">Shoes <svg class="mh-mob-nav__chevron" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4l4 4 4-4"/></svg></summary>
-        <div class="mh-mob-nav__sub">
-          <a href="/collections/men-shoes">View All Shoes</a>
-          <a href="/collections/men-shoes-sneakers">Sneakers</a>
-          <a href="/collections/men-shoes-boots">Boots</a>
-          <a href="/collections/men-shoes-lace-ups-oxfords">Lace Ups &amp; Oxfords</a>
-          <a href="/collections/men-shoes-sandals">Sandals &amp; Slides</a>
-          <a href="/collections/men-shoes-loafers">Loafers</a>
-        </div>
-      </details>
-      <details class="mh-mob-nav__group">
-        <summary class="mh-mob-nav__group-title">Bags <svg class="mh-mob-nav__chevron" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4l4 4 4-4"/></svg></summary>
-        <div class="mh-mob-nav__sub">
-          <a href="/collections/men-bags">View All Bags</a>
-          <a href="/collections/men-bags-backpacks">Backpacks</a>
-          <a href="/collections/men-bags-shoulder-bags">Shoulder Bags</a>
-          <a href="/collections/men-bags-mini-crossbody">Mini &amp; Crossbody</a>
-          <a href="/collections/men-bags-shopper-tote-bags">Shopper &amp; Tote</a>
-          <a href="/collections/men-bags-belt-bags">Belt Bags</a>
-        </div>
-      </details>
-      <details class="mh-mob-nav__group">
-        <summary class="mh-mob-nav__group-title">Accessories <svg class="mh-mob-nav__chevron" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4l4 4 4-4"/></svg></summary>
-        <div class="mh-mob-nav__sub">
-          <a href="/collections/men-accessories">View All Accessories</a>
-          <a href="/collections/men-accs-jewelry">Jewellery</a>
-          <a href="/collections/men-accs-hats">Hats &amp; Caps</a>
-          <a href="/collections/men-accs-sunglasses">Sunglasses</a>
-          <a href="/collections/men-accs-belts">Belts</a>
-          <a href="/collections/men-accs-scarves">Scarves</a>
-          <a href="/collections/men-accs-wallets-pouches">Wallets &amp; Pouches</a>
-        </div>
-      </details>
-      <a href="/collections/men-sale" class="mh-mob-nav__highlight">Sale</a>
-      <a href="/blogs/editorial" class="mh-mob-nav__link">Editorial</a>
+      {%- for link in linklists['mens-menu'].links -%}
+        {%- assign link_lower = link.title | downcase -%}
+        {%- assign is_highlight = false -%}
+        {%- if link_lower contains 'sale' or link_lower contains 'new arrivals' -%}
+          {%- assign is_highlight = true -%}
+        {%- endif -%}
+        {%- if link.links.size > 0 -%}
+          <details class="mh-mob-nav__group">
+            <summary class="mh-mob-nav__group-title">{{ link.title }} <svg class="mh-mob-nav__chevron" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4l4 4 4-4"/></svg></summary>
+            <div class="mh-mob-nav__sub">
+              {%- for child in link.links -%}<a href="{{ child.url }}">{{ child.title }}</a>{%- endfor -%}
+            </div>
+          </details>
+        {%- else -%}
+          <a href="{{ link.url }}" class="{% if is_highlight %}mh-mob-nav__highlight{% else %}mh-mob-nav__link{% endif %}">{{ link.title }}</a>
+        {%- endif -%}
+      {%- endfor -%}
     </div>
 
     <!-- Bottom icons row -->
     <div class="mh-mob-nav__foot">
-      <a href="/search" class="mh-mob-nav__foot-btn" aria-label="Search">
+      <button class="mh-mob-nav__foot-btn" id="mh-mob-search-trigger" aria-label="Search">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
         <span>Search</span>
-      </a>
+      </button>
       <a href="/account" class="mh-mob-nav__foot-btn" aria-label="Account">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
         <span>Account</span>
@@ -1168,16 +531,14 @@
     </div>
   </footer>
 
-  {%- if template.name == 'collection' -%}
+  {%- if template.name == 'collection' or template.name == 'index' or template.name == 'search' -%}
     <div class="marais-toast" id="marais-toast" aria-live="polite"></div>
     <script src="{{ 'marais-collection.js' | asset_url }}" defer></script>
   {%- endif -%}
   {%- if template.name == 'cart' -%}
     <script src="{{ 'marais-cart.js' | asset_url }}" defer></script>
   {%- endif -%}
-  {%- if template.name == 'search' -%}
-    <script src="{{ 'marais-search.js' | asset_url }}" defer></script>
-  {%- endif -%}
+  <script src="{{ 'marais-search.js' | asset_url }}" defer></script>
   <script src="{{ 'marais-account.js' | asset_url }}" defer></script>
 
   <!-- MINI CART JS -->

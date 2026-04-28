@@ -1,0 +1,131 @@
+<div class="mh-timeline-outer">
+  <div class="mh-timeline">
+    <div class="mh-timeline__hdr">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="mh-timeline__eyebrow">{{ section.settings.eyebrow }}</p>
+      {%- endif -%}
+      {%- if section.settings.title != blank -%}
+        <h2 class="mh-timeline__title">{{ section.settings.title }}</h2>
+      {%- endif -%}
+    </div>
+
+    <div class="mh-timeline__inner">
+      <div class="mh-timeline__track">
+        <div class="mh-timeline__line" aria-hidden="true"></div>
+
+        {%- assign ms_idx = 0 -%}
+        {%- for block in section.blocks -%}
+
+          {%- if block.type == 'era' -%}
+            <div class="mh-tl__era" {{ block.shopify_attributes }}>
+              <span class="mh-tl__era-sub">{{ block.settings.subtitle }}</span>
+              <span class="mh-tl__era-title">{{ block.settings.title }}</span>
+            </div>
+
+          {%- elsif block.type == 'milestone' -%}
+            {%- assign side_mod = ms_idx | modulo: 2 -%}
+            {%- assign ms_idx = ms_idx | plus: 1 -%}
+
+            <div class="mh-tl__item{% if side_mod == 1 %} mh-tl__item--right{% endif %}" {{ block.shopify_attributes }}>
+              {%- if side_mod == 0 -%}
+                <div class="mh-tl__card">
+                  <h3 class="mh-tl__headline">{{ block.settings.headline }}</h3>
+                  {%- if block.settings.body != blank -%}<p class="mh-tl__body">{{ block.settings.body }}</p>{%- endif -%}
+                </div>
+                <div class="mh-tl__center"><div class="mh-tl__dot"></div><span class="mh-tl__year">{{ block.settings.year }}</span></div>
+                <div class="mh-tl__spacer"></div>
+              {%- else -%}
+                <div class="mh-tl__spacer"></div>
+                <div class="mh-tl__center"><div class="mh-tl__dot"></div><span class="mh-tl__year">{{ block.settings.year }}</span></div>
+                <div class="mh-tl__card">
+                  <h3 class="mh-tl__headline">{{ block.settings.headline }}</h3>
+                  {%- if block.settings.body != blank -%}<p class="mh-tl__body">{{ block.settings.body }}</p>{%- endif -%}
+                </div>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var outer    = document.currentScript.previousElementSibling;
+  var timeline = outer.querySelector('.mh-timeline');
+  var scroller = outer.querySelector('.mh-timeline__inner');
+  var track    = outer.querySelector('.mh-timeline__track');
+  var items    = outer.querySelectorAll('.mh-tl__item');
+  var eras     = outer.querySelectorAll('.mh-tl__era');
+
+  /* ── Size the outer wrapper so the page scroll equals the inner scroll range ── */
+  function setup() {
+    var maxScroll = track.scrollHeight - scroller.clientHeight;
+    outer.style.height = (window.innerHeight + Math.max(0, maxScroll)) + 'px';
+  }
+
+  /* ── On page scroll, drive the inner scrollTop directly ── */
+  function sync() {
+    var progress = Math.max(0, -outer.getBoundingClientRect().top);
+    scroller.scrollTop = progress;
+    updateProximity();
+  }
+
+  /* ── Proximity fade/scale ── */
+  function updateProximity() {
+    var sr     = scroller.getBoundingClientRect();
+    var centre = sr.top + sr.height * 0.5;
+    items.forEach(function (el) {
+      var rect = el.getBoundingClientRect();
+      var prox = Math.max(0, 1 - Math.abs(centre - (rect.top + rect.height / 2)) / (sr.height * 0.5));
+      el.style.opacity   = 0.18 + prox * 0.82;
+      el.style.transform = 'scale(' + (0.96 + prox * 0.06) + ')';
+    });
+    eras.forEach(function (era) {
+      if (era.getBoundingClientRect().top < centre + 60) era.classList.add('mh-tl__era--vis');
+    });
+  }
+
+  /* ── Init ── */
+  setup();
+  sync();
+
+  window.addEventListener('scroll', sync,  { passive: true });
+  window.addEventListener('resize', function () { setup(); sync(); }, { passive: true });
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Timeline",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Our History" },
+    { "type": "text", "id": "title",   "label": "Title",   "default": "The Evolution of MARAIS" }
+  ],
+  "blocks": [
+    {
+      "type": "era",
+      "name": "Era / Chapter",
+      "settings": [
+        { "type": "text", "id": "title",    "label": "Era title",    "placeholder": "The Early Years" },
+        { "type": "text", "id": "subtitle", "label": "Era subtitle", "placeholder": "Establishing Luxury" }
+      ]
+    },
+    {
+      "type": "milestone",
+      "name": "Milestone",
+      "settings": [
+        { "type": "text",     "id": "year",     "label": "Year",      "placeholder": "2004" },
+        { "type": "text",     "id": "headline", "label": "Headline",  "placeholder": "The Multi-Brand Debut" },
+        { "type": "textarea", "id": "body",     "label": "Body text" }
+      ]
+    }
+  ],
+  "presets": [
+    { "name": "Timeline" }
+  ]
+}
+{% endschema %}

@@ -1,4 +1,4 @@
-<section class="mh-cat-sec">
+<section class="mh-cat-sec"{% unless section.settings.gender == 'both' %} data-gender="{{ section.settings.gender }}"{% endunless %}>
   <div style="max-width:1440px;margin:0 auto;">
     <div class="mh-sec__hdr mh-fu">
       <div>
@@ -52,7 +52,8 @@
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Shop by Category" },
     { "type": "text", "id": "title", "label": "Title", "default": "The Edit" },
     { "type": "text", "id": "see_all_label", "label": "See all label", "default": "Shop All" },
-    { "type": "url", "id": "see_all_link", "label": "See all link" }
+    { "type": "url", "id": "see_all_link", "label": "See all link" },
+    { "type": "select", "id": "gender", "label": "Show for", "options": [{ "value": "both", "label": "Everyone" }, { "value": "women", "label": "Women only" }, { "value": "men", "label": "Men only" }], "default": "both" }
   ],
   "blocks": [
     {

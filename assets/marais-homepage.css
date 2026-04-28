@@ -662,14 +662,28 @@
   display: flex;
   align-items: center;
   white-space: nowrap;
+  position: relative;
   transition: opacity 0.2s;
 }
-.mh-subnav__item > a:hover { opacity: 0.5; }
+.mh-subnav__item > a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 13px;
+  right: 13px;
+  height: 1px;
+  background: var(--mh-black);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.25s ease;
+}
+.mh-subnav__item:hover > a::after { transform: scaleX(1); }
 .mh-highlight { color: var(--mh-red) !important; }
+.mh-highlight::after { background: var(--mh-red) !important; }
 
 /* === MEGA MENU === */
 .mh-mega {
-  display: none;
+  display: grid;
   position: absolute;
   top: 100%;
   left: 0;
@@ -677,12 +691,23 @@
   background: var(--mh-white);
   border-top: 1px solid var(--mh-light);
   border-bottom: 1px solid var(--mh-light);
-  box-shadow: 0 16px 48px rgba(0,0,0,0.08);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.1);
   z-index: 999;
-  grid-template-columns: 160px 1fr 280px;
+  grid-template-columns: 1fr 280px;
   min-height: 280px;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(-6px);
+  transition: opacity 0.22s ease, transform 0.22s ease, visibility 0s linear 0.22s;
 }
-.mh-subnav__item:hover .mh-mega { display: grid; }
+.mh-subnav__item:hover .mh-mega {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0);
+  transition: opacity 0.22s ease, transform 0.22s ease, visibility 0s linear 0s;
+}
 
 .mh-mega__lbl {
   display: block;
@@ -697,34 +722,14 @@
   border-bottom: 1px solid var(--mh-light);
 }
 
-/* Left: Categories panel */
-.mh-mega__cats {
-  padding: 28px 20px 28px 32px;
-  border-right: 1px solid var(--mh-light);
-  display: flex;
-  flex-direction: column;
-}
-.mh-mega__cats a {
-  font-size: 11px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  font-family: var(--mh-sans);
-  color: var(--mh-black);
-  text-decoration: none;
-  padding: 9px 0;
-  border-bottom: 1px solid var(--mh-light);
-  transition: opacity 0.15s;
-  display: block;
-}
-.mh-mega__cats a:last-child { border-bottom: none; }
-.mh-mega__cats a:hover { opacity: 0.45; }
-.mh-mega__cats a.is-active { font-weight: 600; }
+
+/* Products-only mega (no child nav links configured in Shopify admin) */
+.mh-mega--slim { min-height: 0; }
 
 /* Middle: Main content panel */
 .mh-mega__main {
   padding: 28px 36px;
   border-right: 1px solid var(--mh-light);
-  overflow: hidden;
 }
 
 /* Designers full 2-col grid */
@@ -817,6 +822,7 @@
   background: var(--mh-cream);
   display: flex;
   flex-direction: column;
+  grid-column: 2;
 }
 .mh-mega__products-list {
   display: flex;

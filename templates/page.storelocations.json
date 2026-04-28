@@ -1,0 +1,120 @@
+{
+  "sections": {
+
+    "loc_hero": {
+      "type": "marais-editorial-feature",
+      "settings": {
+        "image_side": "right",
+        "eyebrow": "Find Us",
+        "heading": "Five Boutiques.\nOne City.",
+        "body": "<p>MARAIS is woven into Melbourne's most considered neighbourhoods — from Bourke Street to QV, Chadstone and beyond. Each boutique reflects the character of its location while staying true to a singular curatorial vision.</p><p>Visit us in-store to experience the full edit, speak with our stylists, and discover pieces that speak to you.</p>",
+        "cta_label": "Contact Us",
+        "cta_link": "/pages/contact"
+      }
+    },
+
+    "loc_stats": {
+      "type": "marais-stats-bar",
+      "blocks": {
+        "s1": { "type": "stat", "settings": { "number": "5",    "label": "Melbourne Boutiques" } },
+        "s2": { "type": "stat", "settings": { "number": "2004", "label": "Est. Melbourne" } },
+        "s3": { "type": "stat", "settings": { "number": "50+",  "label": "Global Designers" } },
+        "s4": { "type": "stat", "settings": { "number": "20+",  "label": "Years of Curation" } }
+      },
+      "block_order": ["s1","s2","s3","s4"],
+      "settings": {}
+    },
+
+    "loc_boutiques": {
+      "type": "marais-locations",
+      "blocks": {
+        "l1": {
+          "type": "location",
+          "settings": {
+            "name": "Marais Women's Boutique",
+            "address": "73-77 Bourke Street,\nMelbourne VIC 3000",
+            "phone": "+61 3 8658 9555",
+            "maps_link": "https://maps.google.com/?q=73-77+Bourke+Street,+Melbourne+VIC+3000",
+            "embed_url": "https://www.google.com/maps?q=73-77+Bourke+Street,+Melbourne+VIC+3000&output=embed"
+          }
+        },
+        "l2": {
+          "type": "location",
+          "settings": {
+            "name": "Marais Women QV",
+            "address": "Shop SW282 QV Melbourne,\n286 Swanston St,\nMelbourne VIC 3000",
+            "phone": "+61 3 8658 9550",
+            "maps_link": "https://maps.google.com/?q=Shop+SW282+QV+Melbourne,+286+Swanston+St,+Melbourne+VIC+3000",
+            "embed_url": "https://www.google.com/maps?q=Shop+SW282+QV+Melbourne,+286+Swanston+St,+Melbourne+VIC+3000&output=embed"
+          }
+        },
+        "l3": {
+          "type": "location",
+          "settings": {
+            "name": "Marais QV",
+            "address": "Shop SW288 QV Melbourne,\n286 Swanston St,\nMelbourne VIC 3000",
+            "phone": "+61 3 8658 9550",
+            "maps_link": "https://maps.google.com/?q=Shop+SW288+QV+Melbourne,+286+Swanston+St,+Melbourne+VIC+3000",
+            "embed_url": "https://www.google.com/maps?q=Shop+SW288+QV+Melbourne,+286+Swanston+St,+Melbourne+VIC+3000&output=embed"
+          }
+        },
+        "l4": {
+          "type": "location",
+          "settings": {
+            "name": "Marais Chadstone",
+            "address": "Shop G34, Chadstone Shopping Centre,\n1341 Dandenong Rd, Chadstone VIC 3148",
+            "phone": "+61 3 9639 0314",
+            "maps_link": "https://maps.google.com/?q=Shop+G34,+Chadstone+Shopping+Centre,+1341+Dandenong+Rd,+Chadstone+VIC+3148",
+            "embed_url": "https://www.google.com/maps?q=Shop+G34,+Chadstone+Shopping+Centre,+1341+Dandenong+Rd,+Chadstone+VIC+3148&output=embed"
+          }
+        },
+        "l5": {
+          "type": "location",
+          "settings": {
+            "name": "Marais Men Lux Chadstone",
+            "address": "Shop G39, Chadstone Shopping Centre,\n1341 Dandenong Rd, Chadstone VIC 3148",
+            "phone": "+61 3 9639 0314",
+            "maps_link": "https://maps.google.com/?q=Shop+G39,+Chadstone+Shopping+Centre,+1341+Dandenong+Rd,+Chadstone+VIC+3148",
+            "embed_url": "https://www.google.com/maps?q=Shop+G39,+Chadstone+Shopping+Centre,+1341+Dandenong+Rd,+Chadstone+VIC+3148&output=embed"
+          }
+        }
+      },
+      "block_order": ["l1","l2","l3","l4","l5"],
+      "settings": {
+        "eyebrow": "Our Boutiques",
+        "title": "Visit Us",
+        "layout": "rows"
+      }
+    },
+
+    "loc_contact": {
+      "type": "marais-contact-info",
+      "blocks": {
+        "c1": { "type": "contact", "settings": { "label": "Product enquiries",   "email": "enquiries@marais.com.au" } },
+        "c2": { "type": "contact", "settings": { "label": "Customer care",       "email": "customercare@marais.com.au" } },
+        "c3": { "type": "contact", "settings": { "label": "General information", "email": "info@marais.com.au" } },
+        "c4": { "type": "contact", "settings": { "label": "Press / Media",       "email": "marketing@marais.com.au" } }
+      },
+      "block_order": ["c1","c2","c3","c4"],
+      "settings": {
+        "eyebrow": "Get in Touch",
+        "title": "Contact Information",
+        "note": "The feedback of our customers is vital to improving and maintaining the MARAIS experience."
+      }
+    },
+
+    "loc_newsletter": {
+      "type": "marais-newsletter",
+      "settings": {}
+    }
+
+  },
+
+  "order": [
+    "loc_hero",
+    "loc_stats",
+    "loc_boutiques",
+    "loc_contact",
+    "loc_newsletter"
+  ]
+}

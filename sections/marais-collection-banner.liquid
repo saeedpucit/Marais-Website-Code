@@ -2,7 +2,7 @@
 {%- assign bg = section.settings.bg_color | default: 'var(--mh-cream)' -%}
 {%- assign text_col = section.settings.text_color | default: 'var(--mh-black)' -%}
 
-<div class="mh-split mh-split--{{ layout }}" style="background-color: {{ bg }}; --split-text: {{ text_col }}; --split-inv: {{ bg }}">
+<div class="mh-split mh-split--{{ layout }}"{% unless section.settings.gender == 'both' %} data-gender="{{ section.settings.gender }}"{% endunless %} style="background-color: {{ bg }}; --split-text: {{ text_col }}; --split-inv: {{ bg }}">
 
   <div class="mh-split__image">
     {%- if section.settings.image != blank -%}
@@ -109,7 +109,8 @@
       "id": "text_color",
       "label": "Text colour",
       "default": "#0a0a0a"
-    }
+    },
+    { "type": "select", "id": "gender", "label": "Show for", "options": [{ "value": "both", "label": "Everyone" }, { "value": "women", "label": "Women only" }, { "value": "men", "label": "Men only" }], "default": "both" }
   ],
   "presets": [
     {

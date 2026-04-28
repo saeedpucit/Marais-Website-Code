@@ -1,62 +1,22 @@
-{%- assign active_labels = '' -%}
-{%- for value in filter.active_values -%}
-  {%- unless forloop.first -%}{%- assign active_labels = active_labels | append: ', ' -%}{%- endunless -%}
-  {%- assign active_labels = active_labels | append: value.label -%}
-{%- endfor -%}
-
-<div class="filter-colour-label" id="ColourFilterLabel">{{ active_labels }}</div>
-
-<div class="filter-colour-grid" role="list">
+<ul class="filter-list" role="list">
   {%- for value in filter.values -%}
-    {%- assign is_active = value.active -%}
-    {%- unless is_active -%}{%- if value.count == 0 -%}{%- continue -%}{%- endif -%}{%- endunless -%}
-    <label
-      class="filter-colour{% if is_active %} filter-colour--active{% endif %}"
-      title="{{ value.label }}"
-      role="listitem"
-    >
-      <input
-        type="checkbox"
-        class="filter-checkbox sr-only"
-        {% if is_active %}checked{% endif %}
-        {% if is_oos %}disabled{% endif %}
-        data-url-add="{{ value.url_to_add }}"
-        data-url-remove="{{ value.url_to_remove }}"
-      >
-      {%- if value.image -%}
-        <span class="colour-swatch" style="background-image:url('{{ value.image | img_url: '60x60' }}');background-size:cover;" aria-hidden="true"></span>
-      {%- elsif value.color -%}
-        <span class="colour-swatch" style="background:{{ value.color }};" aria-hidden="true"></span>
-      {%- else -%}
-        <span class="colour-swatch js-cswatch" data-c="{{ value.label | downcase | replace: ' ', '-' }}" aria-hidden="true"></span>
-      {%- endif -%}
-    </label>
+    {%- assign is_active   = value.active -%}
+    {%- assign is_disabled = false -%}
+    {%- unless is_active -%}{%- if value.count == 0 -%}{%- assign is_disabled = true -%}{%- endif -%}{%- endunless -%}
+    {%- if is_disabled -%}{%- continue -%}{%- endif -%}
+    <li>
+      <label class="filter-opt{% if is_active %} filter-opt--active{% endif %}{% if is_disabled %} filter-opt--disabled{% endif %}">
+        <input
+          type="checkbox"
+          class="filter-checkbox sr-only"
+          {% if is_active %}checked{% endif %}
+          {% if is_disabled %}disabled{% endif %}
+          data-url-add="{{ value.url_to_add }}"
+          data-url-remove="{{ value.url_to_remove }}"
+        >
+        <span class="filter-opt__label">{{ value.label | downcase | capitalize }}</span>
+        {%- if value.count > 0 -%}<span class="filter-opt__count">({{ value.count }})</span>{%- endif -%}
+      </label>
+    </li>
   {%- endfor -%}
-</div>
-
-<script>
-(function () {
-  var CM = {
-    'black':'#111','white':'#f5f5f5','ivory':'#fffff0','cream':'#fffdd0','off-white':'#f8f4ef',
-    'beige':'#f5f0e8','sand':'#c2b280','camel':'#c19a6b','tan':'#d2b48c','taupe':'#b09f8c',
-    'brown':'#8b4513','chocolate':'#7b3f00','burgundy':'#800020','red':'#cc0000','wine':'#722f37',
-    'pink':'#ffc0cb','blush':'#ffb6c1','rose':'#ff007f','coral':'#ff7f50','orange':'#ff6600',
-    'yellow':'#ffd700','mustard':'#ffdb58','olive':'#808000','khaki':'#c3b091',
-    'green':'#3a7d44','sage':'#9caf88','emerald':'#006400','forest':'#228b22','mint':'#98ff98',
-    'teal':'#008080','aqua':'#00ffff','blue':'#1e3a8a','navy':'#001f5b','navy-blue':'#001f5b',
-    'cobalt':'#0047ab','sky':'#87ceeb','denim':'#1560bd','grey':'#878787','gray':'#878787',
-    'light-grey':'#cccccc','light-gray':'#cccccc','silver':'#c0c0c0','charcoal':'#36454f',
-    'metallic':'#a8a9ad','gold':'#d4a017','purple':'#6b21a8','lilac':'#c084fc','multi':'#b86bdf'
-  };
-  var LIGHT = {'white':1,'ivory':1,'cream':1,'off-white':1,'yellow':1,'gold':1,'silver':1,'light-grey':1,'light-gray':1,'mint':1,'aqua':1,'sky':1};
-  document.querySelectorAll('.js-cswatch').forEach(function (el) {
-    var key = el.getAttribute('data-c');
-    if (CM[key]) { el.style.background = CM[key]; }
-    if (LIGHT[key]) { el.classList.add('colour-swatch--light'); }
-  });
-  document.querySelectorAll('.product-card__swatch[data-c]').forEach(function (el) {
-    var key = el.getAttribute('data-c').replace(/ /g, '-');
-    if (CM[key]) { el.style.background = CM[key]; }
-  });
-}());
-</script>
+</ul>

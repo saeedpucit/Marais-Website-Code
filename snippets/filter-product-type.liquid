@@ -1,37 +1,36 @@
 {%- comment -%}
-  Path: "GENDER CATEGORY SUBCATEGORY LEAF_WORDS..."
-  L1 = p[0] gender     (Women / Men) — Women first
-  L2 = p[1] category   (Clothing / Shoes / Bags / Accessories) — ordered
-  L3 = p[2] subcategory (Jackets, Knitwear, …)
-  Leaf = p[3..] joined
+  3-part:           GENDER CATEGORY SUBCATEGORY             → direct checkbox
+  4-part multiword: GENDER CATEGORY SUB1 & SUB2             → direct checkbox, label = "Sub1 & Sub2"
+                    GENDER BAGS BELT BAGS                   → direct checkbox, label = "Belt bags"
+                    GENDER BAGS SHOULDER BAGS               → direct checkbox, label = "Shoulder bags"
+  4-part leaf:      GENDER CATEGORY SUBCATEGORY LEAF...     → expandable group + leaf checkboxes
 {%- endcomment -%}
 
 {%- assign gender_order = 'WOMEN|MEN' | split: '|' -%}
 {%- assign l2_order     = 'CLOTHING|SHOES|BAGS|ACCESSORIES' | split: '|' -%}
 
+{%- assign _ch = collection_handle | downcase -%}
+{%- if _ch contains 'women' -%}
+  {%- assign current_gender = 'WOMEN' -%}
+{%- elsif _ch contains 'men' -%}
+  {%- assign current_gender = 'MEN' -%}
+{%- else -%}
+  {%- assign current_gender = '' -%}
+{%- endif -%}
+
 {%- for g_raw in gender_order -%}
+
+  {%- if current_gender != '' and g_raw != current_gender -%}{%- continue -%}{%- endif -%}
 
   {%- assign g_has = false -%}
   {%- for v in filter.values -%}
     {%- assign vp = v.label | split: ' ' -%}
-    {%- if vp.size >= 4 and vp[0] == g_raw -%}{%- assign g_has = true -%}{%- break -%}{%- endif -%}
+    {%- if vp.size >= 3 and vp[0] == g_raw -%}{%- assign g_has = true -%}{%- break -%}{%- endif -%}
   {%- endfor -%}
   {%- unless g_has -%}{%- continue -%}{%- endunless -%}
 
-  {%- assign g_active = 0 -%}
-  {%- for v in filter.values -%}
-    {%- assign vp = v.label | split: ' ' -%}
-    {%- if vp[0] == g_raw and v.active -%}{%- assign g_active = g_active | plus: 1 -%}{%- endif -%}
-  {%- endfor -%}
-
-  <details class="fcat-l1"{% if g_active > 0 %} open{% endif %}>
-    <summary class="fcat-l1__sum">
-      <span class="fcat-arrow">
-        <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="3 2 7 5 3 8"/></svg>
-      </span>
-      <span class="fcat-l1__label">{{ g_raw | downcase | capitalize }}</span>
-      {%- if g_active > 0 -%}<span class="fcat-active-count">({{ g_active }})</span>{%- endif -%}
-    </summary>
+  <div class="fcat-l1">
+    <a href="/collections/{{ g_raw | downcase }}" class="fcat-l1__link">{{ g_raw | downcase | capitalize }}</a>
 
     <ul class="fcat-l2-ul">
       {%- assign seen_l2 = '' -%}
@@ -42,7 +41,7 @@
         {%- assign l2_has = false -%}
         {%- for v in filter.values -%}
           {%- assign vp = v.label | split: ' ' -%}
-          {%- if vp.size >= 4 and vp[0] == g_raw and vp[1] == l2_raw -%}{%- assign l2_has = true -%}{%- break -%}{%- endif -%}
+          {%- if vp.size >= 3 and vp[0] == g_raw and vp[1] == l2_raw -%}{%- assign l2_has = true -%}{%- break -%}{%- endif -%}
         {%- endfor -%}
         {%- unless l2_has -%}{%- continue -%}{%- endunless -%}
         {%- assign seen_l2 = seen_l2 | append: l2_key -%}
@@ -50,15 +49,15 @@
         {%- assign l2_active = 0 -%}
         {%- for v in filter.values -%}
           {%- assign vp = v.label | split: ' ' -%}
-          {%- if vp[0] == g_raw and vp[1] == l2_raw and v.active -%}{%- assign l2_active = l2_active | plus: 1 -%}{%- endif -%}
+          {%- if vp.size >= 3 and vp[0] == g_raw and vp[1] == l2_raw and v.active -%}
+            {%- assign l2_active = l2_active | plus: 1 -%}
+          {%- endif -%}
         {%- endfor -%}
 
         <li>
-          <details class="fcat-l2"{% if l2_active > 0 %} open{% endif %}>
+          <details class="fcat-l2">
             <summary class="fcat-l2__sum">
-              <span class="fcat-arrow fcat-arrow--sm">
-                <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="3 2 7 5 3 8"/></svg>
-              </span>
+
               <span class="fcat-l2__label">{{ l2_raw | downcase | capitalize }}</span>
               {%- if l2_active > 0 -%}<span class="fcat-active-count">({{ l2_active }})</span>{%- endif -%}
             </summary>
@@ -66,68 +65,126 @@
             <ul class="fcat-l3-ul">
               {%- assign seen_l3 = '' -%}
 
-              {%- for v2 in filter.values -%}
-                {%- assign p2 = v2.label | split: ' ' -%}
-                {%- unless p2.size >= 4 and p2[0] == g_raw and p2[1] == l2_raw -%}{%- continue -%}{%- endunless -%}
+              {%- for v3 in filter.values -%}
+                {%- assign p3 = v3.label | split: ' ' -%}
+                {%- unless p3.size >= 3 and p3[0] == g_raw and p3[1] == l2_raw -%}{%- continue -%}{%- endunless -%}
 
-                {%- assign l3_raw = p2[2] -%}
-                {%- assign l3_key = '|||' | append: l3_raw | append: '|||' -%}
+                {%- assign l3_base = p3[2] -%}
+
+                {%- comment -%} Determine if this is a multi-word subcategory (no leaf level) {%- endcomment -%}
+                {%- assign is_multiword = false -%}
+                {%- if p3.size >= 4 -%}
+                  {%- if p3[3] == '&' -%}
+                    {%- assign is_multiword = true -%}
+                  {%- elsif l3_base == 'BELT' and p3[3] == 'BAGS' -%}
+                    {%- assign is_multiword = true -%}
+                  {%- elsif l3_base == 'SHOULDER' and p3[3] == 'BAGS' -%}
+                    {%- assign is_multiword = true -%}
+                  {%- endif -%}
+                {%- endif -%}
+
+                {%- if is_multiword -%}
+                  {%- assign l3_display = '' -%}
+                  {%- for word in p3 -%}
+                    {%- if forloop.index0 >= 2 -%}
+                      {%- unless l3_display == '' -%}{%- assign l3_display = l3_display | append: ' ' -%}{%- endunless -%}
+                      {%- assign l3_display = l3_display | append: word -%}
+                    {%- endif -%}
+                  {%- endfor -%}
+                {%- else -%}
+                  {%- assign l3_display = l3_base -%}
+                {%- endif -%}
+
+                {%- assign l3_key = '|||' | append: l3_display | append: '|||' -%}
                 {%- if seen_l3 contains l3_key -%}{%- continue -%}{%- endif -%}
                 {%- assign seen_l3 = seen_l3 | append: l3_key -%}
 
                 {%- assign l3_active = 0 -%}
                 {%- for v in filter.values -%}
                   {%- assign vp = v.label | split: ' ' -%}
-                  {%- if vp[0] == g_raw and vp[1] == l2_raw and vp[2] == l3_raw and v.active -%}{%- assign l3_active = l3_active | plus: 1 -%}{%- endif -%}
+                  {%- if vp.size >= 3 and vp[0] == g_raw and vp[1] == l2_raw and vp[2] == l3_base and v.active -%}
+                    {%- assign l3_active = l3_active | plus: 1 -%}
+                  {%- endif -%}
+                {%- endfor -%}
+
+                {%- assign has_l4 = false -%}
+                {%- for vck in filter.values -%}
+                  {%- assign pck = vck.label | split: ' ' -%}
+                  {%- unless pck.size >= 4 and pck[0] == g_raw and pck[1] == l2_raw and pck[2] == l3_base -%}{%- continue -%}{%- endunless -%}
+                  {%- assign pck_multiword = false -%}
+                  {%- if pck[3] == '&' -%}{%- assign pck_multiword = true -%}
+                  {%- elsif l3_base == 'BELT' and pck[3] == 'BAGS' -%}{%- assign pck_multiword = true -%}
+                  {%- elsif l3_base == 'SHOULDER' and pck[3] == 'BAGS' -%}{%- assign pck_multiword = true -%}
+                  {%- endif -%}
+                  {%- unless pck_multiword -%}{%- assign has_l4 = true -%}{%- break -%}{%- endunless -%}
                 {%- endfor -%}
 
                 <li>
-                  <details class="fcat-l3"{% if l3_active > 0 %} open{% endif %}>
-                    <summary class="fcat-l3__sum">
-                      <span class="fcat-arrow fcat-arrow--sm">
-                        <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="3 2 7 5 3 8"/></svg>
-                      </span>
-                      <span class="fcat-l3__label">{{ l3_raw | downcase | capitalize }}</span>
-                      {%- if l3_active > 0 -%}<span class="fcat-active-count">({{ l3_active }})</span>{%- endif -%}
-                    </summary>
+                  {%- if has_l4 -%}
 
-                    <ul class="fcat-l4-ul">
-                      {%- for v3 in filter.values -%}
-                        {%- assign p3 = v3.label | split: ' ' -%}
-                        {%- unless p3.size >= 4 and p3[0] == g_raw and p3[1] == l2_raw and p3[2] == l3_raw -%}{%- continue -%}{%- endunless -%}
+                    <details class="fcat-l3">
+                      <summary class="fcat-l3__sum">
 
-                        {%- assign leaf = '' -%}
-                        {%- for lp in p3 -%}
-                          {%- if forloop.index0 >= 3 -%}
-                            {%- unless leaf == '' -%}{%- assign leaf = leaf | append: ' ' -%}{%- endunless -%}
-                            {%- assign leaf = leaf | append: lp | capitalize -%}
+                        <span class="fcat-l3__label">{{ l3_display | downcase | capitalize }}</span>
+                        {%- if l3_active > 0 -%}<span class="fcat-active-count">({{ l3_active }})</span>{%- endif -%}
+                      </summary>
+
+                      <ul class="fcat-l4-ul">
+                        {%- for v4 in filter.values -%}
+                          {%- assign p4 = v4.label | split: ' ' -%}
+                          {%- unless p4.size >= 4 and p4[0] == g_raw and p4[1] == l2_raw and p4[2] == l3_base -%}{%- continue -%}{%- endunless -%}
+                          {%- assign p4_multiword = false -%}
+                          {%- if p4[3] == '&' -%}{%- assign p4_multiword = true -%}
+                          {%- elsif l3_base == 'BELT' and p4[3] == 'BAGS' -%}{%- assign p4_multiword = true -%}
+                          {%- elsif l3_base == 'SHOULDER' and p4[3] == 'BAGS' -%}{%- assign p4_multiword = true -%}
                           {%- endif -%}
+                          {%- if p4_multiword -%}{%- continue -%}{%- endif -%}
+
+                          {%- assign leaf = '' -%}
+                          {%- for word in p4 -%}
+                            {%- if forloop.index0 >= 3 -%}
+                              {%- unless leaf == '' -%}{%- assign leaf = leaf | append: ' ' -%}{%- endunless -%}
+                              {%- assign leaf = leaf | append: word -%}
+                            {%- endif -%}
+                          {%- endfor -%}
+
+                          {%- assign is_active   = v4.active -%}
+                          {%- assign is_disabled = false -%}
+                          {%- unless is_active -%}{%- if v4.count == 0 -%}{%- assign is_disabled = true -%}{%- endif -%}{%- endunless -%}
+
+                          <li>
+                            <a href="{% if is_active %}{{ v4.url_to_remove }}{% else %}{{ v4.url_to_add }}{% endif %}" class="fcat-opt fcat-opt--leaf{% if is_active %} fcat-opt--on{% endif %}{% if is_disabled %} fcat-opt--disabled{% endif %}">
+                              <span class="fcat-opt__lbl">{{ leaf | downcase | capitalize }}</span>
+                              {%- if v4.count > 0 -%}<span class="fcat-opt__cnt">({{ v4.count }})</span>{%- endif -%}
+                            </a>
+                          </li>
                         {%- endfor -%}
+                      </ul>
+                    </details>
 
-                        {%- assign is_active = v3.active -%}
-                        {%- assign is_disabled = false -%}
-                        {%- unless is_active -%}
-                          {%- if v3.count == 0 -%}{%- assign is_disabled = true -%}{%- endif -%}
-                        {%- endunless -%}
+                  {%- else -%}
 
-                        <li>
-                          <label class="fcat-opt fcat-opt--leaf{% if is_active %} fcat-opt--on{% endif %}{% if is_disabled %} fcat-opt--disabled{% endif %}">
-                            <input
-                              type="checkbox"
-                              class="filter-checkbox sr-only"
-                              {% if is_active %}checked{% endif %}
-                              {% if is_disabled %}disabled{% endif %}
-                              data-url-add="{{ v3.url_to_add }}"
-                              data-url-remove="{{ v3.url_to_remove }}"
-                            >
-                            <span class="fcheck fcheck--xs{% if is_active %} fcheck--on{% endif %}" aria-hidden="true"></span>
-                            <span class="fcat-opt__lbl">{{ leaf }}</span>
-                            {%- if v3.count > 0 -%}<span class="fcat-opt__cnt">({{ v3.count }})</span>{%- endif -%}
-                          </label>
-                        </li>
-                      {%- endfor -%}
-                    </ul>
-                  </details>
+                    {%- for v3b in filter.values -%}
+                      {%- assign p3b = v3b.label | split: ' ' -%}
+                      {%- unless p3b.size >= 3 and p3b[0] == g_raw and p3b[1] == l2_raw and p3b[2] == l3_base -%}{%- continue -%}{%- endunless -%}
+                      {%- if p3b.size >= 4 -%}
+                        {%- assign p3b_multiword = false -%}
+                        {%- if p3b[3] == '&' -%}{%- assign p3b_multiword = true -%}
+                        {%- elsif l3_base == 'BELT' and p3b[3] == 'BAGS' -%}{%- assign p3b_multiword = true -%}
+                        {%- elsif l3_base == 'SHOULDER' and p3b[3] == 'BAGS' -%}{%- assign p3b_multiword = true -%}
+                        {%- endif -%}
+                        {%- unless p3b_multiword -%}{%- continue -%}{%- endunless -%}
+                      {%- endif -%}
+                      {%- assign is_active   = v3b.active -%}
+                      {%- assign is_disabled = false -%}
+                      {%- unless is_active -%}{%- if v3b.count == 0 -%}{%- assign is_disabled = true -%}{%- endif -%}{%- endunless -%}
+                      <a href="{% if is_active %}{{ v3b.url_to_remove }}{% else %}{{ v3b.url_to_add }}{% endif %}" class="fcat-opt fcat-opt--leaf{% if is_active %} fcat-opt--on{% endif %}{% if is_disabled %} fcat-opt--disabled{% endif %}">
+                        <span class="fcat-opt__lbl">{{ l3_display | downcase | capitalize }}</span>
+                        {%- if v3b.count > 0 -%}<span class="fcat-opt__cnt">({{ v3b.count }})</span>{%- endif -%}
+                      </a>
+                    {%- endfor -%}
+
+                  {%- endif -%}
                 </li>
               {%- endfor -%}
             </ul>
@@ -135,10 +192,10 @@
         </li>
       {%- endfor -%}
 
-      {%- comment -%}Any L2 categories not in the ordered list{%- endcomment -%}
+      {%- comment -%} Any L2 categories not in the ordered list {%- endcomment -%}
       {%- for v2 in filter.values -%}
         {%- assign p2 = v2.label | split: ' ' -%}
-        {%- unless p2.size >= 4 and p2[0] == g_raw -%}{%- continue -%}{%- endunless -%}
+        {%- unless p2.size >= 3 and p2[0] == g_raw -%}{%- continue -%}{%- endunless -%}
         {%- assign l2_raw = p2[1] -%}
         {%- assign l2_key = '|||' | append: l2_raw | append: '|||' -%}
         {%- if seen_l2 contains l2_key -%}{%- continue -%}{%- endif -%}
@@ -147,89 +204,139 @@
         {%- assign l2_active = 0 -%}
         {%- for v in filter.values -%}
           {%- assign vp = v.label | split: ' ' -%}
-          {%- if vp[0] == g_raw and vp[1] == l2_raw and v.active -%}{%- assign l2_active = l2_active | plus: 1 -%}{%- endif -%}
+          {%- if vp.size >= 3 and vp[0] == g_raw and vp[1] == l2_raw and v.active -%}
+            {%- assign l2_active = l2_active | plus: 1 -%}
+          {%- endif -%}
         {%- endfor -%}
 
         <li>
-          <details class="fcat-l2"{% if l2_active > 0 %} open{% endif %}>
+          <details class="fcat-l2">
             <summary class="fcat-l2__sum">
-              <span class="fcat-arrow fcat-arrow--sm">
-                <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="3 2 7 5 3 8"/></svg>
-              </span>
+
               <span class="fcat-l2__label">{{ l2_raw | downcase | capitalize }}</span>
               {%- if l2_active > 0 -%}<span class="fcat-active-count">({{ l2_active }})</span>{%- endif -%}
             </summary>
 
             <ul class="fcat-l3-ul">
               {%- assign seen_l3 = '' -%}
-              {%- for v2b in filter.values -%}
-                {%- assign p2b = v2b.label | split: ' ' -%}
-                {%- unless p2b.size >= 4 and p2b[0] == g_raw and p2b[1] == l2_raw -%}{%- continue -%}{%- endunless -%}
+              {%- for v3 in filter.values -%}
+                {%- assign p3 = v3.label | split: ' ' -%}
+                {%- unless p3.size >= 3 and p3[0] == g_raw and p3[1] == l2_raw -%}{%- continue -%}{%- endunless -%}
 
-                {%- assign l3_raw = p2b[2] -%}
-                {%- assign l3_key = '|||' | append: l3_raw | append: '|||' -%}
+                {%- assign l3_base = p3[2] -%}
+
+                {%- assign is_multiword = false -%}
+                {%- if p3.size >= 4 -%}
+                  {%- if p3[3] == '&' -%}
+                    {%- assign is_multiword = true -%}
+                  {%- elsif l3_base == 'BELT' and p3[3] == 'BAGS' -%}
+                    {%- assign is_multiword = true -%}
+                  {%- elsif l3_base == 'SHOULDER' and p3[3] == 'BAGS' -%}
+                    {%- assign is_multiword = true -%}
+                  {%- endif -%}
+                {%- endif -%}
+
+                {%- if is_multiword -%}
+                  {%- assign l3_display = '' -%}
+                  {%- for word in p3 -%}
+                    {%- if forloop.index0 >= 2 -%}
+                      {%- unless l3_display == '' -%}{%- assign l3_display = l3_display | append: ' ' -%}{%- endunless -%}
+                      {%- assign l3_display = l3_display | append: word -%}
+                    {%- endif -%}
+                  {%- endfor -%}
+                {%- else -%}
+                  {%- assign l3_display = l3_base -%}
+                {%- endif -%}
+
+                {%- assign l3_key = '|||' | append: l3_display | append: '|||' -%}
                 {%- if seen_l3 contains l3_key -%}{%- continue -%}{%- endif -%}
                 {%- assign seen_l3 = seen_l3 | append: l3_key -%}
 
                 {%- assign l3_active = 0 -%}
                 {%- for v in filter.values -%}
                   {%- assign vp = v.label | split: ' ' -%}
-                  {%- if vp[0] == g_raw and vp[1] == l2_raw and vp[2] == l3_raw and v.active -%}{%- assign l3_active = l3_active | plus: 1 -%}{%- endif -%}
+                  {%- if vp.size >= 3 and vp[0] == g_raw and vp[1] == l2_raw and vp[2] == l3_base and v.active -%}
+                    {%- assign l3_active = l3_active | plus: 1 -%}
+                  {%- endif -%}
+                {%- endfor -%}
+
+                {%- assign has_l4 = false -%}
+                {%- for vck in filter.values -%}
+                  {%- assign pck = vck.label | split: ' ' -%}
+                  {%- unless pck.size >= 4 and pck[0] == g_raw and pck[1] == l2_raw and pck[2] == l3_base -%}{%- continue -%}{%- endunless -%}
+                  {%- assign pck_multiword = false -%}
+                  {%- if pck[3] == '&' -%}{%- assign pck_multiword = true -%}
+                  {%- elsif l3_base == 'BELT' and pck[3] == 'BAGS' -%}{%- assign pck_multiword = true -%}
+                  {%- elsif l3_base == 'SHOULDER' and pck[3] == 'BAGS' -%}{%- assign pck_multiword = true -%}
+                  {%- endif -%}
+                  {%- unless pck_multiword -%}{%- assign has_l4 = true -%}{%- break -%}{%- endunless -%}
                 {%- endfor -%}
 
                 <li>
-                  <details class="fcat-l3"{% if l3_active > 0 %} open{% endif %}>
-                    <summary class="fcat-l3__sum">
-                      <span class="fcat-arrow fcat-arrow--sm">
-                        <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="3 2 7 5 3 8"/></svg>
-                      </span>
-                      <span class="fcat-l3__label">{{ l3_raw | downcase | capitalize }}</span>
-                      {%- if l3_active > 0 -%}<span class="fcat-active-count">({{ l3_active }})</span>{%- endif -%}
-                    </summary>
+                  {%- if has_l4 -%}
+                    <details class="fcat-l3">
+                      <summary class="fcat-l3__sum">
 
-                    <ul class="fcat-l4-ul">
-                      {%- for v3 in filter.values -%}
-                        {%- assign p3 = v3.label | split: ' ' -%}
-                        {%- unless p3.size >= 4 and p3[0] == g_raw and p3[1] == l2_raw and p3[2] == l3_raw -%}{%- continue -%}{%- endunless -%}
-
-                        {%- assign leaf = '' -%}
-                        {%- for lp in p3 -%}
-                          {%- if forloop.index0 >= 3 -%}
-                            {%- unless leaf == '' -%}{%- assign leaf = leaf | append: ' ' -%}{%- endunless -%}
-                            {%- assign leaf = leaf | append: lp | capitalize -%}
+                        <span class="fcat-l3__label">{{ l3_display | downcase | capitalize }}</span>
+                        {%- if l3_active > 0 -%}<span class="fcat-active-count">({{ l3_active }})</span>{%- endif -%}
+                      </summary>
+                      <ul class="fcat-l4-ul">
+                        {%- for v4 in filter.values -%}
+                          {%- assign p4 = v4.label | split: ' ' -%}
+                          {%- unless p4.size >= 4 and p4[0] == g_raw and p4[1] == l2_raw and p4[2] == l3_base -%}{%- continue -%}{%- endunless -%}
+                          {%- assign p4_multiword = false -%}
+                          {%- if p4[3] == '&' -%}{%- assign p4_multiword = true -%}
+                          {%- elsif l3_base == 'BELT' and p4[3] == 'BAGS' -%}{%- assign p4_multiword = true -%}
+                          {%- elsif l3_base == 'SHOULDER' and p4[3] == 'BAGS' -%}{%- assign p4_multiword = true -%}
                           {%- endif -%}
+                          {%- if p4_multiword -%}{%- continue -%}{%- endif -%}
+                          {%- assign leaf = '' -%}
+                          {%- for word in p4 -%}
+                            {%- if forloop.index0 >= 3 -%}
+                              {%- unless leaf == '' -%}{%- assign leaf = leaf | append: ' ' -%}{%- endunless -%}
+                              {%- assign leaf = leaf | append: word -%}
+                            {%- endif -%}
+                          {%- endfor -%}
+                          {%- assign is_active   = v4.active -%}
+                          {%- assign is_disabled = false -%}
+                          {%- unless is_active -%}{%- if v4.count == 0 -%}{%- assign is_disabled = true -%}{%- endif -%}{%- endunless -%}
+                          <li>
+                            <a href="{% if is_active %}{{ v4.url_to_remove }}{% else %}{{ v4.url_to_add }}{% endif %}" class="fcat-opt fcat-opt--leaf{% if is_active %} fcat-opt--on{% endif %}{% if is_disabled %} fcat-opt--disabled{% endif %}">
+                              <span class="fcat-opt__lbl">{{ leaf | downcase | capitalize }}</span>
+                              {%- if v4.count > 0 -%}<span class="fcat-opt__cnt">({{ v4.count }})</span>{%- endif -%}
+                            </a>
+                          </li>
                         {%- endfor -%}
-
-                        {%- assign is_active = v3.active -%}
-                        {%- assign is_disabled = false -%}
-                        {%- unless is_active -%}
-                          {%- if v3.count == 0 -%}{%- assign is_disabled = true -%}{%- endif -%}
-                        {%- endunless -%}
-
-                        <li>
-                          <label class="fcat-opt fcat-opt--leaf{% if is_active %} fcat-opt--on{% endif %}{% if is_disabled %} fcat-opt--disabled{% endif %}">
-                            <input
-                              type="checkbox"
-                              class="filter-checkbox sr-only"
-                              {% if is_active %}checked{% endif %}
-                              {% if is_disabled %}disabled{% endif %}
-                              data-url-add="{{ v3.url_to_add }}"
-                              data-url-remove="{{ v3.url_to_remove }}"
-                            >
-                            <span class="fcheck fcheck--xs{% if is_active %} fcheck--on{% endif %}" aria-hidden="true"></span>
-                            <span class="fcat-opt__lbl">{{ leaf }}</span>
-                            {%- if v3.count > 0 -%}<span class="fcat-opt__cnt">({{ v3.count }})</span>{%- endif -%}
-                          </label>
-                        </li>
-                      {%- endfor -%}
-                    </ul>
-                  </details>
+                      </ul>
+                    </details>
+                  {%- else -%}
+                    {%- for v3b in filter.values -%}
+                      {%- assign p3b = v3b.label | split: ' ' -%}
+                      {%- unless p3b.size >= 3 and p3b[0] == g_raw and p3b[1] == l2_raw and p3b[2] == l3_base -%}{%- continue -%}{%- endunless -%}
+                      {%- if p3b.size >= 4 -%}
+                        {%- assign p3b_multiword = false -%}
+                        {%- if p3b[3] == '&' -%}{%- assign p3b_multiword = true -%}
+                        {%- elsif l3_base == 'BELT' and p3b[3] == 'BAGS' -%}{%- assign p3b_multiword = true -%}
+                        {%- elsif l3_base == 'SHOULDER' and p3b[3] == 'BAGS' -%}{%- assign p3b_multiword = true -%}
+                        {%- endif -%}
+                        {%- unless p3b_multiword -%}{%- continue -%}{%- endunless -%}
+                      {%- endif -%}
+                      {%- assign is_active   = v3b.active -%}
+                      {%- assign is_disabled = false -%}
+                      {%- unless is_active -%}{%- if v3b.count == 0 -%}{%- assign is_disabled = true -%}{%- endif -%}{%- endunless -%}
+                      <a href="{% if is_active %}{{ v3b.url_to_remove }}{% else %}{{ v3b.url_to_add }}{% endif %}" class="fcat-opt fcat-opt--leaf{% if is_active %} fcat-opt--on{% endif %}{% if is_disabled %} fcat-opt--disabled{% endif %}">
+                        <span class="fcat-opt__lbl">{{ l3_display | downcase | capitalize }}</span>
+                        {%- if v3b.count > 0 -%}<span class="fcat-opt__cnt">({{ v3b.count }})</span>{%- endif -%}
+                      </a>
+                    {%- endfor -%}
+                  {%- endif -%}
                 </li>
               {%- endfor -%}
             </ul>
           </details>
         </li>
       {%- endfor -%}
+
     </ul>
-  </details>
+  </div>
 {%- endfor -%}

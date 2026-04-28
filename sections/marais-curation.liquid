@@ -1,0 +1,56 @@
+<div class="mh-curation">
+  <div class="mh-curation__inner">
+    {%- if section.settings.eyebrow != blank -%}
+      <p class="mh-curation__eyebrow">{{ section.settings.eyebrow }}</p>
+    {%- endif -%}
+    {%- if section.settings.title != blank -%}
+      <h2 class="mh-curation__title">{{ section.settings.title }}</h2>
+    {%- endif -%}
+    {%- if section.settings.intro != blank -%}
+      <p class="mh-curation__intro">{{ section.settings.intro }}</p>
+    {%- endif -%}
+
+    <div class="mh-curation__grid">
+      {%- for block in section.blocks -%}
+        <div class="mh-curation__pillar" {{ block.shopify_attributes }}>
+          <span class="mh-curation__num">0{{ forloop.index }}</span>
+          <h3 class="mh-curation__pillar-title">{{ block.settings.title }}</h3>
+          <p class="mh-curation__pillar-body">{{ block.settings.body }}</p>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Curation Pillars",
+  "tag": "section",
+  "max_blocks": 6,
+  "settings": [
+    { "type": "text",     "id": "eyebrow", "label": "Eyebrow", "default": "The MARAIS Curation" },
+    { "type": "text",     "id": "title",   "label": "Title",   "default": "A Living Edit" },
+    { "type": "textarea", "id": "intro",   "label": "Intro",   "default": "We specialise in a meticulous mix — chosen for artistry and enduring appeal." }
+  ],
+  "blocks": [
+    {
+      "type": "pillar",
+      "name": "Pillar",
+      "settings": [
+        { "type": "text",     "id": "title", "label": "Category",    "placeholder": "Ready-to-Wear" },
+        { "type": "textarea", "id": "body",  "label": "Description", "placeholder": "From iconic heritage houses to the avant-garde new guard." }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Curation Pillars",
+      "blocks": [
+        { "type": "pillar", "settings": { "title": "Ready-to-Wear",       "body": "From iconic heritage houses to the avant-garde new guard." } },
+        { "type": "pillar", "settings": { "title": "Accessories",          "body": "An expansive selection of footwear, bags, and leather goods." } },
+        { "type": "pillar", "settings": { "title": "Lifestyle & Jewellery","body": "A sophisticated range of fine jewellery and curated lifestyle products." } }
+      ]
+    }
+  ]
+}
+{% endschema %}
