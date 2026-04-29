@@ -170,9 +170,9 @@
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         Free express delivery — order by 2pm for next business day
       </div>
-      <div class="mpdp-trust__item">
+      <div class="mpdp-trust__item" id="mpdpLocItem">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-        In store at MARAIS QV, Bourke St &amp; Chadstone
+        <span id="mpdpLocText">Checking store availability…</span>
       </div>
       <div class="mpdp-trust__item">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
@@ -242,22 +242,6 @@
   </div>
 </div>
 
-<!-- Cart sidebar -->
-<div class="mpdp-cart-ov" id="mpdpCartOv" onclick="mpdpCloseCart()"></div>
-<div class="mpdp-cart-sb" id="mpdpCartSb">
-  <div class="mpdp-cart-sb__hdr">
-    <h2 class="mpdp-cart-sb__h">Your Bag</h2>
-    <button class="mpdp-cart-sb__x" onclick="mpdpCloseCart()">&times;</button>
-  </div>
-  <div class="mpdp-cart-sb__body" id="mpdpCartBody">
-    <p class="mpdp-cart-sb__empty">Your bag is empty</p>
-  </div>
-  <div class="mpdp-cart-sb__foot">
-    <div class="mpdp-cart-sb__tot"><span>Total</span><strong id="mpdpCartTot">{{ cart.total_price | money }}</strong></div>
-    <a href="/cart" class="mpdp-cart-sb__checkout">Proceed to Checkout</a>
-    <p class="mpdp-cart-sb__note">Complimentary shipping on all Australian orders</p>
-  </div>
-</div>
 
 <!-- Toast -->
 <div class="mpdp-toast" id="mpdpToast"></div>
@@ -324,8 +308,8 @@
 /* Info */
 .mpdp-info{padding:48px 0 48px 52px;position:sticky;top:64px;max-height:calc(100vh - 64px);overflow-y:auto}
 .mpdp-info::-webkit-scrollbar{width:0}
-.mpdp-info__vendor{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--mh-gray);margin-bottom:10px;font-family:var(--mh-sans)}
-.mpdp-info__name{font-family:var(--mh-serif);font-size:clamp(28px,3vw,42px);font-weight:300;line-height:1.1;margin-bottom:6px;letter-spacing:-.01em}
+.mpdp-info__vendor{font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--mh-gray);margin-bottom:10px;font-family:var(--mh-sans)}
+.mpdp-info__name{font-family:var(--mh-serif);font-size:clamp(20px,2.2vw,30px);font-weight:300;line-height:1.1;margin-bottom:6px;letter-spacing:-.01em}
 .mpdp-info__col{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--mh-gold);margin-bottom:24px;font-family:var(--mh-sans)}
 .mpdp-info__price-row{display:flex;align-items:baseline;gap:10px;margin-bottom:6px}
 .mpdp-info__price{font-family:var(--mh-serif);font-size:28px;font-weight:400;letter-spacing:.02em}
@@ -390,29 +374,6 @@
 .mpdp-rel-name{font-family:var(--mh-serif);font-size:17px;font-weight:300;line-height:1.2;margin-bottom:10px}
 .mpdp-rel-price{font-size:13px;letter-spacing:.04em;font-family:var(--mh-sans)}
 
-/* Cart sidebar */
-.mpdp-cart-ov{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:1800;opacity:0;pointer-events:none;transition:opacity .3s}
-.mpdp-cart-ov.is-open{opacity:1;pointer-events:all}
-.mpdp-cart-sb{position:fixed;right:0;top:0;bottom:0;width:420px;background:var(--mh-white);z-index:1900;transform:translateX(100%);transition:transform .4s cubic-bezier(.25,.46,.45,.94);display:flex;flex-direction:column}
-.mpdp-cart-sb.is-open{transform:translateX(0)}
-.mpdp-cart-sb__hdr{padding:28px 30px;border-bottom:1px solid var(--mh-light);display:flex;justify-content:space-between;align-items:center}
-.mpdp-cart-sb__h{font-family:var(--mh-serif);font-size:26px;font-weight:300}
-.mpdp-cart-sb__x{background:none;border:none;cursor:pointer;font-size:22px;color:var(--mh-gray);line-height:1;transition:color .2s;font-family:var(--mh-sans)}.mpdp-cart-sb__x:hover{color:var(--mh-black)}
-.mpdp-cart-sb__body{flex:1;overflow-y:auto;padding:28px 30px}
-.mpdp-cart-sb__empty{color:var(--mh-gray);font-size:13px;text-align:center;padding:40px 0;font-family:var(--mh-sans)}
-.mpdp-ci{display:flex;gap:16px;margin-bottom:24px;padding-bottom:24px;border-bottom:1px solid var(--mh-light)}
-.mpdp-ci__img{width:84px;height:104px;background:var(--mh-cream);flex-shrink:0;overflow:hidden}
-.mpdp-ci__img img{width:100%;height:100%;object-fit:cover;display:block}
-.mpdp-ci__vendor{font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--mh-gray);margin-bottom:4px;font-family:var(--mh-sans)}
-.mpdp-ci__name{font-family:var(--mh-serif);font-size:17px;font-weight:300;margin-bottom:5px}
-.mpdp-ci__meta{font-size:12px;color:var(--mh-gray);letter-spacing:.04em;margin-bottom:8px;font-family:var(--mh-sans)}
-.mpdp-ci__price{font-size:14px;letter-spacing:.04em;font-family:var(--mh-sans)}
-.mpdp-cart-sb__foot{padding:24px 30px;border-top:1px solid var(--mh-light)}
-.mpdp-cart-sb__tot{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;font-size:14px;font-family:var(--mh-sans)}
-.mpdp-cart-sb__tot strong{font-family:var(--mh-serif);font-size:24px;font-weight:400}
-.mpdp-cart-sb__checkout{display:block;width:100%;background:var(--mh-black);color:#fff;border:none;padding:18px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;font-family:var(--mh-sans);transition:background .2s;text-align:center;text-decoration:none;margin-bottom:10px}
-.mpdp-cart-sb__checkout:hover{background:#222}
-.mpdp-cart-sb__note{text-align:center;font-size:11px;color:var(--mh-gray);letter-spacing:.04em;font-family:var(--mh-sans)}
 
 /* Toast */
 .mpdp-toast{position:fixed;bottom:40px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--mh-black);color:#fff;padding:14px 28px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;z-index:2000;opacity:0;transition:all .3s;pointer-events:none;white-space:nowrap;font-family:var(--mh-sans)}
@@ -497,7 +458,7 @@
   document.addEventListener('keydown', function(e){
     if(e.key==='ArrowLeft') mpdpPrev();
     if(e.key==='ArrowRight') mpdpNext();
-    if(e.key==='Escape'){ mpdpCloseCart(); document.getElementById('mpdpSzModal').classList.remove('is-open'); }
+    if(e.key==='Escape'){ if(window.MaraisCart){ window.MaraisCart.close(); } document.getElementById('mpdpSzModal').classList.remove('is-open'); }
   });
 
   // ── Variant selection ─────────────────────────────────────
@@ -553,7 +514,22 @@
       if(imgIdx >= 0 && imgIdx < IMAGES.length) mpdpSetImg(imgIdx, null);
     }
     history.replaceState(null,'','?variant='+match.id);
+    updateLocAvail(match);
   }
+
+  // ── Store availability (uses inventory_quantity already in VARIANTS data) ──
+  var LOC_TEXT = 'In store at Bourke St, QV Melbourne & Chadstone';
+
+  function updateLocAvail(variant) {
+    var el = document.getElementById('mpdpLocText');
+    if (!el) return;
+    var qty = variant.inventory_quantity;
+    var policy = variant.inventory_management;
+    var inStock = policy === null || qty > 0;
+    el.textContent = inStock ? LOC_TEXT : 'Not currently available in store';
+  }
+
+  updateLocAvail(VARIANTS.find(function(v){ return v.id === {{ product.selected_or_first_available_variant.id }}; }) || VARIANTS[0]);
 
   function formatMoney(cents){
     return 'AUD $' + (cents/100).toFixed(2).replace(/\.00$/,'').replace(/\B(?=(\d{3})+(?!\d))/g,',');
@@ -586,8 +562,7 @@
         body:JSON.stringify({id:parseInt(vid),quantity:1})
       }).then(function(r){ return r.json(); }).then(function(item){
         mpdpToast('Added to bag');
-        mpdpRefreshCart();
-        mpdpOpenCart();
+        if(window.MaraisCart){ window.MaraisCart.refresh(true); }
       }).catch(function(){ mpdpToast('Could not add to bag'); })
       .finally(function(){ if(atcBtn) atcBtn.disabled = false; });
     });
@@ -595,39 +570,6 @@
 
   window.mpdpMobileAtc = function(){ if(form) form.dispatchEvent(new Event('submit',{bubbles:true,cancelable:true})); };
 
-  function mpdpRefreshCart(){
-    fetch('/cart.js').then(function(r){ return r.json(); }).then(function(cart){
-      var totEl = document.getElementById('mpdpCartTot');
-      if(totEl) totEl.textContent = formatMoney(cart.total_price);
-      var badge = document.querySelector('.mh-cart-badge');
-      if(badge) badge.textContent = cart.item_count;
-      else if(cart.item_count > 0){
-        var cartBtn = document.querySelector('.mh-cart-btn');
-        if(cartBtn){
-          var b = document.createElement('span');
-          b.className = 'mh-cart-badge';
-          b.textContent = cart.item_count;
-          cartBtn.appendChild(b);
-        }
-      }
-      var body = document.getElementById('mpdpCartBody');
-      if(!body) return;
-      if(cart.items.length === 0){
-        body.innerHTML = '<p class="mpdp-cart-sb__empty">Your bag is empty</p>';
-        return;
-      }
-      body.innerHTML = cart.items.map(function(item){
-        var imgHtml = item.featured_image ? '<img src="'+item.featured_image.url+'" alt="'+item.title+'">' : '';
-        return '<div class="mpdp-ci"><div class="mpdp-ci__img">'+imgHtml+'</div><div><p class="mpdp-ci__vendor">'+item.vendor+'</p><p class="mpdp-ci__name">'+item.product_title+'</p><p class="mpdp-ci__meta">'+item.variant_title+'</p><p class="mpdp-ci__price">'+formatMoney(item.final_price)+'</p></div></div>';
-      }).join('');
-    });
-  }
-
-  // ── Cart sidebar ──────────────────────────────────────────
-  window.mpdpOpenCart  = function(){ document.getElementById('mpdpCartOv').classList.add('is-open'); document.getElementById('mpdpCartSb').classList.add('is-open'); document.body.style.overflow='hidden'; mpdpRefreshCart(); };
-  window.mpdpCloseCart = function(){ document.getElementById('mpdpCartOv').classList.remove('is-open'); document.getElementById('mpdpCartSb').classList.remove('is-open'); document.body.style.overflow=''; };
-  var cartIco = document.querySelector('.mh-cart-btn');
-  if(cartIco) cartIco.addEventListener('click',function(e){ e.preventDefault(); mpdpOpenCart(); });
 
   // ── Accordion ─────────────────────────────────────────────
   window.mpdpAccord = function(head){
@@ -668,8 +610,7 @@
       document.getElementById('mpdpRel').style.display = '';
     }).catch(function(){});
 
-  // Initial cart fetch to update badge
-  mpdpRefreshCart();
+
 })();
 </script>
 

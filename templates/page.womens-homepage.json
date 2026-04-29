@@ -1,0 +1,125 @@
+{
+  "sections": {
+
+    "hero_women": {
+      "type": "marais-hero",
+      "settings": {
+        "badge": "F/W 2025 — Women's New Arrivals",
+        "heading_line1": "The",
+        "heading_line2": "Women's",
+        "heading_italic": "Edit",
+        "subtext": "From Maison Margiela to Loewe, Sacai to Balenciaga — Melbourne's most considered women's edit, curated for those who dress with intention.",
+        "cta1_label": "New Arrivals",
+        "cta1_link": "/collections/womens-new-arrivals",
+        "cta2_label": "Shop All Women",
+        "cta2_link": "/collections/women",
+        "gender": "both"
+      }
+    },
+
+    "marais_ticker": {
+      "type": "marais-ticker",
+      "blocks": {
+        "t1": { "type": "item", "settings": { "text": "New Arrivals — F/W 25" } },
+        "t2": { "type": "item", "settings": { "text": "Maison Margiela" } },
+        "t3": { "type": "item", "settings": { "text": "Loewe" } },
+        "t4": { "type": "item", "settings": { "text": "Sacai" } },
+        "t5": { "type": "item", "settings": { "text": "Balenciaga" } },
+        "t6": { "type": "item", "settings": { "text": "Jacquemus" } },
+        "t7": { "type": "item", "settings": { "text": "Celine" } },
+        "t8": { "type": "item", "settings": { "text": "Off-White" } }
+      },
+      "block_order": ["t1","t2","t3","t4","t5","t6","t7","t8"],
+      "settings": {}
+    },
+
+    "cat_women": {
+      "type": "marais-category-grid",
+      "blocks": {
+        "cw1": { "type": "category", "settings": { "label": "Just In", "name": "New Arrivals", "bg_color": "#12122a", "link": "/collections/womens-new-arrivals" } },
+        "cw2": { "type": "category", "settings": { "label": "Women", "name": "Clothing", "bg_color": "#0d1a0c", "link": "/collections/women-clothing" } },
+        "cw3": { "type": "category", "settings": { "label": "Women", "name": "Shoes", "bg_color": "#1a0c0c", "link": "/collections/women-shoes" } },
+        "cw4": { "type": "category", "settings": { "label": "Women", "name": "Bags", "bg_color": "#0c0c1a", "link": "/collections/women-bags" } },
+        "cw5": { "type": "category", "settings": { "label": "Women", "name": "Accessories", "bg_color": "#1a180a", "link": "/collections/women-accessories" } }
+      },
+      "block_order": ["cw1","cw2","cw3","cw4","cw5"],
+      "settings": {
+        "eyebrow": "Women's Edit",
+        "title": "Shop by Category",
+        "see_all_label": "Shop All Women",
+        "see_all_link": "/collections/women",
+        "gender": "both"
+      }
+    },
+
+    "marais_products": {
+      "type": "marais-products",
+      "blocks": {
+        "tab_women": { "type": "tab", "settings": { "label": "Women", "collection": "women-new-arrivals", "gender": "women" } }
+      },
+      "block_order": ["tab_women"],
+      "settings": {
+        "eyebrow": "Just Arrived",
+        "title": "Just In",
+        "products_to_show": 8,
+        "show_vendor": true,
+        "see_all_label": "View All Women",
+        "see_all_link": "/collections/women"
+      }
+    },
+
+    "banner_women": {
+      "type": "marais-collection-banner",
+      "settings": {
+        "layout": "image-left",
+        "eyebrow": "Women's New Season",
+        "heading": "The",
+        "heading_italic": "Autumn Edit",
+        "body": "Defining pieces from Maison Margiela, Loewe, Sacai and more — curated for the season ahead.",
+        "cta_label": "Shop Women",
+        "cta_link": "/collections/women",
+        "bg_color": "#f5f2ed",
+        "text_color": "#0a0a0a",
+        "gender": "both"
+      }
+    },
+
+    "marais_editorial_grid": {
+      "type": "marais-editorial-grid",
+      "blocks": {
+        "ed1": { "type": "article", "settings": { "category": "Campaign — F/W 25", "title": "The MARAIS Women's Edit", "bg_color": "#0a0a1e", "link": "#" } },
+        "ed2": { "type": "article", "settings": { "category": "Craftsmanship", "title": "The Making of an Icon", "bg_color": "#1e180a", "link": "#" } },
+        "ed3": { "type": "article", "settings": { "category": "Style", "title": "Dressing with Intention", "bg_color": "#0a1e1a", "link": "#" } }
+      },
+      "block_order": ["ed1","ed2","ed3"],
+      "settings": {
+        "eyebrow": "MARAIS Journal",
+        "title": "Editorial",
+        "see_all_label": "All Stories",
+        "see_all_link": "/blogs/news"
+      }
+    },
+
+    "marais_newsletter": {
+      "type": "marais-newsletter",
+      "settings": {
+        "heading": "Stay",
+        "heading_italic": "Connected",
+        "subtext": "Be the first to discover new women's arrivals, exclusive offers and events — directly to your inbox.",
+        "placeholder": "Your email address",
+        "button_label": "Subscribe"
+      }
+    }
+
+  },
+
+  "order": [
+    "hero_women",
+    "marais_ticker",
+    "cat_women",
+    "marais_products",
+    "banner_women",
+    "marais_editorial_grid",
+    "marais_newsletter"
+  ]
+}

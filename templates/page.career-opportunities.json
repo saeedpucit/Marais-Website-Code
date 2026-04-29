@@ -1,0 +1,53 @@
+{
+  "sections": {
+    "careers_faq": {
+      "type": "marais-faq-accordion",
+      "blocks": {
+        "role1": {
+          "type": "faq",
+          "settings": {
+            "question": "Are there any current openings?",
+            "answer": "<p>We are always interested in hearing from passionate individuals who share our love of luxury fashion. Please send your CV and a brief cover letter to <a href=\"mailto:careers@marais.com.au\">careers@marais.com.au</a>.</p>"
+          }
+        },
+        "role2": {
+          "type": "faq",
+          "settings": {
+            "question": "What roles do you typically hire for?",
+            "answer": "<p>We hire across retail, buying, styling, operations, and digital. Whether you are an experienced buyer or just starting your career in fashion, we welcome your enquiry.</p>"
+          }
+        },
+        "role3": {
+          "type": "faq",
+          "settings": {
+            "question": "How do I apply?",
+            "answer": "<p>Email your CV and a short introduction to <a href=\"mailto:careers@marais.com.au\">careers@marais.com.au</a>. We review every application and will be in touch if your background aligns with our current or upcoming needs.</p>"
+          }
+        },
+        "role4": {
+          "type": "faq",
+          "settings": {
+            "question": "Do you offer internships or work experience?",
+            "answer": "<p>Yes — we welcome applications for internships and work experience placements across our boutiques and head office. Please reach out via email to discuss availability.</p>"
+          }
+        }
+      },
+      "block_order": ["role1", "role2", "role3", "role4"],
+      "settings": {
+        "eyebrow": "Join the Team",
+        "title": "Career Opportunities"
+      }
+    },
+    "careers_contact": {
+      "type": "marais-contact",
+      "settings": {
+        "heading": "Get in Touch",
+        "response_promise": "We respond to all career enquiries within 3 business days",
+        "email": "careers@marais.com.au",
+        "phone": "+61 3 9827 0000",
+        "hours": "Mon–Fri 9am–5pm AEST"
+      }
+    }
+  },
+  "order": ["careers_faq", "careers_contact"]
+}

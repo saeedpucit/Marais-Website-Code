@@ -76,10 +76,10 @@
 .cart-item__info { flex: 1; }
 
 .cart-item__vendor {
-  font-size: 9px;
+  font-size: 11px;
   letter-spacing: .18em;
   text-transform: uppercase;
-  color: var(--mh-gold);
+  color: var(--mh-black);
   font-family: var(--mh-sans);
   margin-bottom: 4px;
 }

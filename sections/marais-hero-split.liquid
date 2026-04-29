@@ -1,0 +1,69 @@
+<section class="mh-shero">
+  {%- for block in section.blocks -%}
+    <div class="mh-shero__side" {{ block.shopify_attributes }}>
+
+      <div class="mh-shero__bg">
+        {%- if block.settings.bg_image != blank -%}
+          <img src="{{ block.settings.bg_image | image_url: width: 1400 }}" alt="" loading="eager" width="1400">
+        {%- endif -%}
+      </div>
+
+      {%- if block.settings.visual_image != blank -%}
+        <div class="mh-shero__visual">
+          <img src="{{ block.settings.visual_image | image_url: width: 700 }}" alt="" loading="eager" width="700">
+        </div>
+      {%- endif -%}
+
+      <div class="mh-shero__content">
+        {%- if block.settings.badge != blank -%}
+          <span class="mh-shero__badge">{{ block.settings.badge }}</span>
+        {%- endif -%}
+        <h2 class="mh-shero__h">
+          {{ block.settings.heading_line1 }}<br>
+          {{ block.settings.heading_line2 }}<br>
+          <em>{{ block.settings.heading_italic }}</em>
+        </h2>
+        {%- if block.settings.subtext != blank -%}
+          <p class="mh-shero__sub">{{ block.settings.subtext }}</p>
+        {%- endif -%}
+        <div class="mh-shero__cta">
+          {%- if block.settings.cta1_label != blank -%}
+            <a href="{{ block.settings.cta1_link }}" class="mh-btn-w">{{ block.settings.cta1_label }}</a>
+          {%- endif -%}
+          {%- if block.settings.cta2_label != blank -%}
+            <a href="{{ block.settings.cta2_link }}" class="mh-btn-o">{{ block.settings.cta2_label }}</a>
+          {%- endif -%}
+        </div>
+      </div>
+
+    </div>
+  {%- endfor -%}
+</section>
+
+{% schema %}
+{
+  "name": "Hero Split",
+  "tag": "section",
+  "max_blocks": 2,
+  "blocks": [
+    {
+      "type": "side",
+      "name": "Side",
+      "settings": [
+        { "type": "image_picker", "id": "bg_image",     "label": "Background image" },
+        { "type": "image_picker", "id": "visual_image", "label": "Campaign / product image" },
+        { "type": "text",         "id": "badge",         "label": "Badge",          "default": "F/W 2025" },
+        { "type": "text",         "id": "heading_line1", "label": "Heading line 1", "default": "The" },
+        { "type": "text",         "id": "heading_line2", "label": "Heading line 2", "default": "Edit" },
+        { "type": "text",         "id": "heading_italic","label": "Heading italic",  "default": "Now" },
+        { "type": "textarea",     "id": "subtext",       "label": "Subtext" },
+        { "type": "text",         "id": "cta1_label",    "label": "CTA 1 label" },
+        { "type": "url",          "id": "cta1_link",     "label": "CTA 1 link" },
+        { "type": "text",         "id": "cta2_label",    "label": "CTA 2 label" },
+        { "type": "url",          "id": "cta2_link",     "label": "CTA 2 link" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Hero Split" }]
+}
+{% endschema %}

@@ -32,7 +32,11 @@
         "see_all_label": "View All",
         "see_all_link": "/collections/all"
       }
+    },
+    "collection_newsletter": {
+      "type": "marais-newsletter",
+      "settings": {}
     }
   },
-  "order": ["main", "you_may_also_like"]
+  "order": ["main", "you_may_also_like", "collection_newsletter"]
 }

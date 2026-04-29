@@ -48,7 +48,13 @@
     document.querySelectorAll('.filter-checkbox').forEach(function (cb) {
       cb.addEventListener('change', function () {
         var url = this.checked ? this.dataset.urlAdd : this.dataset.urlRemove;
-        if (url) navigateTo(url);
+        if (!url) return;
+        if (this.checked && this.closest('.filter-size-grid')) {
+          if (url.indexOf('filter.v.availability') === -1) {
+            url = url + (url.indexOf('?') === -1 ? '?' : '&') + 'filter.v.availability=1';
+          }
+        }
+        navigateTo(url);
       });
     });
   }
@@ -249,7 +255,7 @@
         })
         .then(function (r) { return r.json(); })
         .then(function (d) {
-          if (d.id) { showToast('Added to bag'); updateCartCount(); }
+          if (d.id) { showToast('Added to bag'); if (window.MaraisCart) { window.MaraisCart.refresh(true); } else { updateCartCount(); } }
           else showToast(d.message || 'Could not add to bag');
         })
         .catch(function () { showToast('Could not add to bag'); })
@@ -458,7 +464,7 @@
       .then(function (d) {
         if (d.id) {
           showToast('Added to bag');
-          updateCartCount();
+          if (window.MaraisCart) { window.MaraisCart.refresh(true); } else { updateCartCount(); }
           btn.textContent = 'Added!';
           setTimeout(function () { btn.textContent = orig; btn.disabled = false; }, 1600);
         } else {
@@ -497,7 +503,7 @@
       })
       .then(function (r) { return r.json(); })
       .then(function (d) {
-        if (d.id) { showToast('Added to bag'); updateCartCount(); }
+        if (d.id) { showToast('Added to bag'); if (window.MaraisCart) { window.MaraisCart.refresh(true); } else { updateCartCount(); } }
         else showToast(d.message || 'Could not add to bag');
       })
       .catch(function () { showToast('Could not add to bag'); })

@@ -1,0 +1,125 @@
+{
+  "sections": {
+
+    "hero_men": {
+      "type": "marais-hero",
+      "settings": {
+        "badge": "F/W 2025 — Men's New Arrivals",
+        "heading_line1": "The",
+        "heading_line2": "Men's",
+        "heading_italic": "Edit",
+        "subtext": "Fear of God, Rick Owens, Stone Island, Wooyoungmi — the defining pieces of the season, chosen without compromise.",
+        "cta1_label": "New Arrivals",
+        "cta1_link": "/collections/new-men",
+        "cta2_label": "Shop All Men",
+        "cta2_link": "/collections/men",
+        "gender": "both"
+      }
+    },
+
+    "marais_ticker": {
+      "type": "marais-ticker",
+      "blocks": {
+        "t1": { "type": "item", "settings": { "text": "New Arrivals — F/W 25" } },
+        "t2": { "type": "item", "settings": { "text": "Rick Owens DRKSHDW" } },
+        "t3": { "type": "item", "settings": { "text": "Stone Island" } },
+        "t4": { "type": "item", "settings": { "text": "Wooyoungmi F/W 25" } },
+        "t5": { "type": "item", "settings": { "text": "Fear of God" } },
+        "t6": { "type": "item", "settings": { "text": "Maison Margiela" } },
+        "t7": { "type": "item", "settings": { "text": "Post Archive Faction" } },
+        "t8": { "type": "item", "settings": { "text": "Y-3" } }
+      },
+      "block_order": ["t1","t2","t3","t4","t5","t6","t7","t8"],
+      "settings": {}
+    },
+
+    "cat_men": {
+      "type": "marais-category-grid",
+      "blocks": {
+        "cm1": { "type": "category", "settings": { "label": "Just In", "name": "New Arrivals", "bg_color": "#0a0a0a", "link": "/collections/new-men" } },
+        "cm2": { "type": "category", "settings": { "label": "Men", "name": "Clothing", "bg_color": "#0d1a0c", "link": "/collections/men-clothing" } },
+        "cm3": { "type": "category", "settings": { "label": "Men", "name": "Shoes", "bg_color": "#1a0c0c", "link": "/collections/men-shoes" } },
+        "cm4": { "type": "category", "settings": { "label": "Men", "name": "Bags", "bg_color": "#0c0c1a", "link": "/collections/men-bags" } },
+        "cm5": { "type": "category", "settings": { "label": "Men", "name": "Accessories", "bg_color": "#1a180a", "link": "/collections/men-accessories" } }
+      },
+      "block_order": ["cm1","cm2","cm3","cm4","cm5"],
+      "settings": {
+        "eyebrow": "Men's Edit",
+        "title": "Shop by Category",
+        "see_all_label": "Shop All Men",
+        "see_all_link": "/collections/men",
+        "gender": "both"
+      }
+    },
+
+    "marais_products": {
+      "type": "marais-products",
+      "blocks": {
+        "tab_men": { "type": "tab", "settings": { "label": "Men", "collection": "men-new-arrivals", "gender": "men" } }
+      },
+      "block_order": ["tab_men"],
+      "settings": {
+        "eyebrow": "Just Arrived",
+        "title": "Just In",
+        "products_to_show": 8,
+        "show_vendor": true,
+        "see_all_label": "View All Men",
+        "see_all_link": "/collections/men"
+      }
+    },
+
+    "banner_men": {
+      "type": "marais-collection-banner",
+      "settings": {
+        "layout": "image-right",
+        "eyebrow": "Men's New Season",
+        "heading": "The",
+        "heading_italic": "Men's Autumn Edit",
+        "body": "Rick Owens, Fear of God, Stone Island, Wooyoungmi — the season's most considered men's pieces.",
+        "cta_label": "Shop Men",
+        "cta_link": "/collections/men",
+        "bg_color": "#0a0a0a",
+        "text_color": "#fafaf8",
+        "gender": "both"
+      }
+    },
+
+    "marais_editorial_grid": {
+      "type": "marais-editorial-grid",
+      "blocks": {
+        "ed1": { "type": "article", "settings": { "category": "Campaign — F/W 25", "title": "The MARAIS Men's Edit", "bg_color": "#0a0a1e", "link": "#" } },
+        "ed2": { "type": "article", "settings": { "category": "Craftsmanship", "title": "The Making of an Icon", "bg_color": "#1e180a", "link": "#" } },
+        "ed3": { "type": "article", "settings": { "category": "Style", "title": "Dressing with Intention", "bg_color": "#0a1e1a", "link": "#" } }
+      },
+      "block_order": ["ed1","ed2","ed3"],
+      "settings": {
+        "eyebrow": "MARAIS Journal",
+        "title": "Editorial",
+        "see_all_label": "All Stories",
+        "see_all_link": "/blogs/news"
+      }
+    },
+
+    "marais_newsletter": {
+      "type": "marais-newsletter",
+      "settings": {
+        "heading": "Stay",
+        "heading_italic": "Connected",
+        "subtext": "Be the first to discover new men's arrivals, exclusive offers and events — directly to your inbox.",
+        "placeholder": "Your email address",
+        "button_label": "Subscribe"
+      }
+    }
+
+  },
+
+  "order": [
+    "hero_men",
+    "marais_ticker",
+    "cat_men",
+    "marais_products",
+    "banner_men",
+    "marais_editorial_grid",
+    "marais_newsletter"
+  ]
+}

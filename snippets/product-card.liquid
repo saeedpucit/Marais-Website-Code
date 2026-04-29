@@ -1,11 +1,9 @@
 {%- assign img1       = product.featured_image -%}
 {%- assign img2       = product.images[1] -%}
+{%- assign is_core = false -%}
+{%- if product.tags contains 'CORE' -%}{%- assign is_core = true -%}{%- endif -%}
 {%- assign is_sale = false -%}
 {%- if product.compare_at_price > product.price and product.available -%}{%- assign is_sale = true -%}{%- endif -%}
-{%- assign is_new = false -%}
-{%- if product.tags contains 'new' or product.tags contains 'new-arrival' -%}{%- assign is_new = true -%}{%- endif -%}
-{%- assign is_limited = false -%}
-{%- if product.tags contains 'limited-edition' or product.tags contains 'ltd' -%}{%- assign is_limited = true -%}{%- endif -%}
 {%- assign delay      = index | minus: 1 | times: 40 | at_most: 400 -%}
 
 {%- assign colour_idx = nil -%}
@@ -25,12 +23,8 @@
   <a href="{{ product.url }}" class="product-card__img-link" tabindex="-1" aria-hidden="true">
     <div class="product-card__img-wrap">
 
-      {%- if is_sale -%}
-        <span class="product-card__badge product-card__badge--sale">Sale</span>
-      {%- elsif is_limited -%}
-        <span class="product-card__badge product-card__badge--ltd">Ltd</span>
-      {%- elsif is_new -%}
-        <span class="product-card__badge product-card__badge--new">New</span>
+      {%- if is_core -%}
+        <span class="product-card__badge product-card__badge--core">Core</span>
       {%- endif -%}
 
       {%- if img1 -%}
